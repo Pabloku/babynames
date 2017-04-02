@@ -28,15 +28,15 @@ android {
   productFlavors {
     PRODUCTION {
       applicationId 'com.kamisoft.babynames'
-      if(project.hasProperty("babynames.signingRelease")
-          && new File(project.property("babynames.signingRelease") + ".gradle").exists()) {
+      if (project.hasProperty("babynames.signingRelease") && new File(
+          project.property("babynames.signingRelease") + ".gradle").exists()) {
         apply from: project.property("babynames.signingRelease") + ".gradle";
       }
     }
     develop {
       applicationId 'com.kamisoft.babynames.develop'
-      if(project.hasProperty("babynames.signingDebug")
-          && new File(project.property("babynames.signingDebug") + ".gradle").exists()) {
+      if (project.hasProperty("babynames.signingDebug") && new File(
+          project.property("babynames.signingDebug") + ".gradle").exists()) {
         apply from: project.property("babynames.signingDebug") + ".gradle";
       }
     }
