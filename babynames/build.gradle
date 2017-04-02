@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+  def globalConfiguration = rootProject.extensions.getByName("ext")
+
+  compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+  buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
+
+  defaultConfig {
+    minSdkVersion globalConfiguration["androidMinSdkVersion"]
+    targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+    versionCode globalConfiguration["androidVersionCode"]
+    versionName globalConfiguration["androidVersionName"]
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
+
+  productFlavors {
+    PRODUCTION {
+      applicationId 'com.kamisoft.babynames'
+      if(project.hasProperty("babynames.signingRelease")
+          && new File(project.property("babynames.signingRelease") + ".gradle").exists()) {
+        apply from: project.property("babynames.signingRelease") + ".gradle";
+      }
+    }
+    develop {
+      applicationId 'com.kamisoft.babynames.develop'
+      if(project.hasProperty("babynames.signingDebug")
+          && new File(project.property("babynames.signingDebug") + ".gradle").exists()) {
+        apply from: project.property("babynames.signingDebug") + ".gradle";
+      }
+    }
+  }
+}
+
+dependencies {
+  def appDependencies = rootProject.ext.appDependencies
+  def appTestDependencies = rootProject.ext.appTestDependencies
+
+  compile appDependencies.appCompat
+  compile appDependencies.timber
+
+  androidTestCompile(appTestDependencies.espresso, {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  testCompile appTestDependencies.junit
+  compile appDependencies.kotlin
+}

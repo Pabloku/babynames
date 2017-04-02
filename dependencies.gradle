@@ -1,0 +1,34 @@
+allprojects {
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+}
+
+ext {
+
+  //BabyNames App
+  androidVersionCode = 1
+  androidVersionName = "0.1"
+
+  //Android
+  androidBuildToolsVersion = "25.0.1"
+  androidMinSdkVersion = 15
+  androidCompileSdkVersion = 25
+  androidTargetSdkVersion = 25
+
+  //Libraries
+  appCompatVersion = '25.3.1'
+  timberVersion = '4.5.1'
+
+  //Testing
+  jUnitVersion = '4.12'
+  espressoVersion = '2.2.2'
+
+  appDependencies = [appCompat           : "com.android.support:appcompat-v7:${appCompatVersion}",
+                     timber              : "com.jakewharton.timber:timber:${timberVersion}",
+                     kotlin              : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"]
+
+  appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
+                         espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]
+}
