@@ -49,10 +49,20 @@ dependencies {
 
   compile appDependencies.appCompat
   compile appDependencies.timber
+  compile appDependencies.playServices
+  compile appDependencies.firebaseCore
+  compile appDependencies.firebaseRealtimeDB
 
   androidTestCompile(appTestDependencies.espresso, {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
   testCompile appTestDependencies.junit
   compile appDependencies.kotlin
+  compile appDependencies.constraintLayout
+  compile appDependencies.anko
+  compile appDependencies.ankoAppCompatV7
+  compile appDependencies.ankoDesign
+  compile appDependencies.ankoRecyclerView
 }
+
+apply plugin: 'com.google.gms.google-services'

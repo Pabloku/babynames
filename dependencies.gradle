@@ -20,14 +20,25 @@ ext {
   //Libraries
   appCompatVersion = '25.3.1'
   timberVersion = '4.5.1'
+  playServicesAndFirebaseVersion = '10.2.1'
+  constraintLayoutVersion = '1.0.2'
+  ankoVersion = '0.9.1'
 
   //Testing
   jUnitVersion = '4.12'
   espressoVersion = '2.2.2'
 
-  appDependencies = [appCompat           : "com.android.support:appcompat-v7:${appCompatVersion}",
-                     timber              : "com.jakewharton.timber:timber:${timberVersion}",
-                     kotlin              : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"]
+  appDependencies = [appCompat         : "com.android.support:appcompat-v7:${appCompatVersion}",
+                     timber            : "com.jakewharton.timber:timber:${timberVersion}",
+                     kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+                     playServices      : "com.google.android.gms:play-services-base:$playServicesAndFirebaseVersion",
+                     firebaseCore      : "com.google.firebase:firebase-core:$playServicesAndFirebaseVersion",
+                     firebaseRealtimeDB: "com.google.firebase:firebase-database:$playServicesAndFirebaseVersion",
+                     constraintLayout  : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
+                     anko              : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
+                     ankoAppCompatV7   : "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion",
+                     ankoDesign        : "org.jetbrains.anko:anko-design:$ankoVersion",
+                     ankoRecyclerView  : "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]

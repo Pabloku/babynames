@@ -2,13 +2,14 @@
 apply from: rootProject.file('dependencies.gradle')
 
 buildscript {
-  ext.kotlin_version = '1.1.1'
+  ext.kotlinVersion = '1.1.1'
   repositories {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.0'
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath 'com.android.tools.build:gradle:2.3.1'
+    classpath 'com.google.gms:google-services:3.0.0'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
