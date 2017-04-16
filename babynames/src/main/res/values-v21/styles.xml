@@ -1,0 +1,13 @@
+<resources>
+
+  <style name="ButtonBoy" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorButtonNormal">@color/boy_color</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="ButtonGirl" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorButtonNormal">@color/girl_color</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+</resources>
