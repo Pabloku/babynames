@@ -23,6 +23,7 @@ ext {
   playServicesAndFirebaseVersion = '10.2.1'
   constraintLayoutVersion = '1.0.2'
   ankoVersion = '0.9.1'
+  stepperIndicatorVersion = '1.0.6'
 
   //Testing
   jUnitVersion = '4.12'
@@ -38,7 +39,8 @@ ext {
                      anko              : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
                      ankoAppCompatV7   : "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion",
                      ankoDesign        : "org.jetbrains.anko:anko-design:$ankoVersion",
-                     ankoRecyclerView  : "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion"]
+                     ankoRecyclerView  : "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion",
+                     stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]

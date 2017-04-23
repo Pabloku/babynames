@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+repositories {
+  maven { url "https://jitpack.io" }
+}
 
 android {
   def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -63,6 +68,8 @@ dependencies {
   compile appDependencies.ankoAppCompatV7
   compile appDependencies.ankoDesign
   compile appDependencies.ankoRecyclerView
+  compile appDependencies.stepperIndicator
+  compile 'com.android.support:support-v4:25.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
