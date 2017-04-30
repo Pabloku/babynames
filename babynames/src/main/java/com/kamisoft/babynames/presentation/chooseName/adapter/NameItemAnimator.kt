@@ -12,6 +12,7 @@ import android.view.animation.OvershootInterpolator
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.getScreenHeight
 import kotlinx.android.synthetic.main.row_name.view.*
+import org.jetbrains.anko.imageResource
 import java.util.*
 
 class NameItemAnimator : DefaultItemAnimator() {
@@ -71,7 +72,11 @@ class NameItemAnimator : DefaultItemAnimator() {
 
         if (preInfo is FeedItemHolderInfo) {
             val holder = newHolder as NamesAdapter.ViewHolder
-            animateHeartButton(holder)
+            if (NamesAdapter.ACTION_LIKE_BUTTON_CLICKED == preInfo.updateAction) {
+                animateHeartButtonLiked(holder)
+            } else {
+                animateHeartButtonUnLiked(holder)
+            }
         }
 
         return false
@@ -86,7 +91,7 @@ class NameItemAnimator : DefaultItemAnimator() {
         }
     }
 
-    private fun animateHeartButton(holder: NamesAdapter.ViewHolder) {
+    private fun animateHeartButtonLiked(holder: NamesAdapter.ViewHolder) {
         val animatorSet = AnimatorSet()
 
         val rotationAnim = ObjectAnimator.ofFloat(holder.itemView.btnLike, "rotation", 0f, 360f)
@@ -102,7 +107,38 @@ class NameItemAnimator : DefaultItemAnimator() {
         bounceAnimY.interpolator = OVERSHOOT_INTERPOLATOR
         bounceAnimY.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
-                holder.itemView.btnLike.setImageResource(R.drawable.ic_heart_red)
+                holder.itemView.btnLike.imageResource = R.drawable.ic_heart_red
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                heartAnimationsMap.remove(holder)
+                dispatchChangeFinishedIfAllAnimationsEnded(holder)
+            }
+        })
+
+        animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim)
+        animatorSet.start()
+
+        heartAnimationsMap.put(holder, animatorSet)
+    }
+
+    private fun animateHeartButtonUnLiked(holder: NamesAdapter.ViewHolder) {
+        val animatorSet = AnimatorSet()
+
+        val rotationAnim = ObjectAnimator.ofFloat(holder.itemView.btnLike, "rotation", 360f, 0f)
+        rotationAnim.duration = 300
+        rotationAnim.interpolator = ACCELERATE_INTERPOLATOR
+
+        val bounceAnimX = ObjectAnimator.ofFloat(holder.itemView.btnLike, "scaleX", 0.9f, 1f)
+        bounceAnimX.duration = 300
+        bounceAnimX.interpolator = OVERSHOOT_INTERPOLATOR
+
+        val bounceAnimY = ObjectAnimator.ofFloat(holder.itemView.btnLike, "scaleY", 0.9f, 1f)
+        bounceAnimY.duration = 300
+        bounceAnimY.interpolator = OVERSHOOT_INTERPOLATOR
+        bounceAnimY.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                holder.itemView.btnLike.imageResource = R.drawable.ic_heart_outline_grey
             }
 
             override fun onAnimationEnd(animation: Animator) {
@@ -140,7 +176,6 @@ class NameItemAnimator : DefaultItemAnimator() {
     class FeedItemHolderInfo(var updateAction: String) : ItemHolderInfo()
 
     companion object {
-        private val DECELERATE_INTERPOLATOR = DecelerateInterpolator()
         private val ACCELERATE_INTERPOLATOR = AccelerateInterpolator()
         private val OVERSHOOT_INTERPOLATOR = OvershootInterpolator(4f)
     }
