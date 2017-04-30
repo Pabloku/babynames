@@ -11,13 +11,13 @@ import com.kamisoft.babynames.logger.Logger
 
 //TODO [Paloga] Proguard config for firebase real time database https://firebase.google.com/docs/database/android/start/
 class FirebaseNamesDataSource : NamesDataSource {
-    override fun getNamesList(genre: NamesDataSource.Genre): List<String> {
-        return Tasks.await(getNameListTask(genre))
+    override fun getNamesList(gender: NamesDataSource.Gender): List<String> {
+        return Tasks.await(getNameListTask(gender))
     }
 
-    fun getNameListTask(genre: NamesDataSource.Genre): Task<List<String>> {
-        val firebaseGenresDBReference = FirebaseDatabase.getInstance().reference.child(FirebaseDBCommons.Node.GENRES.toString())
-        val firebaseQuery = firebaseGenresDBReference.child(FirebaseDBCommons.Node.valueOf(genre.toString().toUpperCase()).toString())
+    fun getNameListTask(gender: NamesDataSource.Gender): Task<List<String>> {
+        val firebaseGendersDBReference = FirebaseDatabase.getInstance().reference.child(FirebaseDBCommons.Node.GENDERS.toString())
+        val firebaseQuery = firebaseGendersDBReference.child(FirebaseDBCommons.Node.valueOf(gender.toString().toUpperCase()).toString())
 
         val taskCompletionSource = TaskCompletionSource<List<String>>()
 

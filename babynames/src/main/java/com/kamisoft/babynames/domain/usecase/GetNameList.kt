@@ -13,18 +13,18 @@ class GetNameList(val namesRepository: NamesRepository) {
         }
     }
 
-    fun getNames(genre: NamesDataSource.Genre, callback: CallBacks.NamesCallback) {
-        Thread(GetNames(genre, callback)).start()
+    fun getNames(gender: NamesDataSource.Gender, callback: CallBacks.NamesCallback) {
+        Thread(GetNames(gender, callback)).start()
     }
 
-    private fun namesLoaded(genre: NamesDataSource.Genre, callback: CallBacks.NamesCallback) {
-        val nameList = namesRepository.getAllNamesByGenre(genre)
+    private fun loadNames(gender: NamesDataSource.Gender, callback: CallBacks.NamesCallback) {
+        val nameList = namesRepository.getAllNamesByGender(gender)
         Handler(Looper.getMainLooper()).post(NamesLoaded(callback, nameList))
     }
 
-    private inner class GetNames(val genre: NamesDataSource.Genre, val callback: CallBacks.NamesCallback) : Runnable {
+    private inner class GetNames(val gender: NamesDataSource.Gender, val callback: CallBacks.NamesCallback) : Runnable {
         override fun run() {
-            namesLoaded(genre, callback)
+            loadNames(gender, callback)
         }
     }
 

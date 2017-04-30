@@ -6,8 +6,8 @@ import com.kamisoft.babynames.domain.repository.NamesRepository
 
 class NamesDataRepository(val namesDataFactory: NamesDataFactory) : NamesRepository {
 
-    override fun getAllNamesByGenre(genre: NamesDataSource.Genre): List<String> {
+    override fun getAllNamesByGender(gender: NamesDataSource.Gender): List<String> {
         val namesDataSource = namesDataFactory.create()
-        return namesDataSource.getNamesList(genre)
+        return namesDataSource.getNamesList(gender)
     }
 }
