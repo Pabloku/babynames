@@ -1,16 +1,17 @@
-package com.kamisoft.babynames.presentation.chooseName
+package com.kamisoft.babynames.presentation.chooseName.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
+import com.kamisoft.babynames.domain.model.BabyName
 import kotlinx.android.synthetic.main.row_name.view.*
 
-class NamesAdapter(val listener: (String) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>() {
+class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>() {
 
     val ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button"
-    private var nameList: List<String> = emptyList()
+    private var nameList: List<BabyName> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.row_name, parent, false)
@@ -23,7 +24,7 @@ class NamesAdapter(val listener: (String) -> Unit) : RecyclerView.Adapter<NamesA
 
     override fun getItemCount() = nameList.size
 
-    fun setNameList(names: List<String>) {
+    fun setBabyNameNameList(names: List<BabyName>) {
         this.nameList = names
         notifyDataSetChanged()
     }
@@ -32,16 +33,20 @@ class NamesAdapter(val listener: (String) -> Unit) : RecyclerView.Adapter<NamesA
         viewHolder.itemView.btnLike.setOnClickListener {
             notifyItemChanged(viewHolder.adapterPosition, ACTION_LIKE_BUTTON_CLICKED)
         }
-        viewHolder.itemView.setOnClickListener {
-            notifyItemChanged(viewHolder.adapterPosition, ACTION_LIKE_BUTTON_CLICKED) }
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        fun bind(item: String, listener: (String) -> Unit) = with(itemView) {
-            txtName.text = item
-            btnLike.setImageResource(R.drawable.ic_heart_outline_grey)
-            //setOnClickListener { listener(item) }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(babyName: BabyName, listener: (BabyName) -> Unit) = with(itemView) {
+            txtName.text = babyName.name
+            if (babyName.liked) {
+                btnLike.setImageResource(R.drawable.ic_heart_red)
+            } else {
+                btnLike.setImageResource(R.drawable.ic_heart_outline_grey)
+            }
+            setOnClickListener {
+                notifyItemChanged(adapterPosition, ACTION_LIKE_BUTTON_CLICKED)
+                listener(babyName)
+            }
         }
     }
 }

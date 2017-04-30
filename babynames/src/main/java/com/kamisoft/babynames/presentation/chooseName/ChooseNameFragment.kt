@@ -2,11 +2,11 @@ package com.kamisoft.babynames.presentation.chooseName
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.hide
@@ -14,19 +14,23 @@ import com.kamisoft.babynames.commons.show
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.data.repository.NamesDataRepository
+import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
+import com.kamisoft.babynames.presentation.chooseName.adapter.NameItemAnimator
+import com.kamisoft.babynames.presentation.chooseName.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class ChooseNameFragment : MvpLceFragment<RelativeLayout, List<String>, ChooseNameView,
+class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
 
     private val selectedGender: NamesDataSource.Gender by GenderArgument(ARG_GENDER)
 
     private val namesAdapter: NamesAdapter = NamesAdapter {
-        Logger.debug("$it Clicked")
+        Logger.debug("${it.name} Clicked")
+        presenter.manageBabyNameClick(it)
     }
 
     companion object {
@@ -49,7 +53,7 @@ class ChooseNameFragment : MvpLceFragment<RelativeLayout, List<String>, ChooseNa
         //TODO errorView is pending
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
-        rvList.itemAnimator = FeedItemAnimator()
+        rvList.itemAnimator = NameItemAnimator()
         showLoading(false)
     }
 
@@ -60,8 +64,8 @@ class ChooseNameFragment : MvpLceFragment<RelativeLayout, List<String>, ChooseNa
 
     override fun createPresenter() = ChooseNamePresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
-    override fun setData(nameList: List<String>) {
-        namesAdapter.setNameList(nameList)
+    override fun setData(nameList: List<BabyName>) {
+        namesAdapter.setBabyNameNameList(nameList)
     }
 
     override fun loadData(pullToRefresh: Boolean) {

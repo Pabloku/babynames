@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.chooseName
+package com.kamisoft.babynames.presentation.chooseName.adapter
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -14,7 +14,7 @@ import com.kamisoft.babynames.commons.getScreenHeight
 import kotlinx.android.synthetic.main.row_name.view.*
 import java.util.*
 
-class FeedItemAnimator : DefaultItemAnimator() {
+class NameItemAnimator : DefaultItemAnimator() {
 
     internal var likeAnimationsMap: Map<RecyclerView.ViewHolder, AnimatorSet> = HashMap()
     internal var heartAnimationsMap: MutableMap<RecyclerView.ViewHolder, AnimatorSet> = HashMap()
@@ -27,13 +27,11 @@ class FeedItemAnimator : DefaultItemAnimator() {
 
     override fun recordPreLayoutInformation(state: RecyclerView.State,
                                             viewHolder: RecyclerView.ViewHolder,
-                                            changeFlags: Int, payloads: List<Any>): RecyclerView.ItemAnimator.ItemHolderInfo {
+                                            changeFlags: Int, payloads: List<Any>): ItemHolderInfo {
         if (changeFlags == RecyclerView.ItemAnimator.FLAG_CHANGED) {
-            for (payload in payloads) {
-                if (payload is String) {
-                    return FeedItemHolderInfo(payload)
-                }
-            }
+            payloads
+                    .filterIsInstance<String>()
+                    .forEach { return FeedItemHolderInfo(it) }
         }
 
         return super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
@@ -67,14 +65,12 @@ class FeedItemAnimator : DefaultItemAnimator() {
 
     override fun animateChange(oldHolder: RecyclerView.ViewHolder,
                                newHolder: RecyclerView.ViewHolder,
-                               preInfo: RecyclerView.ItemAnimator.ItemHolderInfo,
-                               postInfo: RecyclerView.ItemAnimator.ItemHolderInfo): Boolean {
+                               preInfo: ItemHolderInfo,
+                               postInfo: ItemHolderInfo): Boolean {
         cancelCurrentAnimationIfExists(newHolder)
 
         if (preInfo is FeedItemHolderInfo) {
-            val feedItemHolderInfo = preInfo
             val holder = newHolder as NamesAdapter.ViewHolder
-
             animateHeartButton(holder)
         }
 
@@ -141,10 +137,10 @@ class FeedItemAnimator : DefaultItemAnimator() {
         }
     }
 
-    class FeedItemHolderInfo(var updateAction: String) : RecyclerView.ItemAnimator.ItemHolderInfo()
+    class FeedItemHolderInfo(var updateAction: String) : ItemHolderInfo()
 
     companion object {
-        private val DECCELERATE_INTERPOLATOR = DecelerateInterpolator()
+        private val DECELERATE_INTERPOLATOR = DecelerateInterpolator()
         private val ACCELERATE_INTERPOLATOR = AccelerateInterpolator()
         private val OVERSHOOT_INTERPOLATOR = OvershootInterpolator(4f)
     }
