@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.chooseName
+package com.kamisoft.babynames.presentation.choose_name
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.kamisoft.babynames.data.datasource.NamesDataSource

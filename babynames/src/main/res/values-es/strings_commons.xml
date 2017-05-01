@@ -2,4 +2,6 @@
   <string name="app_name">BabyName</string>
   <string name="boy">Niño</string>
   <string name="girl">Niña</string>
+  <string name="dad">Papá</string>
+  <string name="mom">Mamá</string>
 </resources>

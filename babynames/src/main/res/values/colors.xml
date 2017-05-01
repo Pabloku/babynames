@@ -10,5 +10,7 @@
   <color name="divider">#BDBDBD</color>
   <color name="boy_color">#46D0BE</color>
   <color name="girl_color">#FB929C</color>
+  <color name="dad_color">#3AACE7</color>
+  <color name="mom_color">#D76272</color>
   <color name="disable">#BDBDBD</color>
 </resources>

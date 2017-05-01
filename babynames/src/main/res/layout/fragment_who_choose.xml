@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <TextView
+      android:id="@+id/txtWhoChoose"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/who_choose"
+      android:textAllCaps="true"
+      android:gravity="center"
+      android:padding="5dp"
+      android:textSize="40sp"
+      android:layout_marginTop="8dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <Button
+      android:id="@+id/btnDad"
+      android:text="@string/dad"
+      android:textAllCaps="true"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:drawableStart="@drawable/ic_dad"
+      android:drawableLeft="@drawable/ic_dad"
+      android:textSize="30sp"
+      android:theme="@style/ButtonDad"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/txtWhoChoose"
+      app:layout_constraintBottom_toTopOf="@+id/guideline"
+      app:layout_constraintVertical_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.0"/>
+
+
+  <Button
+      android:id="@+id/btnMom"
+      android:text="@string/mom"
+      android:textAllCaps="true"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      android:drawableStart="@drawable/ic_mom"
+      android:drawableLeft="@drawable/ic_mom"
+      android:textSize="30sp"
+      android:theme="@style/ButtonMom"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/guideline"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintVertical_bias="0.0"/>
+
+  <android.support.constraint.Guideline
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/guideline"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.5"/>
+
+</android.support.constraint.ConstraintLayout>

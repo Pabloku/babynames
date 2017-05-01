@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.chooseName
+package com.kamisoft.babynames.presentation.choose_name
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,8 +17,8 @@ import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
-import com.kamisoft.babynames.presentation.chooseName.adapter.NameItemAnimator
-import com.kamisoft.babynames.presentation.chooseName.adapter.NamesAdapter
+import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
+import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty

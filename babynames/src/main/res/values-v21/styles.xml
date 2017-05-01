@@ -10,4 +10,15 @@
     <item name="android:textColor">@android:color/white</item>
   </style>
 
+  <style name="ButtonDad" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorButtonNormal">@color/dad_color</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="ButtonMon" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorButtonNormal">@color/mom_color</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>v
+
+
 </resources>

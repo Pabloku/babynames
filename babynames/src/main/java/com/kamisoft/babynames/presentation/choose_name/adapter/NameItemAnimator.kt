@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.chooseName.adapter
+package com.kamisoft.babynames.presentation.choose_name.adapter
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

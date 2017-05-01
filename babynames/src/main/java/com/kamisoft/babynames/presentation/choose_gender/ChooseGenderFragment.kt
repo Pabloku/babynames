@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.chooseGender
+package com.kamisoft.babynames.presentation.choose_gender
 
 import android.content.Context
 import android.os.Bundle
