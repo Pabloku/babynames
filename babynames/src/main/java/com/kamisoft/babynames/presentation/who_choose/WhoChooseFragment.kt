@@ -9,18 +9,29 @@ import android.view.ViewGroup
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.domain.model.Parent
 import kotlinx.android.synthetic.main.fragment_who_choose.*
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 
 class WhoChooseFragment : Fragment() {
 
+    private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
+
     interface WhoChooseListener {
-        fun onWhoSelected(parent: Parent)
+        fun onWhoSelected(parent: Parent, position: Int)
     }
 
     var callBack: WhoChooseListener? = null
 
     companion object {
-        fun createInstance() = WhoChooseFragment()
+        const val ARG_PARENT_POSITION = "parentPosition"
+        fun createInstance(parentPosition: Int): WhoChooseFragment {
+            val fragment = WhoChooseFragment()
+            val bundle = Bundle()
+            bundle.putInt(ARG_PARENT_POSITION, parentPosition)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,8 +40,14 @@ class WhoChooseFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnDad.setOnClickListener { callBack?.onWhoSelected(Parent.DAD) }
-        btnMom.setOnClickListener { callBack?.onWhoSelected(Parent.MOM) }
+        btnDad.setOnClickListener { callBack?.onWhoSelected(Parent.DAD, parentPosition) }
+        btnMom.setOnClickListener { callBack?.onWhoSelected(Parent.MOM, parentPosition) }
+
+        if (parentPosition == 1) {
+            txtWhoChoose.setText(R.string.who_choose_first)
+        } else {
+            txtWhoChoose.setText(R.string.who_choose_second)
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -40,5 +57,11 @@ class WhoChooseFragment : Fragment() {
             throw IllegalStateException("The attaching activity has to implement ${WhoChooseListener::class.java.canonicalName}")
         }
         callBack = context
+    }
+
+    class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
+        override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
+            return thisRef.arguments.getInt(arg)
+        }
     }
 }

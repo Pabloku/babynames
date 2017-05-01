@@ -27,10 +27,12 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
 
     override fun getItemCount() = nameList.size
 
-    fun setBabyNameNameList(names: List<BabyName>) {
+    fun setBabyNameList(names: List<BabyName>) {
         this.nameList = names
         notifyDataSetChanged()
     }
+
+    fun getBabyNameList() = nameList
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

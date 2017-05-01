@@ -1,3 +1,4 @@
 <resources>
-  <string name="who_choose">Who choose first?</string>
+  <string name="who_choose_first">Who choose first?</string>
+  <string name="who_choose_second">Who choose now?</string>
 </resources>

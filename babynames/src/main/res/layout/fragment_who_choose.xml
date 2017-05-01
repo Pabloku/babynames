@@ -9,7 +9,7 @@
       android:id="@+id/txtWhoChoose"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/who_choose"
+      android:text="@string/who_choose_first"
       android:textAllCaps="true"
       android:gravity="center"
       android:padding="5dp"

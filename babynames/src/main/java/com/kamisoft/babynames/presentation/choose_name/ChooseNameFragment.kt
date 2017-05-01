@@ -1,5 +1,6 @@
 package com.kamisoft.babynames.presentation.choose_name
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -19,6 +20,7 @@ import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
+import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -27,18 +29,27 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         ChooseNamePresenter>(), ChooseNameView {
 
     private val selectedGender: NamesDataSource.Gender by GenderArgument(ARG_GENDER)
+    private val parentPosition: Int by ParentArgument(WhoChooseFragment.ARG_PARENT_POSITION)
 
     private val namesAdapter: NamesAdapter = NamesAdapter {
         Logger.debug("${it.name} Clicked")
         presenter.manageBabyNameClick(it)
     }
 
+    interface ChooseNamesListener {
+        fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int)
+    }
+
+    var callBack: ChooseNamesListener? = null
+
     companion object {
         const val ARG_GENDER = "gender"
-        fun createInstance(gender: NamesDataSource.Gender): ChooseNameFragment {
+        const val ARG_PARENT_POSITION = "parentPosition"
+        fun createInstance(gender: NamesDataSource.Gender, parentPosition: Int): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
+            bundle.putInt(ARG_PARENT_POSITION, parentPosition)
             fragment.arguments = bundle
             return fragment
         }
@@ -54,6 +65,9 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
+        btnOk.setOnClickListener {
+            callBack?.onNamesSelected(presenter.getLikedBabyNames(namesAdapter.getBabyNameList()), parentPosition)
+        }
         showLoading(false)
     }
 
@@ -65,7 +79,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun createPresenter() = ChooseNamePresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
     override fun setData(nameList: List<BabyName>) {
-        namesAdapter.setBabyNameNameList(nameList)
+        namesAdapter.setBabyNameList(nameList)
     }
 
     override fun loadData(pullToRefresh: Boolean) {
@@ -88,9 +102,24 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         contentView.show()
     }
 
-    class GenderArgument(private val name: String) : ReadOnlyProperty<Fragment, NamesDataSource.Gender> {
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        if (context !is ChooseNamesListener) {
+            throw IllegalStateException("The attaching activity has to implement ${ChooseNamesListener::class.java.canonicalName}")
+        }
+        callBack = context
+    }
+
+    class GenderArgument(private val arg: String) : ReadOnlyProperty<Fragment, NamesDataSource.Gender> {
         override fun getValue(thisRef: Fragment, property: KProperty<*>): NamesDataSource.Gender {
-            return NamesDataSource.Gender.valueOf(thisRef.arguments.getString(name).toUpperCase())
+            return NamesDataSource.Gender.valueOf(thisRef.arguments.getString(arg).toUpperCase())
+        }
+    }
+
+    class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
+        override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
+            return thisRef.arguments.getInt(arg)
         }
     }
 

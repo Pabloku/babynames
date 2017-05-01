@@ -4,25 +4,35 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.data.datasource.NamesDataSource
+import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
 import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
 import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-//TODO Mvp makes sense here in this static activity?
 class MainActivity : AppCompatActivity(),
-        ChooseGenderFragment.ChooseGenderListener, WhoChooseFragment.WhoChooseListener {
-
+        ChooseGenderFragment.ChooseGenderListener,
+        WhoChooseFragment.WhoChooseListener,
+        ChooseNameFragment.ChooseNamesListener {
     lateinit var gender: NamesDataSource.Gender
 
     override fun onGenderSelected(gender: NamesDataSource.Gender) {
         this.gender = gender
-        showWhoChooseView()
+        showWhoChooseView(1)
     }
 
-    override fun onWhoSelected(parent: Parent) {
-        showChooseNameView(this.gender)
+    override fun onWhoSelected(parent: Parent, position: Int) {
+        showChooseNameView(this.gender, position)
+    }
+
+    override fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int) {
+        //TODO save babyNamesLiked in memory
+        if (parentPosition == 1) {
+            showWhoChooseView(2)
+        } else {
+            //TODO show coincidences fragment!
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +40,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         showChooseGenderView()
-        stepperIndicator.stepCount = 4
-
+        stepperIndicator.stepCount = 5
     }
 
     fun showChooseGenderView() {
@@ -40,24 +49,34 @@ class MainActivity : AppCompatActivity(),
         transaction.commit()
     }
 
-    fun showWhoChooseView() {
+    fun showWhoChooseView(parentPosition: Int) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.contentView, WhoChooseFragment.createInstance())
-        transaction.addToBackStack("whoChoose")
+        transaction.replace(R.id.contentView, WhoChooseFragment.createInstance(parentPosition))
+        if (parentPosition == 1) { //TODO isFirstParent
+            stepperIndicator.currentStep = 1
+            transaction.addToBackStack("whoChooseFirstParent")
+        } else {
+            stepperIndicator.currentStep = 3
+            transaction.addToBackStack("whoChooseSecondParent")
+        }
         transaction.commit()
-        stepperIndicator.currentStep = 1
     }
 
-    fun showChooseNameView(gender: NamesDataSource.Gender) {
+    fun showChooseNameView(gender: NamesDataSource.Gender, parentPosition: Int) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.contentView, ChooseNameFragment.createInstance(gender))
-        transaction.addToBackStack("chooseName")
+        transaction.replace(R.id.contentView, ChooseNameFragment.createInstance(gender, parentPosition))
+        if (parentPosition == 1) {
+            stepperIndicator.currentStep = 2
+            transaction.addToBackStack("chooseNameFirstParent")
+        } else {
+            stepperIndicator.currentStep = 4
+            transaction.addToBackStack("chooseNameSecondParent")
+        }
         transaction.commit()
-        stepperIndicator.currentStep = 2
     }
 
     override fun onBackPressed() {

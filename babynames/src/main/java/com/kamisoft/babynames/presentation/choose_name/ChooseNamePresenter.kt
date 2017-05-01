@@ -16,6 +16,10 @@ class ChooseNamePresenter(private val getNamesUseCase: GetNameList) :
         babyName.liked = !babyName.liked
     }
 
+    fun getLikedBabyNames(babyNameList: List<BabyName>): List<BabyName> {
+        return babyNameList.filter { it.liked }
+    }
+
     fun onNamesLoaded(nameList: List<BabyName>) {
         view?.setData(nameList)
         view?.showContent()
