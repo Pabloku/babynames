@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.hide
@@ -20,7 +18,6 @@ import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
-import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -29,7 +26,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         ChooseNamePresenter>(), ChooseNameView {
 
     private val selectedGender: NamesDataSource.Gender by GenderArgument(ARG_GENDER)
-    private val parentPosition: Int by ParentArgument(WhoChooseFragment.ARG_PARENT_POSITION)
+    private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
     private val namesAdapter: NamesAdapter = NamesAdapter {
         Logger.debug("${it.name} Clicked")
@@ -57,6 +54,16 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_choose_name, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home, menu)
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -100,6 +107,10 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         super.showContent()
         loadingView.hide()
         contentView.show()
+    }
+
+    fun findNameInList(text: String) {
+        (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
     }
 
     override fun onAttach(context: Context?) {

@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
@@ -40,6 +39,8 @@ class MainActivity : AppCompatActivity(),
         ChooseNameFragment.ChooseNamesListener,
         MatchesFragment.MatchesListener {
 
+    private lateinit var chooseNameFragment: ChooseNameFragment
+
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
 
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int) {
+        hideSearchToolbar()
         //TODO save babyNamesLiked in memory
         if (parentPosition == 1) {
             babyNamesFirstParent = babyNamesLiked
@@ -99,10 +101,7 @@ class MainActivity : AppCompatActivity(),
         searchMenu = searchToolbar.menu
 
         searchToolbar.setNavigationOnClickListener({
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                circleReveal(searchToolbar, 1, true, false)
-            else
-                searchToolbar.hide()
+            hideSearchToolbar()
         })
 
         searchItem = searchMenu.findItem(R.id.action_search)
@@ -110,10 +109,7 @@ class MainActivity : AppCompatActivity(),
         MenuItemCompat.setOnActionExpandListener(searchItem, object : MenuItemCompat.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 // Do something when collapsed
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    circleReveal(searchToolbar, 1, true, false)
-                } else
-                    searchToolbar.hide()
+                hideSearchToolbar()
                 return true
             }
 
@@ -173,7 +169,7 @@ class MainActivity : AppCompatActivity(),
 
             fun callSearch(query: String) {
                 Logger.info("query $query")
-
+                chooseNameFragment.findNameInList(query)
             }
 
         })
@@ -202,10 +198,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun showChooseNameView(gender: NamesDataSource.Gender, parentPosition: Int) {
+        chooseNameFragment = ChooseNameFragment.createInstance(gender, parentPosition)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.contentView, ChooseNameFragment.createInstance(gender, parentPosition))
+        transaction.replace(R.id.contentView, chooseNameFragment)
         if (parentPosition == 1) {
             stepperIndicator.currentStep = 2
             transaction.addToBackStack("chooseNameFirstParent")
@@ -227,8 +224,8 @@ class MainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         if (searchToolbar.isVisible()) {
-            circleReveal(searchToolbar, 1, true, false)
-        }else {
+            hideSearchToolbar()
+        } else {
             super.onBackPressed()
             if (stepperIndicator.currentStep > 0) {
                 stepperIndicator.currentStep -= 1
@@ -236,25 +233,30 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_home, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         when (item.itemId) {
             R.id.action_search -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    circleReveal(searchToolbar, 1, true, true)
-                else
-                    searchToolbar.show()
-
+                showSearchToolbar()
                 searchItem.expandActionView()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showSearchToolbar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            circleReveal(searchToolbar, 1, true, true)
+        else
+            searchToolbar.show()
+    }
+
+    private fun hideSearchToolbar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            circleReveal(searchToolbar, 1, true, false)
+        else
+            searchToolbar.hide()
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

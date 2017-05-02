@@ -67,4 +67,8 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
             }
         }
     }
+
+    fun getFirstItemPositionStartingWith(text: String) = nameList.indexOfFirst {
+        it.name.toLowerCase().startsWith(text.toLowerCase())
+    }
 }
