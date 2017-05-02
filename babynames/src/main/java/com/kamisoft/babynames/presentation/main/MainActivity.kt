@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity(),
         Logger.debug("Matches acepted")
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -91,8 +90,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun setupToolbars() {
-        setSupportActionBar(toolbar as Toolbar?);
-        setSearchToolbar();
+        setSupportActionBar(toolbar as Toolbar?)
+        setSearchToolbar()
     }
 
     fun setSearchToolbar() {
@@ -124,7 +123,7 @@ class MainActivity : AppCompatActivity(),
 
     fun initSearchView() {
         val searchView = searchMenu.findItem(R.id.action_search).actionView as SearchView
-        searchView.maxWidth = Integer.MAX_VALUE;
+        searchView.maxWidth = Integer.MAX_VALUE
 
         // Enable/Disable Submit button in the keyboard
 
@@ -185,7 +184,7 @@ class MainActivity : AppCompatActivity(),
     fun showWhoChooseView(parentPosition: Int) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right);
+                R.anim.enter_from_left, R.anim.exit_to_right)
         transaction.replace(R.id.contentView, WhoChooseFragment.createInstance(parentPosition))
         if (parentPosition == 1) { //TODO isFirstParent
             stepperIndicator.currentStep = 1
@@ -201,7 +200,7 @@ class MainActivity : AppCompatActivity(),
         chooseNameFragment = ChooseNameFragment.createInstance(gender, parentPosition)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right);
+                R.anim.enter_from_left, R.anim.exit_to_right)
         transaction.replace(R.id.contentView, chooseNameFragment)
         if (parentPosition == 1) {
             stepperIndicator.currentStep = 2
@@ -216,7 +215,7 @@ class MainActivity : AppCompatActivity(),
     fun showCoincidencesView(matches: ArrayList<String>) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right);
+                R.anim.enter_from_left, R.anim.exit_to_right)
         transaction.replace(R.id.contentView, MatchesFragment.createInstance(matches))
         transaction.addToBackStack("coincidences")
         transaction.commit()
