@@ -9,6 +9,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kamisoft.babynames.data.entity.FireBaseBabyName
 import com.kamisoft.babynames.logger.Logger
+import java.text.Collator
+import java.util.*
 
 
 //TODO [Paloga] Proguard config for firebase real time database https://firebase.google.com/docs/database/android/start/
@@ -25,13 +27,20 @@ class FirebaseNamesDataSource : NamesDataSource {
 
         firebaseQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                taskCompletionSource.setResult(
-                        dataSnapshot?.children?.map {
-                            val firebaseBabyName = it.getValue(FireBaseBabyName::class.java)
-                            firebaseBabyName.name = it.key
-                            return@map firebaseBabyName
-                        }
-                )
+                val list = dataSnapshot?.children?.map {
+                    val firebaseBabyName = it.getValue(FireBaseBabyName::class.java)
+                    firebaseBabyName.name = it.key
+                    return@map firebaseBabyName
+                }
+                
+                // This strategy mean it'll ignore the accents. Maybe better way to do this in kotlin?
+                Collections.sort(list) { babyName1, babyName2 ->
+                    val collator = Collator.getInstance()
+                    collator.strength = Collator.PRIMARY
+                    collator.compare(babyName1.name, babyName2.name)
+                }
+
+                taskCompletionSource.setResult(list)
             }
 
             override fun onCancelled(databaseError: DatabaseError?) {
