@@ -50,7 +50,7 @@ class MatchesFragment : Fragment() {
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, false) })
+        namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, "", "", false) })
     }
 
     override fun onAttach(context: Context?) {

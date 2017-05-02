@@ -21,7 +21,7 @@ class GetNameList(val namesRepository: NamesRepository) {
     private fun loadNames(gender: NamesDataSource.Gender, callback: CallBacks.NamesCallback) {
         val nameList = namesRepository.getAllNamesByGender(gender)
         val babyNameList = ArrayList<BabyName>()
-        nameList.map { babyNameList.add(BabyName(name = it, liked = false)) }
+        nameList.map { babyNameList.add(BabyName(name = it.name, origin = it.origin, meaning = it.meaning, liked = false)) }
         Handler(Looper.getMainLooper()).post(NamesLoaded(callback, babyNameList))
     }
 

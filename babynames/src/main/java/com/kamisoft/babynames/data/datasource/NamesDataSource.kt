@@ -1,5 +1,7 @@
 package com.kamisoft.babynames.data.datasource
 
+import com.kamisoft.babynames.data.entity.FireBaseBabyName
+
 interface NamesDataSource {
 
     //TODO [Paloga] Think about the best place for this enum https://kotlinlang.org/docs/reference/delegated-properties.html
@@ -11,5 +13,5 @@ interface NamesDataSource {
         }
     }
 
-    fun getNamesList(gender: Gender): List<String>
+    fun getNamesList(gender: Gender): List<FireBaseBabyName>
 }
