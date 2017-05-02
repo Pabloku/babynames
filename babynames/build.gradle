@@ -71,6 +71,7 @@ dependencies {
   compile appDependencies.stepperIndicator
   compile appDependencies.recyclerView
   compile appDependencies.mosbyMvpLce
+  compile appDependencies.recyclerViewFS
 }
 
 apply plugin: 'com.google.gms.google-services'

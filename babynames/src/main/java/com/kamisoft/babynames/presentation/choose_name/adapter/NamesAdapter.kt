@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.domain.model.BabyName
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import kotlinx.android.synthetic.main.row_name.view.*
 
-class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>() {
+class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>(),
+        FastScrollRecyclerView.SectionedAdapter {
 
     companion object {
         val ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button"
@@ -34,6 +36,10 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
     }
 
     fun getBabyNameList() = nameList
+
+    private fun getInitialLetter(name: String) = name[0].toString()
+
+    override fun getSectionName(position: Int): String = getInitialLetter(nameList[position].name)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

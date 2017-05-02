@@ -26,6 +26,7 @@ ext {
   ankoVersion = '0.9.1'
   stepperIndicatorVersion = '1.0.6'
   mosbyVersion = '3.0.3'
+  recyclerviewFastscrollVersion = '1.0.15'
 
   //Testing
   jUnitVersion = '4.12'
@@ -44,7 +45,8 @@ ext {
                      ankoRecyclerView  : "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion",
                      stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion",
                      recyclerView      : "com.android.support:recyclerview-v7:$recyclerViewVersion",
-                     mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion"]
+                     mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",
+                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]
