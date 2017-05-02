@@ -10,7 +10,7 @@
       android:padding="16dp"
       android:layout_gravity="center"
       android:layout_centerInParent="true"
-      android:drawableTop="@drawable/ic_error_outline_black_24dp"
+      android:drawableTop="@drawable/ic_error"
       android:drawablePadding="16dp"
       android:textSize="20sp"
       android:textColor="#656565"
