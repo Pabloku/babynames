@@ -5,4 +5,6 @@
   <string name="girl">Niña</string>
   <string name="dad">Papá</string>
   <string name="mom">Mamá</string>
+  <string name="search">Buscar</string>
+  <string name="search_hint">Buscar…</string>
 </resources>

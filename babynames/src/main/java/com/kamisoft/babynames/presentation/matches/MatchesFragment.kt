@@ -13,8 +13,6 @@ import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.fragment_choose_name.*
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 class MatchesFragment : Fragment() {
 
@@ -25,17 +23,11 @@ class MatchesFragment : Fragment() {
     var callBack: MatchesListener? = null
 
     companion object {
-        const val ARG_MATCH_LIST = "matchList"
-        fun createInstance(matches: ArrayList<String>): MatchesFragment {
+        fun createInstance(): MatchesFragment {
             val fragment = MatchesFragment()
-            val bundle = Bundle()
-            bundle.putStringArrayList(ARG_MATCH_LIST, matches)
-            fragment.arguments = bundle
             return fragment
         }
     }
-
-    private val nameMatchesList: ArrayList<String> by MatchesArgument(ARG_MATCH_LIST)
 
     private val namesAdapter: NamesAdapter = NamesAdapter {
         Logger.debug("${it.name} Clicked")
@@ -50,7 +42,7 @@ class MatchesFragment : Fragment() {
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, "", "", false) })
+        //TODO remove heart in items of this screen
     }
 
     override fun onAttach(context: Context?) {
@@ -62,9 +54,8 @@ class MatchesFragment : Fragment() {
         callBack = context
     }
 
-    class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, ArrayList<String>> {
-        override fun getValue(thisRef: Fragment, property: KProperty<*>): ArrayList<String> {
-            return thisRef.arguments.getStringArrayList(arg)
-        }
+    fun setMatchedItems(nameMatchesList: List<String>) {
+        namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, "", "", false) })
     }
+
 }

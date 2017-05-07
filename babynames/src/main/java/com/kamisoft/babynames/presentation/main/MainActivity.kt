@@ -1,24 +1,23 @@
 package com.kamisoft.babynames.presentation.main
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewAnimationUtils
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.kamisoft.babyname.R
+import com.kamisoft.babynames.commons.circleReveal
 import com.kamisoft.babynames.commons.hide
 import com.kamisoft.babynames.commons.isVisible
 import com.kamisoft.babynames.commons.show
@@ -32,49 +31,64 @@ import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-
+//TODO MVP
 class MainActivity : AppCompatActivity(),
         ChooseGenderFragment.ChooseGenderListener,
         WhoChooseFragment.WhoChooseListener,
         ChooseNameFragment.ChooseNamesListener,
         MatchesFragment.MatchesListener {
 
-    private lateinit var chooseNameFragment: ChooseNameFragment
+    private val chooseGenderFragment by lazy { ChooseGenderFragment.createInstance() }
+    private val whoChooseFirstFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 1) }
+    private val chooseNameFirstFragment by lazy { ChooseNameFragment.createInstance(gender, parentPosition = 1) }
+    private val whoChooseSecondFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 2) }
+    private val chooseNameSecondFragment by lazy { ChooseNameFragment.createInstance(gender, parentPosition = 2) }
+    private val matchesFragment by lazy { MatchesFragment.createInstance() }
 
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
 
-    private lateinit var gender: NamesDataSource.Gender
+    private var gender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
 
     private lateinit var babyNamesFirstParent: List<BabyName>
     private lateinit var babyNamesSecondParent: List<BabyName>
 
     override fun onGenderSelected(gender: NamesDataSource.Gender) {
-        this.gender = gender
-        showWhoChooseView(1)
+        if (gender != this.gender) {
+            this.gender = gender
+            chooseNameFirstFragment.updateListByGender(gender)
+        }
+        contentPager.currentItem = contentPager.currentItem + 1
     }
 
     override fun onWhoSelected(parent: Parent, position: Int) {
-        showChooseNameView(this.gender, position)
+        contentPager.currentItem = contentPager.currentItem + 1
     }
 
     override fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int) {
         hideSearchToolbar()
+        clearSearchText()
+        contentPager.currentItem = contentPager.currentItem + 1
         //TODO save babyNamesLiked in memory
         if (parentPosition == 1) {
             babyNamesFirstParent = babyNamesLiked
-            showWhoChooseView(2)
         } else {
-            //TODO show coincidences fragment!
             babyNamesSecondParent = babyNamesLiked
             val list = babyNamesFirstParent.filter {
                 val name1 = it.name
                 val babyName2 = babyNamesSecondParent.find { it.name == name1 }
                 return@filter babyName2 != null
             }
-            showCoincidencesView(ArrayList(list.map { it.name }))
+            matchesFragment.setMatchedItems(ArrayList(list.map { it.name }))
         }
     }
+
+
+    fun getCurrentFragment(): Fragment {
+        val pagerAdapter = contentPager.adapter as ScreenSlidePagerAdapter
+        return pagerAdapter.instantiateItem(contentPager, contentPager.currentItem) as Fragment
+    }
+
 
     override fun onAccept() {
         Logger.debug("Matches acepted")
@@ -84,9 +98,9 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initPager()
         setupToolbars()
-        showChooseGenderView()
-        stepperIndicator.stepCount = 5
+        stepperIndicator.setViewPager(contentPager)
     }
 
     fun setupToolbars() {
@@ -101,6 +115,7 @@ class MainActivity : AppCompatActivity(),
 
         searchToolbar.setNavigationOnClickListener({
             hideSearchToolbar()
+            clearSearchText()
         })
 
         searchItem = searchMenu.findItem(R.id.action_search)
@@ -109,6 +124,7 @@ class MainActivity : AppCompatActivity(),
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 // Do something when collapsed
                 hideSearchToolbar()
+                clearSearchText()
                 return true
             }
 
@@ -126,33 +142,29 @@ class MainActivity : AppCompatActivity(),
         searchView.maxWidth = Integer.MAX_VALUE
 
         // Enable/Disable Submit button in the keyboard
-
         searchView.isSubmitButtonEnabled = false
         searchView.setBackgroundResource(R.drawable.abc_textfield_search_default_mtrl_alpha)
 
         // Change search close button image
-
         val closeButton = searchView.findViewById(R.id.search_close_btn) as ImageView
         closeButton.setImageResource(R.drawable.ic_close)
 
         // set hint and the text colors
-
         val txtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as EditText
-        txtSearch.hint = "Search..."
+        txtSearch.setHint(R.string.search_hint)
         txtSearch.setHintTextColor(Color.LTGRAY)
         txtSearch.setTextColor(Color.WHITE)
 
         // set the cursor
-
         val searchTextView = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as AutoCompleteTextView
+
         try {
             val mCursorDrawableRes = TextView::class.java.getDeclaredField("mCursorDrawableRes")
             mCursorDrawableRes.isAccessible = true
             mCursorDrawableRes.set(searchTextView, R.drawable.search_cursor) //This sets the cursor resource ID to 0 or @null which will make it visible on white background
         } catch (e: Exception) {
-            e.printStackTrace()
+            Logger.error(e, "initSearchView error")
         }
-
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -168,66 +180,22 @@ class MainActivity : AppCompatActivity(),
 
             fun callSearch(query: String) {
                 Logger.info("query $query")
-                chooseNameFragment.findNameInList(query)
+                (getCurrentFragment() as ChooseNameFragment).findNameInList(query)
             }
 
         })
 
     }
 
-    fun showChooseGenderView() {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.contentView, ChooseGenderFragment.createInstance())
-        transaction.commit()
-    }
-
-    fun showWhoChooseView(parentPosition: Int) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction.replace(R.id.contentView, WhoChooseFragment.createInstance(parentPosition))
-        if (parentPosition == 1) { //TODO isFirstParent
-            stepperIndicator.currentStep = 1
-            transaction.addToBackStack("whoChooseFirstParent")
-        } else {
-            stepperIndicator.currentStep = 3
-            transaction.addToBackStack("whoChooseSecondParent")
-        }
-        transaction.commit()
-    }
-
-    fun showChooseNameView(gender: NamesDataSource.Gender, parentPosition: Int) {
-        chooseNameFragment = ChooseNameFragment.createInstance(gender, parentPosition)
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction.replace(R.id.contentView, chooseNameFragment)
-        if (parentPosition == 1) {
-            stepperIndicator.currentStep = 2
-            transaction.addToBackStack("chooseNameFirstParent")
-        } else {
-            stepperIndicator.currentStep = 4
-            transaction.addToBackStack("chooseNameSecondParent")
-        }
-        transaction.commit()
-    }
-
-    fun showCoincidencesView(matches: ArrayList<String>) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right)
-        transaction.replace(R.id.contentView, MatchesFragment.createInstance(matches))
-        transaction.addToBackStack("coincidences")
-        transaction.commit()
-    }
-
     override fun onBackPressed() {
         if (searchToolbar.isVisible()) {
             hideSearchToolbar()
+            clearSearchText()
         } else {
-            super.onBackPressed()
-            if (stepperIndicator.currentStep > 0) {
-                stepperIndicator.currentStep -= 1
+            if (contentPager.currentItem > 0) {
+                contentPager.currentItem -= 1
+            } else {
+                super.onBackPressed()
             }
         }
     }
@@ -246,53 +214,59 @@ class MainActivity : AppCompatActivity(),
 
     private fun showSearchToolbar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            circleReveal(searchToolbar, 1, true, true)
+            searchToolbar.circleReveal(posFromRight = 1, containsOverflow = true, isShow = true)
         else
             searchToolbar.show()
     }
 
     private fun hideSearchToolbar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            circleReveal(searchToolbar, 1, true, false)
+            searchToolbar.circleReveal(posFromRight = 1, containsOverflow = true, isShow = false)
         else
             searchToolbar.hide()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    fun circleReveal(myView: View, posFromRight: Int, containsOverflow: Boolean, isShow: Boolean) {
-        var width = myView.width
+    private fun clearSearchText() {
+        val searchView = searchMenu.findItem(R.id.action_search).actionView as SearchView
+        val searchTextView = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as AutoCompleteTextView
+        searchTextView.setText("")
+    }
 
-        if (posFromRight > 0)
-            width -= posFromRight * resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) - resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material) / 2
-        if (containsOverflow)
-            width -= resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material)
+    object Page {
+        val FIRST = 0
+        val SECOND = 1
+        val THIRD = 2
+        val FOURTH = 3
+        val FIFTH = 4
+        val SIXTH = 5
+    }
 
-        val cx = width
-        val cy = myView.height / 2
+    private fun initPager() {
+        val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
+        contentPager.offscreenPageLimit = 5
+        contentPager.adapter = pagerAdapter
+    }
 
-        val anim: Animator
-        if (isShow)
-            anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0f, width.toFloat())
-        else
-            anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, width.toFloat(), 0f)
+    val NUMBER_OF_PAGES = 6
 
-        anim.duration = 220.toLong()
+    private inner class ScreenSlidePagerAdapter constructor(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-        // make the view invisible when the animation is done
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                if (!isShow) {
-                    super.onAnimationEnd(animation)
-                    myView.visibility = View.INVISIBLE
+        override fun getItem(position: Int): Fragment {
+            return when (position) {
+                Page.FIRST -> chooseGenderFragment
+                Page.SECOND -> whoChooseFirstFragment
+                Page.THIRD -> chooseNameFirstFragment
+                Page.FOURTH -> whoChooseSecondFragment
+                Page.FIFTH -> chooseNameSecondFragment
+                Page.SIXTH -> matchesFragment
+                else -> {
+                    chooseGenderFragment
                 }
             }
-        })
+        }
 
-        // make the view visible and start the animation
-        if (isShow)
-            myView.show()
-
-        // start the animation
-        anim.start()
+        override fun getCount(): Int {
+            return NUMBER_OF_PAGES
+        }
     }
 }

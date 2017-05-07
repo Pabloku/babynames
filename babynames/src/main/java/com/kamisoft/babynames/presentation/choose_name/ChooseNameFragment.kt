@@ -25,13 +25,13 @@ import kotlin.reflect.KProperty
 class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
 
-    private val selectedGender: NamesDataSource.Gender by GenderArgument(ARG_GENDER)
+    private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
-    private val namesAdapter: NamesAdapter = NamesAdapter {
+    private val namesAdapter: NamesAdapter = NamesAdapter({
         Logger.debug("${it.name} Clicked")
         presenter.manageBabyNameClick(it)
-    }
+    })
 
     interface ChooseNamesListener {
         fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int)
@@ -59,6 +59,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        selectedGender = NamesDataSource.Gender.valueOf(arguments.getString(ARG_GENDER).toUpperCase())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -86,6 +87,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun createPresenter() = ChooseNamePresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
     override fun setData(nameList: List<BabyName>) {
+        showLoading(false)
         namesAdapter.setBabyNameList(nameList)
     }
 
@@ -113,6 +115,12 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
     }
 
+    fun updateListByGender(gender:NamesDataSource.Gender) {
+        showLoading(false)
+        selectedGender = gender
+        presenter.loadNames(selectedGender)
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -120,12 +128,6 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
             throw IllegalStateException("The attaching activity has to implement ${ChooseNamesListener::class.java.canonicalName}")
         }
         callBack = context
-    }
-
-    class GenderArgument(private val arg: String) : ReadOnlyProperty<Fragment, NamesDataSource.Gender> {
-        override fun getValue(thisRef: Fragment, property: KProperty<*>): NamesDataSource.Gender {
-            return NamesDataSource.Gender.valueOf(thisRef.arguments.getString(arg).toUpperCase())
-        }
     }
 
     class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
