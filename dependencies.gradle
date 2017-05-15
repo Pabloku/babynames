@@ -43,6 +43,7 @@ ext {
                      ankoAppCompatV7   : "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion",
                      ankoDesign        : "org.jetbrains.anko:anko-design:$ankoVersion",
                      ankoRecyclerView  : "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion",
+                     ankoSqlite        : "org.jetbrains.anko:anko-sqlite:$ankoVersion",
                      stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion",
                      recyclerView      : "com.android.support:recyclerview-v7:$recyclerViewVersion",
                      mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",

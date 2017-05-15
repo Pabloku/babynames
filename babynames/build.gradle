@@ -68,6 +68,7 @@ dependencies {
   compile appDependencies.ankoAppCompatV7
   compile appDependencies.ankoDesign
   compile appDependencies.ankoRecyclerView
+  compile appDependencies.ankoSqlite
   compile appDependencies.stepperIndicator
   compile appDependencies.recyclerView
   compile appDependencies.mosbyMvpLce
