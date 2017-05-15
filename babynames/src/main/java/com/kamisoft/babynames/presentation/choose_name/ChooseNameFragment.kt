@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
@@ -16,6 +17,8 @@ import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.data.repository.FavoritesDataRepository
 import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Parent
+import com.kamisoft.babynames.domain.usecase.GetFavoriteList
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
@@ -27,15 +30,13 @@ import kotlin.reflect.KProperty
 
 class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
-
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
-    private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
-    private val saveFavoriteUseCase = SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory()))
+    private var parent: String = Parent.DAD.toString()
+    private val parentPosition: Int by ParentPositionArgument(ARG_PARENT_POSITION)
 
     private val namesAdapter: NamesAdapter = NamesAdapter({
         Logger.debug("${it.name} Clicked")
-        saveFavoriteUseCase.saveFavoriteName(it.name)
-        presenter.manageBabyNameClick(it)
+        presenter.manageBabyNameClick(parent + parentPosition, selectedGender, it)
     })
 
     interface ChooseNamesListener {
@@ -46,11 +47,13 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     companion object {
         const val ARG_GENDER = "gender"
+        const val ARG_PARENT = "parent"
         const val ARG_PARENT_POSITION = "parentPosition"
-        fun createInstance(gender: NamesDataSource.Gender, parentPosition: Int): ChooseNameFragment {
+        fun createInstance(parent: String, gender: NamesDataSource.Gender, parentPosition: Int): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
+            bundle.putString(ARG_PARENT, parent)
             bundle.putInt(ARG_PARENT_POSITION, parentPosition)
             fragment.arguments = bundle
             return fragment
@@ -65,6 +68,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         selectedGender = NamesDataSource.Gender.valueOf(arguments.getString(ARG_GENDER).toUpperCase())
+        parent = arguments.getString(ARG_PARENT)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -75,7 +79,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //TODO errorView is pending
-        rvList.layoutManager = LinearLayoutManager(activity)
+        rvList.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
         btnOk.setOnClickListener {
@@ -89,12 +93,22 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         presenter.loadNames(selectedGender)
     }
 
-    override fun createPresenter() = ChooseNamePresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
+    //TODO Clean that parent + parentPosition
+    override fun createPresenter() = ChooseNamePresenter(
+            GetNameList(NamesDataRepository(NamesDataFactory())),
+            GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
+            SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())))
 
     override fun setData(nameList: List<BabyName>) {
         showLoading(false)
         namesAdapter.setBabyNameList(nameList)
+        presenter.loadFavorites(parent + parentPosition, selectedGender)
     }
+
+    override fun setFavoriteList(favorites: List<String>) {
+        namesAdapter.updateFavorites(favorites)
+    }
+
 
     override fun loadData(pullToRefresh: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -120,10 +134,15 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
     }
 
-    fun updateListByGender(gender:NamesDataSource.Gender) {
+    fun updateListByGender(gender: NamesDataSource.Gender) {
         showLoading(false)
-        selectedGender = gender
+        this.selectedGender = gender
         presenter.loadNames(selectedGender)
+    }
+
+    fun updateParent(parent: String) {
+        this.parent = parent
+        presenter.loadFavorites(parent + parentPosition, selectedGender)
     }
 
     override fun onAttach(context: Context?) {
@@ -135,7 +154,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         callBack = context
     }
 
-    class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
+    class ParentPositionArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
         override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
             return thisRef.arguments.getInt(arg)
         }

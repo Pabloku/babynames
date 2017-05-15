@@ -40,14 +40,15 @@ class MainActivity : AppCompatActivity(),
 
     private val chooseGenderFragment by lazy { ChooseGenderFragment.createInstance() }
     private val whoChooseFirstFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 1) }
-    private val chooseNameFirstFragment by lazy { ChooseNameFragment.createInstance(gender, parentPosition = 1) }
+    private val chooseNameFirstFragment by lazy { ChooseNameFragment.createInstance(parent.toString(), gender, parentPosition = 1) }
     private val whoChooseSecondFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 2) }
-    private val chooseNameSecondFragment by lazy { ChooseNameFragment.createInstance(gender, parentPosition = 2) }
+    private val chooseNameSecondFragment by lazy { ChooseNameFragment.createInstance(parent.toString(), gender, parentPosition = 2) }
     private val matchesFragment by lazy { MatchesFragment.createInstance() }
 
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
 
+    private var parent: Parent = Parent.DAD
     private var gender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
 
     private lateinit var babyNamesFirstParent: List<BabyName>
@@ -62,6 +63,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onWhoSelected(parent: Parent, position: Int) {
+        this.parent = parent
+        chooseNameFirstFragment.updateParent(parent.toString())
         contentPager.currentItem = contentPager.currentItem + 1
     }
 

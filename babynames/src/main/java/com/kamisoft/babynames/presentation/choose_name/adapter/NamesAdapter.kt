@@ -19,6 +19,7 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
     }
 
     private var nameList: List<BabyName> = emptyList()
+    private var favoriteList: List<String> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.row_name, parent, false)
@@ -33,6 +34,16 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
     fun setBabyNameList(names: List<BabyName>) {
         this.nameList = names
         notifyDataSetChanged()
+    }
+
+    fun updateFavorites(favorites: List<String>) {
+        this.favoriteList = favorites
+        this.favoriteList.forEach {
+            val favorite = it
+            val babyName = nameList.find { it.name == favorite }
+            babyName?.liked = true
+            notifyItemChanged(nameList.indexOf(babyName))
+        }
     }
 
     fun getBabyNameList() = nameList

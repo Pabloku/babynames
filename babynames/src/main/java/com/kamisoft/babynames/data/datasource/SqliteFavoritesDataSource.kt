@@ -1,6 +1,7 @@
 package com.kamisoft.babynames.data.datasource
 
 import com.kamisoft.babynames.commons.deleteWhere
+import com.kamisoft.babynames.commons.parseList
 import com.kamisoft.babynames.commons.parseOpt
 import com.kamisoft.babynames.commons.toVarargArray
 import com.kamisoft.babynames.data.db.BabyNameDbHelper
@@ -14,10 +15,11 @@ import org.jetbrains.anko.db.select
 class SqliteFavoritesDataSource(val babyNameDbHelper: BabyNameDbHelper = BabyNameDbHelper.instance,
                                 val dataMapper: DbDataMapper = DbDataMapper()) : FavoritesDataSource {
 
-    override fun existFavorite(favorite: Favorite) : Boolean {
+    override fun isFavorite(parent: String, gender: NamesDataSource.Gender, name: String): Boolean {
         return babyNameDbHelper.use {
-            val where = "${FavoriteTable.BABY_NAME} = ?"
-            val sqliteFavorite = select(FavoriteTable.NAME).whereSimple(where, favorite.babyName)
+            val where = "${FavoriteTable.PARENT} = ? AND ${FavoriteTable.GENDER} = ? AND ${FavoriteTable.BABY_NAME} = ?"
+            val sqliteFavorite = select(FavoriteTable.NAME)
+                    .whereSimple(where, parent, gender.ordinal.toString(), name)
                     .parseOpt { SqliteFavorite(HashMap(it)) }
             sqliteFavorite != null
         }
@@ -32,6 +34,15 @@ class SqliteFavoritesDataSource(val babyNameDbHelper: BabyNameDbHelper = BabyNam
     override fun deleteFavorite(favorite: Favorite) = babyNameDbHelper.use {
         val where = "${FavoriteTable.BABY_NAME} = '${favorite.babyName}'"
         deleteWhere(FavoriteTable.NAME, where)
+    }
+
+    override fun getFavorites(parent: String, gender: NamesDataSource.Gender): List<String> {
+        return babyNameDbHelper.use {
+            val where = "${FavoriteTable.PARENT} = ? AND ${FavoriteTable.GENDER} = ?"
+            select(FavoriteTable.NAME)
+                    .whereSimple(where, parent, gender.ordinal.toString())
+                    .parseList { SqliteFavorite(HashMap(it)).babyName }
+        }
     }
 
 }
