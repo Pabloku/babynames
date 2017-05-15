@@ -6,5 +6,5 @@ object FavoriteTable {
     val ID = "_id"
     val PARENT = "parent"
     val GENDER = "gender"
-    val BABY_NAME = "baby_name"
+    val BABY_NAME = "babyName"
 }

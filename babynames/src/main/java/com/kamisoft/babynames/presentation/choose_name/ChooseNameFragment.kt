@@ -10,11 +10,14 @@ import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.hide
 import com.kamisoft.babynames.commons.show
+import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataSource
+import com.kamisoft.babynames.data.repository.FavoritesDataRepository
 import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.usecase.GetNameList
+import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
@@ -27,9 +30,11 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
+    private val saveFavoriteUseCase = SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory()))
 
     private val namesAdapter: NamesAdapter = NamesAdapter({
         Logger.debug("${it.name} Clicked")
+        saveFavoriteUseCase.saveFavoriteName(it.name)
         presenter.manageBabyNameClick(it)
     })
 
