@@ -93,7 +93,6 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         presenter.loadNames(selectedGender)
     }
 
-    //TODO Clean that parent + parentPosition
     override fun createPresenter() = ChooseNamePresenter(
             GetNameList(NamesDataRepository(NamesDataFactory())),
             GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
@@ -108,7 +107,6 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun setFavoriteList(favorites: List<String>) {
         namesAdapter.updateFavorites(favorites)
     }
-
 
     override fun loadData(pullToRefresh: Boolean) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -133,6 +131,8 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     fun findNameInList(text: String) {
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
     }
+
+    //TODO These 2 methods, updateListByGender and updateParent are so ugly. They do app reload the name list that was shown by default
 
     fun updateListByGender(gender: NamesDataSource.Gender) {
         showLoading(false)
