@@ -32,7 +32,7 @@ class SqliteFavoritesDataSource(val babyNameDbHelper: BabyNameDbHelper = BabyNam
     }
 
     override fun deleteFavorite(favorite: Favorite) = babyNameDbHelper.use {
-        val where = "${FavoriteTable.BABY_NAME} = '${favorite.babyName}'"
+        val where = "${FavoriteTable.PARENT} = '${favorite.parent}' AND ${FavoriteTable.BABY_NAME} = '${favorite.babyName}'"
         deleteWhere(FavoriteTable.NAME, where)
     }
 

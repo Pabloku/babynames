@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun initPager() {
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
-        contentPager.offscreenPageLimit = 5
+        contentPager.offscreenPageLimit = 2
         contentPager.adapter = pagerAdapter
     }
 
