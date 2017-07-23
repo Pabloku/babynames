@@ -1,8 +1,6 @@
 package com.kamisoft.babynames.presentation.choose_name
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,36 +23,27 @@ import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.fragment_choose_name.*
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private var parent: String = Parent.DAD.toString()
-    private val parentPosition: Int by ParentPositionArgument(ARG_PARENT_POSITION)
 
     private val namesAdapter: NamesAdapter = NamesAdapter({
         Logger.debug("${it.name} Clicked")
-        presenter.manageBabyNameClick(parent + parentPosition, selectedGender, it)
+        presenter.manageBabyNameClick(parent, selectedGender, it)
     })
 
-    interface ChooseNamesListener {
-        fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int)
-    }
-
-    var callBack: ChooseNamesListener? = null
+    lateinit var callBack: (babyNamesLiked: List<BabyName>) -> Unit
 
     companion object {
         const val ARG_GENDER = "gender"
         const val ARG_PARENT = "parent"
-        const val ARG_PARENT_POSITION = "parentPosition"
-        fun createInstance(parent: String, gender: NamesDataSource.Gender, parentPosition: Int): ChooseNameFragment {
+        fun createInstance(parent: String, gender: NamesDataSource.Gender): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
             bundle.putString(ARG_PARENT, parent)
-            bundle.putInt(ARG_PARENT_POSITION, parentPosition)
             fragment.arguments = bundle
             return fragment
         }
@@ -83,7 +72,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
         btnOk.setOnClickListener {
-            callBack?.onNamesSelected(presenter.getLikedBabyNames(namesAdapter.getBabyNameList()), parentPosition)
+            callBack.invoke(presenter.getLikedBabyNames(namesAdapter.getBabyNameList()))
         }
         showLoading(false)
     }
@@ -101,7 +90,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     override fun setData(nameList: List<BabyName>) {
         showLoading(false)
         namesAdapter.setBabyNameList(nameList)
-        presenter.loadFavorites(parent + parentPosition, selectedGender)
+        presenter.loadFavorites(parent, selectedGender)
     }
 
     override fun setFavoriteList(favorites: List<String>) {
@@ -131,33 +120,4 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     fun findNameInList(text: String) {
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
     }
-
-    //TODO These 2 methods, updateListByGender and updateParent are so ugly. They do app reload the name list that was shown by default
-
-    fun updateListByGender(gender: NamesDataSource.Gender) {
-        showLoading(false)
-        this.selectedGender = gender
-        presenter.loadNames(selectedGender)
-    }
-
-    fun updateParent(parent: String) {
-        this.parent = parent
-        presenter.loadFavorites(parent + parentPosition, selectedGender)
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        if (context !is ChooseNamesListener) {
-            throw IllegalStateException("The attaching activity has to implement ${ChooseNamesListener::class.java.canonicalName}")
-        }
-        callBack = context
-    }
-
-    class ParentPositionArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
-        override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
-            return thisRef.arguments.getInt(arg)
-        }
-    }
-
 }

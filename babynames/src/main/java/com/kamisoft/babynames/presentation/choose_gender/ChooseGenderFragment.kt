@@ -1,6 +1,5 @@
 package com.kamisoft.babynames.presentation.choose_gender
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -12,11 +11,7 @@ import kotlinx.android.synthetic.main.fragment_choose_gender.*
 
 class ChooseGenderFragment : Fragment() {
 
-    interface ChooseGenderListener {
-        fun onGenderSelected(gender: NamesDataSource.Gender)
-    }
-
-    var callBack: ChooseGenderListener? = null
+    lateinit var callBack: (NamesDataSource.Gender) -> Unit
 
     companion object {
         fun createInstance() = ChooseGenderFragment()
@@ -28,16 +23,7 @@ class ChooseGenderFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnBoy.setOnClickListener { callBack?.onGenderSelected(NamesDataSource.Gender.MALE) }
-        btnGirl.setOnClickListener { callBack?.onGenderSelected(NamesDataSource.Gender.FEMALE) }
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        if (context !is ChooseGenderListener) {
-            throw IllegalStateException("The attaching activity has to implement ${ChooseGenderListener::class.java.canonicalName}")
-        }
-        callBack = context
+        btnBoy.setOnClickListener { callBack.invoke(NamesDataSource.Gender.MALE) }
+        btnGirl.setOnClickListener { callBack.invoke(NamesDataSource.Gender.FEMALE) }
     }
 }

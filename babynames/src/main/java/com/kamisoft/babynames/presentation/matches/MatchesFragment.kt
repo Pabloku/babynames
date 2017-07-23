@@ -13,21 +13,23 @@ import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.fragment_choose_name.*
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 class MatchesFragment : Fragment() {
 
-    interface MatchesListener {
-        fun onAccept()
-    }
-
-    var callBack: MatchesListener? = null
-
     companion object {
-        fun createInstance(): MatchesFragment {
+        const val ARG_MATCH_LIST = "matchList"
+        fun createInstance(matches: ArrayList<String>): MatchesFragment {
             val fragment = MatchesFragment()
+            val bundle = Bundle()
+            bundle.putStringArrayList(ARG_MATCH_LIST, matches)
+            fragment.arguments = bundle
             return fragment
         }
     }
+
+    private val nameMatchesList: ArrayList<String> by MatchesArgument(ARG_MATCH_LIST)
 
     private val namesAdapter: NamesAdapter = NamesAdapter {
         Logger.debug("${it.name} Clicked")
@@ -42,20 +44,12 @@ class MatchesFragment : Fragment() {
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        //TODO remove heart in items of this screen
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        if (context !is MatchesListener) {
-            throw IllegalStateException("The attaching activity has to implement ${MatchesListener::class.java.canonicalName}")
-        }
-        callBack = context
-    }
-
-    fun setMatchedItems(nameMatchesList: List<String>) {
         namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, "", "", false) })
     }
 
+    class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, ArrayList<String>> {
+        override fun getValue(thisRef: Fragment, property: KProperty<*>): ArrayList<String> {
+            return thisRef.arguments.getStringArrayList(arg)
+        }
+    }
 }

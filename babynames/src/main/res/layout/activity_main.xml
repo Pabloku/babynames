@@ -15,8 +15,8 @@
       layout="@layout/search_toolbar"
       android:visibility="invisible"/>
 
-  <android.support.v4.view.ViewPager
-      android:id="@+id/contentPager"
+  <FrameLayout
+      android:id="@+id/contentView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@+id/stepperIndicator"

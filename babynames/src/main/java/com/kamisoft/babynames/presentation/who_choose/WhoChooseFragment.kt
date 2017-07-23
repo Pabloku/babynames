@@ -1,6 +1,5 @@
 package com.kamisoft.babynames.presentation.who_choose
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,11 +16,7 @@ class WhoChooseFragment : Fragment() {
 
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
-    interface WhoChooseListener {
-        fun onWhoSelected(parent: Parent, position: Int)
-    }
-
-    var callBack: WhoChooseListener? = null
+    lateinit var callBack: (Parent) -> Unit
 
     companion object {
         const val ARG_PARENT_POSITION = "parentPosition"
@@ -40,23 +35,14 @@ class WhoChooseFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnDad.setOnClickListener { callBack?.onWhoSelected(Parent.DAD, parentPosition) }
-        btnMom.setOnClickListener { callBack?.onWhoSelected(Parent.MOM, parentPosition) }
+        btnDad.setOnClickListener { callBack.invoke(Parent.DAD) }
+        btnMom.setOnClickListener { callBack.invoke(Parent.MOM) }
 
         if (parentPosition == 1) {
             txtWhoChoose.setText(R.string.who_choose_first)
         } else {
             txtWhoChoose.setText(R.string.who_choose_second)
         }
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        if (context !is WhoChooseListener) {
-            throw IllegalStateException("The attaching activity has to implement ${WhoChooseListener::class.java.canonicalName}")
-        }
-        callBack = context
     }
 
     class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {

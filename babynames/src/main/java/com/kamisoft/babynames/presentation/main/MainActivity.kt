@@ -3,11 +3,7 @@ package com.kamisoft.babynames.presentation.main
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -16,6 +12,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.circleReveal
 import com.kamisoft.babynames.commons.hide
@@ -24,6 +21,7 @@ import com.kamisoft.babynames.commons.show
 import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Parent
+import com.kamisoft.babynames.domain.model.SummaryResult
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
 import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
@@ -31,79 +29,123 @@ import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-//TODO MVP
-class MainActivity : AppCompatActivity(),
-        ChooseGenderFragment.ChooseGenderListener,
-        WhoChooseFragment.WhoChooseListener,
-        ChooseNameFragment.ChooseNamesListener,
-        MatchesFragment.MatchesListener {
-
-    private val chooseGenderFragment by lazy { ChooseGenderFragment.createInstance() }
-    private val whoChooseFirstFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 1) }
-    private val chooseNameFirstFragment by lazy { ChooseNameFragment.createInstance(parent.toString(), gender, parentPosition = 1) }
-    private val whoChooseSecondFragment by lazy { WhoChooseFragment.createInstance(parentPosition = 2) }
-    private val chooseNameSecondFragment by lazy { ChooseNameFragment.createInstance(parent.toString(), gender, parentPosition = 2) }
-    private val matchesFragment by lazy { MatchesFragment.createInstance() }
+class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
 
-    private var parent: Parent = Parent.DAD
-    private var gender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
-
-    private lateinit var babyNamesFirstParent: List<BabyName>
-    private lateinit var babyNamesSecondParent: List<BabyName>
-
-    override fun onGenderSelected(gender: NamesDataSource.Gender) {
-        if (gender != this.gender) {
-            this.gender = gender
-            chooseNameFirstFragment.updateListByGender(gender)
-        }
-        contentPager.currentItem = contentPager.currentItem + 1
-    }
-
-    override fun onWhoSelected(parent: Parent, position: Int) {
-        this.parent = parent
-        chooseNameFirstFragment.updateParent(parent.toString())
-        contentPager.currentItem = contentPager.currentItem + 1
-    }
-
-    override fun onNamesSelected(babyNamesLiked: List<BabyName>, parentPosition: Int) {
-        hideSearchToolbar()
-        clearSearchText()
-        contentPager.currentItem = contentPager.currentItem + 1
-        //TODO save babyNamesLiked in memory
-        if (parentPosition == 1) {
-            babyNamesFirstParent = babyNamesLiked
-        } else {
-            babyNamesSecondParent = babyNamesLiked
-            val list = babyNamesFirstParent.filter {
-                val name1 = it.name
-                val babyName2 = babyNamesSecondParent.find { it.name == name1 }
-                return@filter babyName2 != null
-            }
-            matchesFragment.setMatchedItems(ArrayList(list.map { it.name }))
-        }
-    }
-
-
-    fun getCurrentFragment(): Fragment {
-        val pagerAdapter = contentPager.adapter as ScreenSlidePagerAdapter
-        return pagerAdapter.instantiateItem(contentPager, contentPager.currentItem) as Fragment
-    }
-
-
-    override fun onAccept() {
-        Logger.debug("Matches acepted")
-    }
+    private var summaryResult = SummaryResult()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initPager()
         setupToolbars()
-        stepperIndicator.setViewPager(contentPager)
+        showChooseGenderView()
+        stepperIndicator.stepCount = 5
+    }
+
+    override fun createPresenter(): MainPresenter = MainPresenter()
+
+    override fun showChooseGenderView() {
+        val transaction = supportFragmentManager.beginTransaction()
+        val chooseGenderFragment = ChooseGenderFragment.createInstance()
+        chooseGenderFragment.callBack = { onGenderSelected(it) }
+        transaction.replace(R.id.contentView, chooseGenderFragment)
+        transaction.commit()
+    }
+
+    private fun onGenderSelected(gender: NamesDataSource.Gender) {
+        Logger.debug("Gender selected: $gender")
+        summaryResult = summaryResult.copy(gender = gender)
+        showWhoChooseFirstView()
+    }
+
+    override fun showWhoChooseFirstView() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right)
+        val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 1)
+        whoChooseFragment.callBack = { onWhoChooseFirst(it) }
+        transaction.replace(R.id.contentView, whoChooseFragment)
+        stepperIndicator.currentStep = 1
+        transaction.addToBackStack("whoChooseFirstParent")
+        transaction.commit()
+    }
+
+    private fun onWhoChooseFirst(parent: Parent) {
+        Logger.debug("Choosing first: $parent")
+        summaryResult = summaryResult.copy(parent1 = parent.toString())
+        showFirstChooseNameView(summaryResult.gender)
+    }
+
+    override fun showFirstChooseNameView(gender: NamesDataSource.Gender) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right)
+        val chooseNameFragment = ChooseNameFragment.createInstance("Pablo", gender)
+        chooseNameFragment.callBack = { onFirstParentChooseNames(it) }
+        transaction.replace(R.id.contentView, chooseNameFragment)
+        transaction.addToBackStack("chooseNameFirstParent")
+        transaction.commit()
+    }
+
+    private fun onFirstParentChooseNames(babyNamesLiked: List<BabyName>) {
+        Logger.debug("First parent chose ${babyNamesLiked.size} names")
+        summaryResult = summaryResult.copy(parent1NamesChosen = babyNamesLiked)
+        showWhoChooseSecondView()
+    }
+
+    override fun showWhoChooseSecondView() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right)
+        val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 2)
+        whoChooseFragment.callBack = { onWhoChooseSecond(it) }
+        transaction.replace(R.id.contentView, whoChooseFragment)
+        stepperIndicator.currentStep = 3
+        transaction.addToBackStack("whoChooseSecondParent")
+        transaction.commit()
+    }
+
+    private fun onWhoChooseSecond(parent: Parent) {
+        Logger.debug("Choosing second: $parent")
+        summaryResult = summaryResult.copy(parent2 = parent.toString())
+        showSecondChooseNameView(summaryResult.gender)
+    }
+
+    override fun showSecondChooseNameView(gender: NamesDataSource.Gender) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right)
+        val chooseNameFragment = ChooseNameFragment.createInstance("Luna", gender)
+        chooseNameFragment.callBack = { onSecondParentChooseNames(it) }
+        transaction.replace(R.id.contentView, chooseNameFragment)
+        stepperIndicator.currentStep = 4
+        transaction.addToBackStack("chooseNameSecondParent")
+        transaction.commit()
+    }
+
+    private fun onSecondParentChooseNames(babyNamesLiked: List<BabyName>) {
+        Logger.debug("Second parent chose ${babyNamesLiked.size} names")
+        summaryResult = summaryResult.copy(parent2NamesChosen = babyNamesLiked)
+        showMatchesView()
+    }
+
+    override fun showMatchesView() {
+        val list = summaryResult.parent1NamesChosen?.filter {
+            val name1 = it.name
+            val babyName2 = summaryResult.parent2NamesChosen?.find { it.name == name1 }
+            return@filter babyName2 != null
+        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right)
+        val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name }))
+        transaction.replace(R.id.contentView, matchesFragment)
+        stepperIndicator.currentStep = 5
+        transaction.addToBackStack("matchesFragment")
+        transaction.commit()
     }
 
     fun setupToolbars() {
@@ -183,7 +225,7 @@ class MainActivity : AppCompatActivity(),
 
             fun callSearch(query: String) {
                 Logger.info("query $query")
-                (getCurrentFragment() as ChooseNameFragment).findNameInList(query)
+                //TODO chooseNameFragment.findNameInList(query)
             }
 
         })
@@ -195,10 +237,9 @@ class MainActivity : AppCompatActivity(),
             hideSearchToolbar()
             clearSearchText()
         } else {
-            if (contentPager.currentItem > 0) {
-                contentPager.currentItem -= 1
-            } else {
-                super.onBackPressed()
+            super.onBackPressed()
+            if (stepperIndicator.currentStep > 0) {
+                stepperIndicator.currentStep -= 1
             }
         }
     }
@@ -233,43 +274,5 @@ class MainActivity : AppCompatActivity(),
         val searchView = searchMenu.findItem(R.id.action_search).actionView as SearchView
         val searchTextView = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as AutoCompleteTextView
         searchTextView.setText("")
-    }
-
-    object Page {
-        val FIRST = 0
-        val SECOND = 1
-        val THIRD = 2
-        val FOURTH = 3
-        val FIFTH = 4
-        val SIXTH = 5
-    }
-
-    private fun initPager() {
-        val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
-        contentPager.offscreenPageLimit = 2
-        contentPager.adapter = pagerAdapter
-    }
-
-    val NUMBER_OF_PAGES = 6
-
-    private inner class ScreenSlidePagerAdapter constructor(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
-
-        override fun getItem(position: Int): Fragment {
-            return when (position) {
-                Page.FIRST -> chooseGenderFragment
-                Page.SECOND -> whoChooseFirstFragment
-                Page.THIRD -> chooseNameFirstFragment
-                Page.FOURTH -> whoChooseSecondFragment
-                Page.FIFTH -> chooseNameSecondFragment
-                Page.SIXTH -> matchesFragment
-                else -> {
-                    chooseGenderFragment
-                }
-            }
-        }
-
-        override fun getCount(): Int {
-            return NUMBER_OF_PAGES
-        }
     }
 }
