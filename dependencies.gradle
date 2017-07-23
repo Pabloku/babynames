@@ -21,11 +21,11 @@ ext {
   appCompatVersion = '25.3.1'
   recyclerViewVersion = '25.3.1'
   timberVersion = '4.5.1'
-  playServicesAndFirebaseVersion = '10.2.1'
+  playServicesAndFirebaseVersion = '10.2.4'
   constraintLayoutVersion = '1.0.2'
-  ankoVersion = '0.9.1'
-  stepperIndicatorVersion = '1.0.6'
-  mosbyVersion = '3.0.3'
+  ankoVersion = '0.10.1'
+  stepperIndicatorVersion = '1.0.6' //TODO update this version
+  mosbyVersion = '3.0.4'
   recyclerviewFastscrollVersion = '1.0.15'
 
   //Testing
