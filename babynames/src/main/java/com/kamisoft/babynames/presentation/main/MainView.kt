@@ -1,7 +1,6 @@
 package com.kamisoft.babynames.presentation.main
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 
 interface MainView : MvpView {
 
@@ -9,11 +8,11 @@ interface MainView : MvpView {
 
     fun showWhoChooseFirstView()
 
-    fun showFirstChooseNameView(gender: NamesDataSource.Gender)
+    fun showFirstChooseNameView()
 
     fun showWhoChooseSecondView()
 
-    fun showSecondChooseNameView(gender: NamesDataSource.Gender)
+    fun showSecondChooseNameView()
 
-    fun showMatchesView() //TODO need a param at least
+    fun showMatchesView()
 }

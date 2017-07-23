@@ -73,6 +73,7 @@ dependencies {
   compile appDependencies.recyclerView
   compile appDependencies.mosbyMvpLce
   compile appDependencies.recyclerViewFS
+  compile appDependencies.materialDialogs
 }
 
 apply plugin: 'com.google.gms.google-services'

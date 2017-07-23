@@ -27,6 +27,7 @@ ext {
   stepperIndicatorVersion = '1.0.6' //TODO update this version
   mosbyVersion = '3.0.4'
   recyclerviewFastscrollVersion = '1.0.15'
+  materialDialogsVersion = '0.9.4.5'
 
   //Testing
   jUnitVersion = '4.12'
@@ -47,7 +48,8 @@ ext {
                      stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion",
                      recyclerView      : "com.android.support:recyclerview-v7:$recyclerViewVersion",
                      mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",
-                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion"]
+                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion",
+                     materialDialogs   : "com.afollestad.material-dialogs:core:${materialDialogsVersion}"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]

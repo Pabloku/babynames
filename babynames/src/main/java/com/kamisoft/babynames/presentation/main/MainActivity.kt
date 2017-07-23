@@ -66,24 +66,25 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 1)
-        whoChooseFragment.callBack = { onWhoChooseFirst(it) }
+        whoChooseFragment.callBack = { parent: Parent, name: String -> onWhoChooseFirst(parent, name) }
         transaction.replace(R.id.contentView, whoChooseFragment)
         stepperIndicator.currentStep = 1
         transaction.addToBackStack("whoChooseFirstParent")
         transaction.commit()
     }
 
-    private fun onWhoChooseFirst(parent: Parent) {
-        Logger.debug("Choosing first: $parent")
-        summaryResult = summaryResult.copy(parent1 = parent.toString())
-        showFirstChooseNameView(summaryResult.gender)
+    private fun onWhoChooseFirst(parent: Parent, name: String) {
+        Logger.debug("Choosing first: $parent called $name")
+        summaryResult = summaryResult.copy(parent1 = parent.toString(),
+                parent1Name = name)
+        showFirstChooseNameView()
     }
 
-    override fun showFirstChooseNameView(gender: NamesDataSource.Gender) {
+    override fun showFirstChooseNameView() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
-        val chooseNameFragment = ChooseNameFragment.createInstance("Pablo", gender)
+        val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent1Name, summaryResult.gender)
         chooseNameFragment.callBack = { onFirstParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         transaction.addToBackStack("chooseNameFirstParent")
@@ -101,24 +102,25 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 2)
-        whoChooseFragment.callBack = { onWhoChooseSecond(it) }
+        whoChooseFragment.callBack = { parent: Parent, name: String -> onWhoChooseSecond(parent, name) }
         transaction.replace(R.id.contentView, whoChooseFragment)
         stepperIndicator.currentStep = 3
         transaction.addToBackStack("whoChooseSecondParent")
         transaction.commit()
     }
 
-    private fun onWhoChooseSecond(parent: Parent) {
-        Logger.debug("Choosing second: $parent")
-        summaryResult = summaryResult.copy(parent2 = parent.toString())
-        showSecondChooseNameView(summaryResult.gender)
+    private fun onWhoChooseSecond(parent: Parent, name: String) {
+        Logger.debug("Choosing second: $parent called $name")
+        summaryResult = summaryResult.copy(parent2 = parent.toString(),
+                parent2Name = name)
+        showSecondChooseNameView()
     }
 
-    override fun showSecondChooseNameView(gender: NamesDataSource.Gender) {
+    override fun showSecondChooseNameView() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
-        val chooseNameFragment = ChooseNameFragment.createInstance("Luna", gender)
+        val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent2Name, summaryResult.gender)
         chooseNameFragment.callBack = { onSecondParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         stepperIndicator.currentStep = 4

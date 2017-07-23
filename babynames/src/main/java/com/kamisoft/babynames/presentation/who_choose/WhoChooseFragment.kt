@@ -10,13 +10,17 @@ import com.kamisoft.babynames.domain.model.Parent
 import kotlinx.android.synthetic.main.fragment_who_choose.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+import com.afollestad.materialdialogs.MaterialDialog
+import android.text.InputType
+
+
 
 
 class WhoChooseFragment : Fragment() {
 
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
-    lateinit var callBack: (Parent) -> Unit
+    lateinit var callBack: (Parent, String) -> Unit
 
     companion object {
         const val ARG_PARENT_POSITION = "parentPosition"
@@ -35,8 +39,8 @@ class WhoChooseFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnDad.setOnClickListener { callBack.invoke(Parent.DAD) }
-        btnMom.setOnClickListener { callBack.invoke(Parent.MOM) }
+        btnDad.setOnClickListener { showInputParentNameDialog(Parent.DAD) }
+        btnMom.setOnClickListener { showInputParentNameDialog(Parent.MOM) }
 
         if (parentPosition == 1) {
             txtWhoChoose.setText(R.string.who_choose_first)
@@ -49,5 +53,16 @@ class WhoChooseFragment : Fragment() {
         override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
             return thisRef.arguments.getInt(arg)
         }
+    }
+
+    fun showInputParentNameDialog(parent: Parent) {
+        MaterialDialog.Builder(activity)
+                .title("¿Cómo te llamas?")
+                .content("Nombre")
+                .inputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME)
+                .input("Nombre hint", "", { _, input ->
+                    //TODO save name in pref
+                    callBack.invoke(parent, input.toString())
+                }).show()
     }
 }
