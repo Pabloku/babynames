@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.commons
+package com.kamisoft.babynames.commons.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -18,11 +18,11 @@ fun View.showToast(message: String) =
 
 fun View.isVisible() = visibility == View.VISIBLE
 
-fun View.show() {
+fun View.visible() {
     visibility = View.VISIBLE
 }
 
-fun View.hide() {
+fun View.gone() {
     visibility = View.GONE
 }
 
@@ -58,7 +58,7 @@ fun View.circleReveal(posFromRight: Int, containsOverflow: Boolean, isShow: Bool
 
     // make the view visible and start the animation
     if (isShow)
-        show()
+        visible()
 
     // start the animation
     anim.start()
