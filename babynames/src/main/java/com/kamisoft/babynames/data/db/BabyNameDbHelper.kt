@@ -16,7 +16,7 @@ class BabyNameDbHelper(ctx: Context = BabyNamesApp.instance) : ManagedSQLiteOpen
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(FavoriteTable.NAME, true,
-                FavoriteTable.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                FavoriteTable.ID to INTEGER + PRIMARY_KEY,
                 FavoriteTable.PARENT to TEXT,
                 FavoriteTable.GENDER to INTEGER,
                 FavoriteTable.BABY_NAME to TEXT)

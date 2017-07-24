@@ -18,6 +18,7 @@ android {
     versionCode globalConfiguration["androidVersionCode"]
     versionName globalConfiguration["androidVersionName"]
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    vectorDrawables.useSupportLibrary = true
   }
 
   buildTypes {
@@ -53,6 +54,7 @@ dependencies {
   def appTestDependencies = rootProject.ext.appTestDependencies
 
   compile appDependencies.appCompat
+  compile appDependencies.supportDesign
   compile appDependencies.timber
   compile appDependencies.playServices
   compile appDependencies.firebaseCore
@@ -73,7 +75,6 @@ dependencies {
   compile appDependencies.recyclerView
   compile appDependencies.mosbyMvpLce
   compile appDependencies.recyclerViewFS
-  compile appDependencies.materialDialogs
 }
 
 apply plugin: 'com.google.gms.google-services'

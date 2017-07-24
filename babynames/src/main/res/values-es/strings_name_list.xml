@@ -1,4 +1,4 @@
 <resources>
-  <string name="choose_favorites">Elige tus nombres favoritos</string>
+  <string name="choose_favorites">%1$s, elige tus nombres favoritos</string>
   <string name="origin">Origen: %1$s</string>
 </resources>

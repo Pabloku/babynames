@@ -1,10 +1,13 @@
 <resources>
-  <string name="app_name">BabyName</string>
+  <string name="app_name">BabyNames</string>
   <string name="no_description">Sin descripción</string>
   <string name="boy">Niño</string>
   <string name="girl">Niña</string>
   <string name="dad">Papá</string>
   <string name="mom">Mamá</string>
+  <string name="dad_name">Papá: %1$s</string>
+  <string name="mom_name">Mamá: %1$s</string>
+  <string name="name">Nombre</string>
   <string name="search">Buscar</string>
   <string name="search_hint">Buscar…</string>
 </resources>

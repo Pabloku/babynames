@@ -10,7 +10,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.commons.getScreenHeight
+import com.kamisoft.babynames.commons.extensions.getScreenHeight
 import kotlinx.android.synthetic.main.row_name.view.*
 import org.jetbrains.anko.imageResource
 import java.util.*

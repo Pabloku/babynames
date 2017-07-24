@@ -1,9 +1,9 @@
 package com.kamisoft.babynames.data.datasource
 
-import com.kamisoft.babynames.commons.deleteWhere
-import com.kamisoft.babynames.commons.parseList
-import com.kamisoft.babynames.commons.parseOpt
-import com.kamisoft.babynames.commons.toVarargArray
+import com.kamisoft.babynames.commons.extensions.deleteWhere
+import com.kamisoft.babynames.commons.extensions.parseList
+import com.kamisoft.babynames.commons.extensions.parseOpt
+import com.kamisoft.babynames.commons.extensions.toVarargArray
 import com.kamisoft.babynames.data.db.BabyNameDbHelper
 import com.kamisoft.babynames.data.db.DbDataMapper
 import com.kamisoft.babynames.data.db.FavoriteTable

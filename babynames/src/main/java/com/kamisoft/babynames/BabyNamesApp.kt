@@ -2,7 +2,7 @@ package com.kamisoft.babynames
 
 import android.app.Application
 import com.kamisoft.babyname.BuildConfig
-import com.kamisoft.babynames.commons.DelegatesExt
+import com.kamisoft.babynames.commons.extensions.DelegatesExt
 import com.kamisoft.babynames.logger.Logger
 
 

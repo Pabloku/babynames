@@ -13,8 +13,8 @@
       android:text="@string/matches"
       android:textAllCaps="true"
       android:gravity="center"
-      android:padding="5dp"
-      android:textSize="40sp"
+      android:padding="@dimen/fragment_title_padding"
+      android:textSize="@dimen/fragment_title_size"
       android:layout_marginTop="8dp"
       android:layout_alignParentTop="true"/>
 

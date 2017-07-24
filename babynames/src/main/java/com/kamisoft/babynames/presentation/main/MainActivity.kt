@@ -14,19 +14,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.commons.circleReveal
-import com.kamisoft.babynames.commons.hide
-import com.kamisoft.babynames.commons.isVisible
-import com.kamisoft.babynames.commons.show
+import com.kamisoft.babynames.commons.extensions.circleReveal
+import com.kamisoft.babynames.commons.extensions.gone
+import com.kamisoft.babynames.commons.extensions.isVisible
+import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
-import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.domain.model.SummaryResult
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
 import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
-import com.kamisoft.babynames.presentation.who_choose.WhoChooseFragment
+import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
@@ -42,7 +41,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
         setupToolbars()
         showChooseGenderView()
-        stepperIndicator.stepCount = 5
+        stepperIndicator.stepCount = 4
     }
 
     override fun createPresenter(): MainPresenter = MainPresenter()
@@ -65,18 +64,18 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
-        val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 1)
-        whoChooseFragment.callBack = { parent: Parent, name: String -> onWhoChooseFirst(parent, name) }
+        val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1)
+        whoChooseFragment.callBack = { firstParentName: String, secondParentName: String -> onWhoChooseFirst(firstParentName, secondParentName) }
         transaction.replace(R.id.contentView, whoChooseFragment)
         stepperIndicator.currentStep = 1
         transaction.addToBackStack("whoChooseFirstParent")
         transaction.commit()
     }
 
-    private fun onWhoChooseFirst(parent: Parent, name: String) {
-        Logger.debug("Choosing first: $parent called $name")
-        summaryResult = summaryResult.copy(parent1 = parent.toString(),
-                parent1Name = name)
+    private fun onWhoChooseFirst(firstParentName: String, secondParentName: String) {
+        Logger.debug("Choosing first: $firstParentName; Choosing second: $secondParentName")
+        summaryResult = summaryResult.copy(parent1Name = firstParentName,
+                parent2Name = secondParentName)
         showFirstChooseNameView()
     }
 
@@ -87,6 +86,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent1Name, summaryResult.gender)
         chooseNameFragment.callBack = { onFirstParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
+        stepperIndicator.currentStep = 2
         transaction.addToBackStack("chooseNameFirstParent")
         transaction.commit()
     }
@@ -94,25 +94,6 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     private fun onFirstParentChooseNames(babyNamesLiked: List<BabyName>) {
         Logger.debug("First parent chose ${babyNamesLiked.size} names")
         summaryResult = summaryResult.copy(parent1NamesChosen = babyNamesLiked)
-        showWhoChooseSecondView()
-    }
-
-    override fun showWhoChooseSecondView() {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right)
-        val whoChooseFragment = WhoChooseFragment.createInstance(parentPosition = 2)
-        whoChooseFragment.callBack = { parent: Parent, name: String -> onWhoChooseSecond(parent, name) }
-        transaction.replace(R.id.contentView, whoChooseFragment)
-        stepperIndicator.currentStep = 3
-        transaction.addToBackStack("whoChooseSecondParent")
-        transaction.commit()
-    }
-
-    private fun onWhoChooseSecond(parent: Parent, name: String) {
-        Logger.debug("Choosing second: $parent called $name")
-        summaryResult = summaryResult.copy(parent2 = parent.toString(),
-                parent2Name = name)
         showSecondChooseNameView()
     }
 
@@ -123,7 +104,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent2Name, summaryResult.gender)
         chooseNameFragment.callBack = { onSecondParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
-        stepperIndicator.currentStep = 4
+        stepperIndicator.currentStep = 3
         transaction.addToBackStack("chooseNameSecondParent")
         transaction.commit()
     }
@@ -145,7 +126,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name }))
         transaction.replace(R.id.contentView, matchesFragment)
-        stepperIndicator.currentStep = 5
+        stepperIndicator.currentStep = 4
         transaction.addToBackStack("matchesFragment")
         transaction.commit()
     }
@@ -262,14 +243,14 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             searchToolbar.circleReveal(posFromRight = 1, containsOverflow = true, isShow = true)
         else
-            searchToolbar.show()
+            searchToolbar.visible()
     }
 
     private fun hideSearchToolbar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             searchToolbar.circleReveal(posFromRight = 1, containsOverflow = true, isShow = false)
         else
-            searchToolbar.hide()
+            searchToolbar.gone()
     }
 
     private fun clearSearchText() {

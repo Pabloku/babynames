@@ -10,8 +10,6 @@ interface MainView : MvpView {
 
     fun showFirstChooseNameView()
 
-    fun showWhoChooseSecondView()
-
     fun showSecondChooseNameView()
 
     fun showMatchesView()
