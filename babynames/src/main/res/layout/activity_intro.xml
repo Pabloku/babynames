@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorIntro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/white"
+      android:fitsSystemWindows="true"
+      android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:srcCompat="@drawable/ic_launcher"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/no_description"/>
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgLogo"
+        android:padding="5dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/intro_title"/>
+
+    <TextView
+        android:id="@+id/txtContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTitle"
+        android:padding="5dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="@string/intro_content"/>
+
+    <TextView
+        android:id="@+id/txtGetNames"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtContent"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:textStyle="bold"
+        android:text="@string/intro_whats_your_names"/>
+
+    <LinearLayout
+        android:id="@+id/layParent1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/txtGetNames"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+      <TextView
+          android:id="@+id/txtParent1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:padding="5dp"
+          android:text="@string/intro_first_parent"/>
+
+      <Button
+          android:id="@+id/btnParent1Dad"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/dad"
+          android:drawableStart="@drawable/ic_dad_small"
+          android:drawableLeft="@drawable/ic_dad_small"
+          android:background="@color/dad_color"
+          android:textColor="@android:color/white"/>
+
+      <Button
+          android:id="@+id/btnParent1Mom"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/mom"
+          android:drawableStart="@drawable/ic_mom_small"
+          android:drawableLeft="@drawable/ic_mom_small"
+          android:background="@color/disable"
+          android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edtParent1Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layParent1"
+        android:inputType="textPersonName"
+        android:hint="@string/name"/>
+
+    <LinearLayout
+        android:id="@+id/layParent2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/edtParent1Name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp">
+
+      <TextView
+          android:id="@+id/txtParent2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:padding="5dp"
+          android:text="@string/intro_second_parent"/>
+
+      <Button
+          android:id="@+id/btnParent2Dad"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/dad"
+          android:drawableStart="@drawable/ic_dad_small"
+          android:drawableLeft="@drawable/ic_dad_small"
+          android:background="@color/disable"
+          android:textColor="@android:color/white"/>
+
+      <Button
+          android:id="@+id/btnParent2Mom"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/mom"
+          android:drawableStart="@drawable/ic_mom_small"
+          android:drawableLeft="@drawable/ic_mom_small"
+          android:background="@color/mom_color"
+          android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edtParent2Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layParent2"
+        android:inputType="textPersonName"
+        android:hint="@string/name"/>
+  </RelativeLayout>
+
+  <com.kamisoft.babynames.presentation.custom_view.MovableFrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end">
+
+    <Button
+        android:id="@+id/btnGo"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/intro_go"
+        android:theme="@style/ButtonDefault"/>
+
+  </com.kamisoft.babynames.presentation.custom_view.MovableFrameLayout>
+</android.support.design.widget.CoordinatorLayout>

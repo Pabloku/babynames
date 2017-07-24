@@ -10,6 +10,11 @@
     <item name="colorPrimaryDark">@color/primary_dark</item>
     <item name="colorAccent">@color/accent</item>
     <item name="android:textViewStyle">@style/TextViewStyle</item>
+    <item name="android:navigationBarColor">@color/primary</item>
+  </style>
+
+  <style name="AppTheme.Splash">
+    <item name="android:windowBackground">@drawable/splash</item>
   </style>
 
   <style name="TextViewStyle" parent="@android:style/Widget.TextView">
@@ -33,6 +38,11 @@
 
   <style name="ButtonMom" parent="Widget.AppCompat.Button.Colored">
     <item name="colorButtonNormal">@color/mom_color</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="ButtonDefault" parent="Widget.AppCompat.Button.Colored">
+    <item name="colorButtonNormal">@color/accent</item>
     <item name="android:textColor">@android:color/white</item>
   </style>
 

@@ -18,7 +18,12 @@
   <style name="ButtonMon" parent="Widget.AppCompat.Button.Colored">
     <item name="android:colorButtonNormal">@color/mom_color</item>
     <item name="android:textColor">@android:color/white</item>
-  </style>v
+  </style>
+
+  <style name="ButtonDefault" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorButtonNormal">@color/accent</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
 
 
 </resources>

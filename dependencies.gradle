@@ -20,20 +20,21 @@ ext {
   //Libraries
   appCompatVersion = '25.3.1'
   recyclerViewVersion = '25.3.1'
+  supportVersion = '25.3.1'
   timberVersion = '4.5.1'
   playServicesAndFirebaseVersion = '10.2.4'
   constraintLayoutVersion = '1.0.2'
   ankoVersion = '0.10.1'
-  stepperIndicatorVersion = '1.0.6' //TODO update this version
+  stepperIndicatorVersion = '1.0.6'
   mosbyVersion = '3.0.4'
   recyclerviewFastscrollVersion = '1.0.15'
-  materialDialogsVersion = '0.9.4.5'
 
   //Testing
   jUnitVersion = '4.12'
   espressoVersion = '2.2.2'
 
   appDependencies = [appCompat         : "com.android.support:appcompat-v7:${appCompatVersion}",
+                     supportDesign     : "com.android.support:design:${supportVersion}",
                      timber            : "com.jakewharton.timber:timber:${timberVersion}",
                      kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
                      playServices      : "com.google.android.gms:play-services-base:$playServicesAndFirebaseVersion",
@@ -48,8 +49,7 @@ ext {
                      stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion",
                      recyclerView      : "com.android.support:recyclerview-v7:$recyclerViewVersion",
                      mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",
-                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion",
-                     materialDialogs   : "com.afollestad.material-dialogs:core:${materialDialogsVersion}"]
+                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]
