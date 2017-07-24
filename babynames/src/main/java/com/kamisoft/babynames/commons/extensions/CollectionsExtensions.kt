@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.commons
+package com.kamisoft.babynames.commons.extensions
 
 import java.util.*
 

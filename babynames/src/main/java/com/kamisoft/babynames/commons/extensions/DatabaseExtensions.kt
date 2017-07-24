@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.commons
+package com.kamisoft.babynames.commons.extensions
 
 import android.database.sqlite.SQLiteDatabase
 import org.jetbrains.anko.db.MapRowParser

@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.commons.hide
-import com.kamisoft.babynames.commons.show
+import com.kamisoft.babynames.commons.extensions.gone
+import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataSource
@@ -67,6 +67,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        txtChooseNames.text = getString(R.string.choose_favorites, parent)
         //TODO errorView is pending
         rvList.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
         rvList.adapter = namesAdapter
@@ -107,14 +108,14 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun showLoading(pullToRefresh: Boolean) {
         super.showLoading(pullToRefresh)
-        loadingView.show()
-        contentView.hide()
+        loadingView.visible()
+        contentView.gone()
     }
 
     override fun showContent() {
         super.showContent()
-        loadingView.hide()
-        contentView.show()
+        loadingView.gone()
+        contentView.visible()
     }
 
     fun findNameInList(text: String) {
