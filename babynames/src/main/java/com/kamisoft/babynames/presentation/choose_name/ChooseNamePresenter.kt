@@ -16,11 +16,11 @@ class ChooseNamePresenter(private val getNamesUseCase: GetNameList,
     private var gender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
 
     fun loadNames(gender: NamesDataSource.Gender) {
-        getNamesUseCase.getNames(gender, NamesCallBack())
+        getNamesUseCase.getNames(gender, { onNamesLoaded(it) })
     }
 
     fun loadFavorites(parent: String?, gender: NamesDataSource.Gender) {
-        parent?.let { getFavoritesUseCase.getFavorites(it, gender, FavoritesCallback()) }
+        parent?.let { getFavoritesUseCase.getFavorites(it, gender, { onFavoritesLoaded(it) }) }
     }
 
     fun manageBabyNameClick(parent: String, gender: NamesDataSource.Gender, babyName: BabyName) {
@@ -40,18 +40,6 @@ class ChooseNamePresenter(private val getNamesUseCase: GetNameList,
 
     fun onFavoritesLoaded(favoriteList: List<String>) {
         view?.setFavoriteList(favoriteList)
-    }
-
-    inner class NamesCallBack : GetNameList.CallBacks.NamesCallback {
-        override fun namesLoaded(nameList: List<BabyName>) {
-            onNamesLoaded(nameList)
-        }
-    }
-
-    inner class FavoritesCallback : GetFavoriteList.CallBacks.FavoritesCallback {
-        override fun favoritesLoaded(favoriteList: List<String>) {
-            onFavoritesLoaded(favoriteList)
-        }
     }
 
 }
