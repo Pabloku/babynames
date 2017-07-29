@@ -92,7 +92,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         transaction.replace(R.id.contentView, fragment)
-        transaction.addToBackStack(backStackTag)
+        backStackTag?.let { transaction.addToBackStack(backStackTag) }
         transaction.commit()
     }
 
