@@ -18,14 +18,14 @@ import com.kamisoft.babynames.commons.extensions.circleReveal
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.isVisible
 import com.kamisoft.babynames.commons.extensions.visible
-import com.kamisoft.babynames.data.datasource.NamesDataSource
-import com.kamisoft.babynames.domain.model.BabyName
-import com.kamisoft.babynames.domain.model.SummaryResult
+import com.kamisoft.babynames.data.datasource.NamesDataFactory
+import com.kamisoft.babynames.data.repository.NamesDataRepository
+import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
 import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
-import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
+import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
@@ -33,31 +33,26 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
 
-    private var summaryResult = SummaryResult()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        presenter.start()
+    }
 
+    override fun initViews() {
         setupToolbars()
-        showChooseGenderView()
         stepperIndicator.stepCount = 4
     }
 
-    override fun createPresenter(): MainPresenter = MainPresenter()
+    override fun createPresenter(): MainPresenter = MainPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
     override fun showChooseGenderView() {
         val transaction = supportFragmentManager.beginTransaction()
         val chooseGenderFragment = ChooseGenderFragment.createInstance()
-        chooseGenderFragment.callBack = { onGenderSelected(it) }
+        chooseGenderFragment.callBack = { presenter.onGenderSelected(it) }
         transaction.replace(R.id.contentView, chooseGenderFragment)
         transaction.commit()
-    }
-
-    private fun onGenderSelected(gender: NamesDataSource.Gender) {
-        Logger.debug("Gender selected: $gender")
-        summaryResult = summaryResult.copy(gender = gender)
-        showWhoChooseFirstView()
     }
 
     override fun showWhoChooseFirstView() {
@@ -65,60 +60,43 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1)
-        whoChooseFragment.callBack = { firstParentName: String, secondParentName: String -> onWhoChooseFirst(firstParentName, secondParentName) }
+        whoChooseFragment.callBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) }
         transaction.replace(R.id.contentView, whoChooseFragment)
         stepperIndicator.currentStep = 1
         transaction.addToBackStack("whoChooseFirstParent")
         transaction.commit()
     }
 
-    private fun onWhoChooseFirst(firstParentName: String, secondParentName: String) {
-        Logger.debug("Choosing first: $firstParentName; Choosing second: $secondParentName")
-        summaryResult = summaryResult.copy(parent1Name = firstParentName,
-                parent2Name = secondParentName)
-        showFirstChooseNameView()
-    }
-
     override fun showFirstChooseNameView() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
-        val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent1Name, summaryResult.gender)
-        chooseNameFragment.callBack = { onFirstParentChooseNames(it) }
+        val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent1Name(),
+                presenter.getGender(), presenter.namesListFuture)
+        chooseNameFragment.callBack = { presenter.onFirstParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         stepperIndicator.currentStep = 2
         transaction.addToBackStack("chooseNameFirstParent")
         transaction.commit()
     }
 
-    private fun onFirstParentChooseNames(babyNamesLiked: List<BabyName>) {
-        Logger.debug("First parent chose ${babyNamesLiked.size} names")
-        summaryResult = summaryResult.copy(parent1NamesChosen = babyNamesLiked)
-        showSecondChooseNameView()
-    }
-
     override fun showSecondChooseNameView() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
-        val chooseNameFragment = ChooseNameFragment.createInstance(summaryResult.parent2Name, summaryResult.gender)
-        chooseNameFragment.callBack = { onSecondParentChooseNames(it) }
+        val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent2Name(),
+                presenter.getGender(), presenter.namesListFuture)
+        chooseNameFragment.callBack = { presenter.onSecondParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         stepperIndicator.currentStep = 3
         transaction.addToBackStack("chooseNameSecondParent")
         transaction.commit()
     }
 
-    private fun onSecondParentChooseNames(babyNamesLiked: List<BabyName>) {
-        Logger.debug("Second parent chose ${babyNamesLiked.size} names")
-        summaryResult = summaryResult.copy(parent2NamesChosen = babyNamesLiked)
-        showMatchesView()
-    }
-
     override fun showMatchesView() {
-        val list = summaryResult.parent1NamesChosen?.filter {
+        val list = presenter.getParent1NamesChosen()?.filter {
             val name1 = it.name
-            val babyName2 = summaryResult.parent2NamesChosen?.find { it.name == name1 }
+            val babyName2 = presenter.getParent2NamesChosen()?.find { it.name == name1 }
             return@filter babyName2 != null
         }
         val transaction = supportFragmentManager.beginTransaction()

@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 repositories {
   maven { url "https://jitpack.io" }
+  maven { url "https://dl.bintray.com/rahulrav/kotlin-futures/" }
 }
 
 android {
@@ -75,6 +76,14 @@ dependencies {
   compile appDependencies.recyclerView
   compile appDependencies.mosbyMvpLce
   compile appDependencies.recyclerViewFS
+  compile appDependencies.kotlinCoroutines
+  compile appDependencies.futures
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+kotlin {
+  experimental {
+    coroutines "enable"
+  }
+}

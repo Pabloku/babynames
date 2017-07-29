@@ -8,6 +8,10 @@ import org.jetbrains.anko.uiThread
 
 class GetNameList(val namesRepository: NamesRepository) {
 
+    fun getNames(gender: NamesDataSource.Gender): List<BabyName> {
+        return loadNames(gender)
+    }
+
     fun getNames(gender: NamesDataSource.Gender, callback: (List<BabyName>) -> Unit) {
         doAsync {
             val nameList = loadNames(gender)

@@ -28,6 +28,8 @@ ext {
   stepperIndicatorVersion = '1.0.6'
   mosbyVersion = '3.0.4'
   recyclerviewFastscrollVersion = '1.0.15'
+  kotlinCoroutinesVersion = '0.17'
+  futuresVersion = '1.1.0'
 
   //Testing
   jUnitVersion = '4.12'
@@ -49,7 +51,9 @@ ext {
                      stepperIndicator  : "com.github.badoualy:stepper-indicator:$stepperIndicatorVersion",
                      recyclerView      : "com.android.support:recyclerview-v7:$recyclerViewVersion",
                      mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",
-                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion"]
+                     recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion",
+                     kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion",
+                     futures           : "com.rahulrav:com.rahulrav.futures:$futuresVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]

@@ -4,6 +4,8 @@ import com.hannesdorfmann.mosby3.mvp.MvpView
 
 interface MainView : MvpView {
 
+    fun initViews()
+
     fun showChooseGenderView()
 
     fun showWhoChooseFirstView()

@@ -22,7 +22,11 @@ import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
+import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import org.jetbrains.anko.support.v4.onUiThread
 
 class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
@@ -39,12 +43,15 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     companion object {
         const val ARG_GENDER = "gender"
         const val ARG_PARENT = "parent"
-        fun createInstance(parent: String, gender: NamesDataSource.Gender): ChooseNameFragment {
+        lateinit var listFuture: Future<List<BabyName>>
+        fun createInstance(parent: String, gender: NamesDataSource.Gender,
+                           namesFuture: Future<List<BabyName>>): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
             bundle.putString(ARG_PARENT, parent)
             fragment.arguments = bundle
+            listFuture = namesFuture
             return fragment
         }
     }
@@ -80,7 +87,30 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onStart() {
         super.onStart()
-        presenter.loadNames(selectedGender)
+        loadData()
+        //presenter.loadNames(selectedGender)
+    }
+
+    private fun loadData() {
+        Logger.debug("Future: loadData")
+        launch(CommonPool) {
+            Logger.debug("Future: loadData launch")
+            if (listFuture.ready) {
+                Logger.debug("Future: is ready")
+                val result = listFuture.result ?: emptyList()
+                onUiThread {
+                    setData(result)
+                    showContent()
+                }
+            } else {
+                Logger.debug("Future: not ready")
+                val result = listFuture.await(30000) ?: emptyList()
+                onUiThread {
+                    setData(result)
+                    showContent()
+                }
+            }
+        }
     }
 
     override fun createPresenter() = ChooseNamePresenter(
