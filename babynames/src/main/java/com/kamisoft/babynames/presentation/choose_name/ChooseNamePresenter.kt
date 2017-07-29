@@ -14,6 +14,12 @@ class ChooseNamePresenter(
         private val saveFavoriteUseCase: SaveFavoriteName) :
         MvpBasePresenter<ChooseNameView>() {
 
+    fun start() {
+        val pullToRefresh = true
+        view?.initViews()
+        view?.showLoading(!pullToRefresh)
+    }
+
     fun loadData() {
         Logger.debug("Future: loadData")
         launch(CommonPool) {

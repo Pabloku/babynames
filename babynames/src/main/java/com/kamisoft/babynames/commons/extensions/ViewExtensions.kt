@@ -10,11 +10,9 @@ import android.view.ViewAnimationUtils
 import android.widget.Toast
 import com.kamisoft.babyname.R
 
-fun View.getLayoutInflater() =
-        LayoutInflater.from(context)
+fun View.getLayoutInflater() = LayoutInflater.from(context)
 
-fun View.showToast(message: String) =
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+fun View.showToast(message: String) = Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
 fun View.isVisible() = visibility == View.VISIBLE
 

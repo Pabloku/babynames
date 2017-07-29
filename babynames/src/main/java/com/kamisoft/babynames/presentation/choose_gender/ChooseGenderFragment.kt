@@ -11,10 +11,12 @@ import kotlinx.android.synthetic.main.fragment_choose_gender.*
 
 class ChooseGenderFragment : Fragment() {
 
-    lateinit var callBack: (NamesDataSource.Gender) -> Unit
-
     companion object {
-        fun createInstance() = ChooseGenderFragment()
+        lateinit var genderSelectCallBack: (NamesDataSource.Gender) -> Unit
+        fun createInstance(genderSelectCallBack: (NamesDataSource.Gender) -> Unit): ChooseGenderFragment {
+            this.genderSelectCallBack = genderSelectCallBack
+            return ChooseGenderFragment()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,7 +25,7 @@ class ChooseGenderFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnBoy.setOnClickListener { callBack.invoke(NamesDataSource.Gender.MALE) }
-        btnGirl.setOnClickListener { callBack.invoke(NamesDataSource.Gender.FEMALE) }
+        btnBoy.setOnClickListener { genderSelectCallBack.invoke(NamesDataSource.Gender.MALE) }
+        btnGirl.setOnClickListener { genderSelectCallBack.invoke(NamesDataSource.Gender.FEMALE) }
     }
 }

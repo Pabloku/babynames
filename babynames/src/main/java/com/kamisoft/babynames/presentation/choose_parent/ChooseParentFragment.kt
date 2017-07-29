@@ -19,15 +19,17 @@ class ChooseParentFragment : Fragment() {
     private val preferencesManager by lazy { AndroidPrefsManager(activity) }
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
-    lateinit var callBack: (String, String) -> Unit
-
     companion object {
         const val ARG_PARENT_POSITION = "parentPosition"
-        fun createInstance(parentPosition: Int): ChooseParentFragment {
+
+        lateinit var parentSelectCallBack: (String, String) -> Unit
+        fun createInstance(parentPosition: Int,
+                           parentSelectCallBack: (String, String) -> Unit): ChooseParentFragment {
             val fragment = ChooseParentFragment()
             val bundle = Bundle()
             bundle.putInt(ARG_PARENT_POSITION, parentPosition)
             fragment.arguments = bundle
+            this.parentSelectCallBack = parentSelectCallBack
             return fragment
         }
     }
@@ -70,8 +72,8 @@ class ChooseParentFragment : Fragment() {
 
         val firstParentToChoose = parent1Name
         val secondParentToChoose = parent2Name
-        btnParent1Dad.setOnClickListener { callBack.invoke(firstParentToChoose, secondParentToChoose) }
-        btnParent1Mom.setOnClickListener { callBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent1Dad.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent1Mom.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
     }
 
     private fun initParent2Buttons() {
@@ -90,8 +92,8 @@ class ChooseParentFragment : Fragment() {
         }
         val firstParentToChoose = parent2Name
         val secondParentToChoose = parent1Name
-        btnParent2Dad.setOnClickListener { callBack.invoke(firstParentToChoose, secondParentToChoose) }
-        btnParent2Mom.setOnClickListener { callBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent2Dad.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent2Mom.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
     }
 
     class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {

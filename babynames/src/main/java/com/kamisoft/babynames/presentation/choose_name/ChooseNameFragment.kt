@@ -32,20 +32,25 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         presenter.manageBabyNameClick(parent, selectedGender, it)
     })
 
-    lateinit var callBack: (babyNamesLiked: List<BabyName>) -> Unit
 
     companion object {
         const val ARG_GENDER = "gender"
         const val ARG_PARENT = "parent"
         lateinit var listFuture: Future<List<BabyName>>
+        lateinit var searchCallback: () -> Unit
+        lateinit var namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit
         fun createInstance(parent: String, gender: NamesDataSource.Gender,
-                           namesFuture: Future<List<BabyName>>): ChooseNameFragment {
+                           namesFuture: Future<List<BabyName>>,
+                           searchCallback: () -> Unit,
+                           namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
             bundle.putString(ARG_PARENT, parent)
             fragment.arguments = bundle
-            listFuture = namesFuture
+            this.listFuture = namesFuture
+            this.searchCallback = searchCallback
+            this.namesListCallBack = namesListCallBack
             return fragment
         }
     }
@@ -66,17 +71,28 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.actionSearch -> {
+                searchCallback.invoke()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.start()
+    }
+
+    override fun initViews() {
         txtChooseNames.text = getString(R.string.choose_favorites, parent)
         //TODO errorView is pending
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        btnOk.setOnClickListener {
-            callBack.invoke(presenter.getLikedBabyNames(namesAdapter.getBabyNameList()))
-        }
-        showLoading(false)
+        btnOk.setOnClickListener { namesListCallBack.invoke(presenter.getLikedBabyNames(namesAdapter.getBabyNameList())) }
     }
 
     override fun onStart() {
