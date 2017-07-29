@@ -1,9 +1,7 @@
 package com.kamisoft.babynames.presentation.main
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataSource
-import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.SummaryResult
 import com.kamisoft.babynames.domain.usecase.GetNameList
@@ -15,7 +13,8 @@ import kotlinx.coroutines.experimental.launch
 class MainPresenter(private val getNamesUseCase: GetNameList) : MvpBasePresenter<MainView>() {
 
     private var summaryResult = SummaryResult()
-    val namesListFuture: Future<List<BabyName>> by lazy { createNameListFuture() }
+    val boyNameListFuture: Future<List<BabyName>> by lazy { createBoyNameListFuture() }
+    val girlNameListFuture: Future<List<BabyName>> by lazy { createGirlNameListFuture() }
 
     fun start() {
         view?.let {
@@ -58,17 +57,44 @@ class MainPresenter(private val getNamesUseCase: GetNameList) : MvpBasePresenter
     fun getParent2NamesChosen() = summaryResult.parent2NamesChosen
 
     private fun loadNameList() {
-        launch(CommonPool) {
-            Logger.debug("Future: launch")
-            namesListFuture.await(30000)
+        when (summaryResult.gender) {
+            NamesDataSource.Gender.MALE -> loadBoyNameList()
+            NamesDataSource.Gender.FEMALE -> loadGirlNameList()
         }
     }
 
-    private fun createNameListFuture() = Future.submit {
-        Logger.debug("Future: createNameListFuture")
-        val getNamesUseCase = GetNameList(NamesDataRepository(NamesDataFactory()))
-        val names = getNamesUseCase.getNames(summaryResult.gender)
-        Logger.debug("Future: createNameListFuture: names ${names.size}")
+    private fun loadBoyNameList() {
+        launch(CommonPool) {
+            Logger.debug("boyNameListFuture: launch")
+            boyNameListFuture.await(30000)//TODO Ese 30000...
+        }
+    }
+
+    private fun loadGirlNameList() {
+        launch(CommonPool) {
+            Logger.debug("girlNameListFuture: launch")
+            girlNameListFuture.await(30000)//TODO Ese 30000...
+        }
+    }
+
+    private fun createBoyNameListFuture() = Future.submit {
+        Logger.debug("Future: createBoyNameListFuture")
+        val names = getNamesUseCase.getNames(NamesDataSource.Gender.MALE)
+        Logger.debug("Future: createBoyNameListFuture: names ${names.size}")
         names
+    }
+
+    private fun createGirlNameListFuture() = Future.submit {
+        Logger.debug("Future: createGirlNameListFuture")
+        val names = getNamesUseCase.getNames(NamesDataSource.Gender.FEMALE)
+        Logger.debug("Future: createGirlNameListFuture: names ${names.size}")
+        names
+    }
+
+    fun getNameListFuture(): Future<List<BabyName>> {
+        return when (summaryResult.gender) {
+            NamesDataSource.Gender.MALE -> boyNameListFuture
+            NamesDataSource.Gender.FEMALE -> girlNameListFuture
+        }
     }
 }

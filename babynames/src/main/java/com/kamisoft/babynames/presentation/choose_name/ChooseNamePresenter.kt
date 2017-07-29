@@ -4,19 +4,32 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
-import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
+import com.kamisoft.babynames.logger.Logger
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 
-class ChooseNamePresenter(private val getNamesUseCase: GetNameList,
-                          private val getFavoritesUseCase: GetFavoriteList,
-                          private val saveFavoriteUseCase: SaveFavoriteName) :
+class ChooseNamePresenter(
+        private val getFavoritesUseCase: GetFavoriteList,
+        private val saveFavoriteUseCase: SaveFavoriteName) :
         MvpBasePresenter<ChooseNameView>() {
 
-    private var parent: String? = null
-    private var gender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
-
-    fun loadNames(gender: NamesDataSource.Gender) {
-        getNamesUseCase.getNames(gender, { onNamesLoaded(it) })
+    fun loadData() {
+        Logger.debug("Future: loadData")
+        launch(CommonPool) {
+            Logger.debug("Future: loadData launch")
+            if (ChooseNameFragment.listFuture.ready) {
+                Logger.debug("Future: is ready")
+                val result = ChooseNameFragment.listFuture.result ?: emptyList()
+                view?.setData(result)
+                view?.showContent()
+            } else {
+                Logger.debug("Future: not ready")
+                val result = ChooseNameFragment.listFuture.await(30000) ?: emptyList()//TODO Ese 30000...
+                view?.setData(result)
+                view?.showContent()
+            }
+        }
     }
 
     fun loadFavorites(parent: String?, gender: NamesDataSource.Gender) {
@@ -30,12 +43,6 @@ class ChooseNamePresenter(private val getNamesUseCase: GetNameList,
 
     fun getLikedBabyNames(babyNameList: List<BabyName>): List<BabyName> {
         return babyNameList.filter { it.liked }
-    }
-
-    fun onNamesLoaded(nameList: List<BabyName>) {
-        loadFavorites(parent, gender)
-        view?.setData(nameList)
-        view?.showContent()
     }
 
     fun onFavoritesLoaded(favoriteList: List<String>) {

@@ -72,7 +72,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent1Name(),
-                presenter.getGender(), presenter.namesListFuture)
+                presenter.getGender(), presenter.getNameListFuture())
         chooseNameFragment.callBack = { presenter.onFirstParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         stepperIndicator.currentStep = 2
@@ -85,7 +85,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right)
         val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent2Name(),
-                presenter.getGender(), presenter.namesListFuture)
+                presenter.getGender(), presenter.getNameListFuture())
         chooseNameFragment.callBack = { presenter.onSecondParentChooseNames(it) }
         transaction.replace(R.id.contentView, chooseNameFragment)
         stepperIndicator.currentStep = 3

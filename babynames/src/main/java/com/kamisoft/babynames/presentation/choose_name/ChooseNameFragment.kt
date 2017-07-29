@@ -3,29 +3,23 @@ package com.kamisoft.babynames.presentation.choose_name
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
-import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.data.repository.FavoritesDataRepository
-import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
-import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.onUiThread
 
 class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
@@ -69,14 +63,14 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         txtChooseNames.text = getString(R.string.choose_favorites, parent)
         //TODO errorView is pending
-        rvList.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
+        rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
         btnOk.setOnClickListener {
@@ -87,41 +81,19 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onStart() {
         super.onStart()
-        loadData()
-        //presenter.loadNames(selectedGender)
-    }
-
-    private fun loadData() {
-        Logger.debug("Future: loadData")
-        launch(CommonPool) {
-            Logger.debug("Future: loadData launch")
-            if (listFuture.ready) {
-                Logger.debug("Future: is ready")
-                val result = listFuture.result ?: emptyList()
-                onUiThread {
-                    setData(result)
-                    showContent()
-                }
-            } else {
-                Logger.debug("Future: not ready")
-                val result = listFuture.await(30000) ?: emptyList()
-                onUiThread {
-                    setData(result)
-                    showContent()
-                }
-            }
-        }
+        presenter.loadData()
     }
 
     override fun createPresenter() = ChooseNamePresenter(
-            GetNameList(NamesDataRepository(NamesDataFactory())),
             GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
             SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())))
 
     override fun setData(nameList: List<BabyName>) {
-        showLoading(false)
-        namesAdapter.setBabyNameList(nameList)
-        presenter.loadFavorites(parent, selectedGender)
+        onUiThread {
+            showLoading(false)
+            namesAdapter.setBabyNameList(nameList)
+            presenter.loadFavorites(parent, selectedGender)
+        }
     }
 
     override fun setFavoriteList(favorites: List<String>) {
@@ -143,9 +115,11 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
     }
 
     override fun showContent() {
-        super.showContent()
-        loadingView.gone()
-        contentView.visible()
+        onUiThread {
+            super.showContent()
+            loadingView.gone()
+            contentView.visible()
+        }
     }
 
     fun findNameInList(text: String) {
