@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:checkableBehavior="none">
+    <item
+        android:id="@+id/drawerDadAndMom"
+        android:icon="@drawable/ic_dad_mom"
+        android:title="@string/drawer_dad_mon"/>
+    <item
+        android:id="@+id/drawerFavoritesDad"
+        android:icon="@drawable/ic_dad_small"
+        android:title="@string/drawer_favorites_dad"/>
+    <item
+        android:id="@+id/drawerFavoritesMom"
+        android:icon="@drawable/ic_mom_small"
+        android:title="@string/drawer_favorites_mom"/>
+    <item
+        android:id="@+id/drawerOurCoincidences"
+        android:icon="@drawable/ic_matches"
+        android:title="@string/drawer_matches"/>
+  </group>
+
+  <item
+      android:id="@+id/drawerFavorites"
+      android:title="@string/drawer_more">
+    <menu>
+      <item
+          android:id="@+id/drawerContact"
+          android:icon="@drawable/ic_email_black_24dp"
+          android:title="@string/drawer_contact_us"/>
+    </menu>
+  </item>
+</menu>

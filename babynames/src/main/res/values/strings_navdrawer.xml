@@ -1,0 +1,8 @@
+<resources>
+  <string name="drawer_dad_mon">Dad and Mom</string>
+  <string name="drawer_favorites_dad">Dad\'s favorites</string>
+  <string name="drawer_favorites_mom">Mom\'s favorites</string>
+  <string name="drawer_more">More…</string>
+  <string name="drawer_matches">Our coincidences</string>
+  <string name="drawer_contact_us">Contact me!</string>
+</resources>

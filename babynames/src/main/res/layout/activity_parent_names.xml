@@ -160,7 +160,7 @@
         android:id="@+id/btnGo"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/parent_names_go"
+        android:text="@string/go"
         android:theme="@style/ButtonDefault"/>
 
   </com.kamisoft.babynames.presentation.custom_view.MovableFrameLayout>

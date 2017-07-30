@@ -4,7 +4,6 @@
   <string name="parent_names_whats_your_names">¿Cómo os llamáis?</string>
   <string name="parent_names_first_parent">1er padre</string>
   <string name="parent_names_second_parent">2do padre</string>
-  <string name="parent_names_go">¡OK, vamos!</string>
   <string name="parent_names_error_first_parent_name_empty">El nombre del 1er padre no puede estar vacío</string>
   <string name="parent_names_error_second_parent_name_empty">El nombre del 2do padre no puede estar vacío</string>
   <string name="parent_names_error_same_parent_names">Los nombres deben ser distintos</string>

@@ -4,7 +4,6 @@
   <string name="parent_names_whats_your_names">What are your names?</string>
   <string name="parent_names_first_parent">1st parent</string>
   <string name="parent_names_second_parent">2nd parent</string>
-  <string name="parent_names_go">OK, let\'s start!</string>
   <string name="parent_names_error_first_parent_name_empty">1st parent\'s name cannot be empty</string>
   <string name="parent_names_error_second_parent_name_empty">1nd parent\'s name cannot be empty</string>
   <string name="parent_names_error_same_parent_names">Names must be different</string>
