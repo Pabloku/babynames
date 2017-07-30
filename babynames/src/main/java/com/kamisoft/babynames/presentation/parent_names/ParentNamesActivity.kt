@@ -22,14 +22,8 @@ class ParentNamesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent_names)
-        if (!isFirstUse()) {
-            openMainActivity()
-        } else {
-            initViews()
-        }
+        initViews()
     }
-
-    private fun isFirstUse() = preferencesManager.getFirstUseInMillis() == 0L
 
     private fun initViews() {
         btnParent1Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent1Mom) }
@@ -37,6 +31,19 @@ class ParentNamesActivity : AppCompatActivity() {
         btnParent2Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent2Mom) }
         btnParent2Mom.setOnClickListener { enableMomButton(btnDad = btnParent2Dad, btnMom = it as Button) }
         btnGo.setOnClickListener { go() }
+
+        edtParent1Name.setText(preferencesManager.getParent1Name())
+        edtParent2Name.setText(preferencesManager.getParent2Name())
+        if (preferencesManager.getParent1() == Parent.DAD.value) {
+            btnParent1Dad.performClick()
+        }else {
+            btnParent1Mom.performClick()
+        }
+        if (preferencesManager.getParent2() == Parent.DAD.value) {
+            btnParent2Dad.performClick()
+        }else {
+            btnParent2Mom.performClick()
+        }
     }
 
     private fun enableDadButton(btnDad: Button, btnMom: Button) {
@@ -51,7 +58,7 @@ class ParentNamesActivity : AppCompatActivity() {
 
     private fun go() {
         if (areInputNamesOK()) {
-            preferencesManager.saveFirstUse(System.currentTimeMillis())
+            preferencesManager.setParentNamesSetDatetime(System.currentTimeMillis())
             preferencesManager.setParent1(getParent1())
             preferencesManager.setParent1Name(edtParent1Name.text.toString())
             preferencesManager.setParent2(getParent2())

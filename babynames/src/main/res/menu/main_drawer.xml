@@ -14,13 +14,13 @@
         android:icon="@drawable/ic_mom_small"
         android:title="@string/drawer_favorites_mom"/>
     <item
-        android:id="@+id/drawerOurCoincidences"
+        android:id="@+id/drawerOurMatches"
         android:icon="@drawable/ic_matches"
         android:title="@string/drawer_matches"/>
   </group>
 
   <item
-      android:id="@+id/drawerFavorites"
+      android:id="@+id/drawerMore"
       android:title="@string/drawer_more">
     <menu>
       <item

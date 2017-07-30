@@ -8,18 +8,18 @@ class AndroidPrefsManager(context: Context) : PreferencesManager {
     private val PREFS_FILE = "BabyNames"
 
     object Key {
-        const val FIRST_USE = "first_use"
+        const val PARENT_NAMES_SET_DATETIME = "parent_names_set_datetime"
         const val PARENT1 = "parent1"
         const val PARENT1_NAME = "parent1_name"
         const val PARENT2 = "parent2"
-        const val PARENT2_NAME = "parent2_name";
+        const val PARENT2_NAME = "parent2_name"
     }
 
     private val preferences: SharedPreferences = context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
 
-    override fun getFirstUseInMillis(): Long = preferences.getLong(Key.FIRST_USE, 0)
+    override fun getParentNamesSetDatetime(): Long = preferences.getLong(Key.PARENT_NAMES_SET_DATETIME, 0)
 
-    override fun saveFirstUse(firstUseInMillis: Long) = preferences.edit().putLong(Key.FIRST_USE, firstUseInMillis).apply()
+    override fun setParentNamesSetDatetime(firstUseInMillis: Long) = preferences.edit().putLong(Key.PARENT_NAMES_SET_DATETIME, firstUseInMillis).apply()
 
     override fun getParent1(): String = preferences.getString(Key.PARENT1, "")
 

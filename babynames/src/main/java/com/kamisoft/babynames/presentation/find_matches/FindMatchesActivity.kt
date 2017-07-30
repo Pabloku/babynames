@@ -46,7 +46,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     override fun showChooseGenderView() {
         val chooseGenderFragment = ChooseGenderFragment.createInstance(genderSelectCallBack = { presenter.onGenderSelected(it) })
-        showFragment(fragment = chooseGenderFragment)
+        showFragment(fragment = chooseGenderFragment, withRightLeftAnimation = false)
     }
 
     override fun showWhoChooseFirstView() {
@@ -87,10 +87,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         stepperIndicator.currentStep = 4
     }
 
-    private fun showFragment(fragment: Fragment, backStackTag: String? = null) {
+    private fun showFragment(fragment: Fragment, backStackTag: String? = null, withRightLeftAnimation: Boolean = true) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                R.anim.enter_from_left, R.anim.exit_to_right)
+        if (withRightLeftAnimation) {
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                    R.anim.enter_from_left, R.anim.exit_to_right)
+        }
         transaction.replace(R.id.contentView, fragment)
         backStackTag?.let { transaction.addToBackStack(backStackTag) }
         transaction.commit()
@@ -110,13 +112,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         val searchToolbar = (searchToolbar as Toolbar)
         searchToolbar.inflateMenu(R.menu.menu_search)
         searchMenu = searchToolbar.menu
+        searchItem = searchMenu.findItem(R.id.actionSearch)
 
         searchToolbar.setNavigationOnClickListener({
             hideSearchToolbar()
             babyNamesSearchView.clearSearchText()
         })
-
-        searchItem = searchMenu.findItem(R.id.actionSearch)
 
         MenuItemCompat.setOnActionExpandListener(searchItem, object : MenuItemCompat.OnActionExpandListener {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {

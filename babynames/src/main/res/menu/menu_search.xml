@@ -5,5 +5,5 @@
       android:title="@string/search"
       android:icon="@drawable/ic_search"
       app:showAsAction="ifRoom|collapseActionView"
-      app:actionViewClass="com.kamisoft.babynames.presentation.main.BabyNamesSearchView.BabyNamesSearchView" />
+      app:actionViewClass="com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView" />
 </menu>

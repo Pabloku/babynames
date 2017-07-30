@@ -3,9 +3,9 @@ package com.kamisoft.babynames.commons.shared_preferences
 
 interface PreferencesManager {
 
-    fun getFirstUseInMillis(): Long
+    fun getParentNamesSetDatetime(): Long
 
-    fun saveFirstUse(firstUseInMillis: Long)
+    fun setParentNamesSetDatetime(firstUseInMillis: Long)
 
     fun getParent1(): String
 
