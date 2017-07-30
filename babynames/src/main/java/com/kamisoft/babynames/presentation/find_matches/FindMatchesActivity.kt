@@ -18,7 +18,7 @@ import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
 import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
 import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_find_matches.*
 
 class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>(), FindMatchesView {
 

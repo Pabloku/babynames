@@ -6,12 +6,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import com.kamisoft.babyname.R
+import com.kamisoft.babynames.commons.extensions.isEmpty
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.extensions.snackbar
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
-import kotlinx.android.synthetic.main.activity_intro.*
+import kotlinx.android.synthetic.main.activity_parent_names.*
 
 
 class ParentNamesActivity : AppCompatActivity() {
