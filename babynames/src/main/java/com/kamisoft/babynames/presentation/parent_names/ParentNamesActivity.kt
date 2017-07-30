@@ -90,12 +90,12 @@ class ParentNamesActivity : AppCompatActivity() {
         var areOk = true
         if (edtParent1Name.isEmpty()) {
             areOk = false
-            snackbar(coordinatorIntro, R.string.intro_error_first_parent_name_empty)
+            snackbar(coordinatorParentNames, R.string.parent_names_error_first_parent_name_empty)
         } else if (edtParent2Name.isEmpty()) {
             areOk = false
-            snackbar(coordinatorIntro, R.string.intro_error_second_parent_name_empty)
+            snackbar(coordinatorParentNames, R.string.parent_names_error_second_parent_name_empty)
         } else if (edtParent1Name.text.toString() == edtParent2Name.text.toString()) {
-            snackbar(coordinatorIntro, R.string.intro_error_same_parent_names)
+            snackbar(coordinatorParentNames, R.string.parent_names_error_same_parent_names)
             areOk = false
         }
         return areOk
