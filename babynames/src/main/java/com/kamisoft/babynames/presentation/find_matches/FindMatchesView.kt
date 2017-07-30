@@ -1,8 +1,8 @@
-package com.kamisoft.babynames.presentation.main
+package com.kamisoft.babynames.presentation.find_matches
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
 
-interface MainView : MvpView {
+interface FindMatchesView : MvpView {
 
     fun initViews()
 

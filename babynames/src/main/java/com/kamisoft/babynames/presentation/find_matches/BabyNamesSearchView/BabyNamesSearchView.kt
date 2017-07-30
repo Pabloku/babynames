@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.main.BabyNamesSearchView
+package com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView
 
 import android.content.Context
 import android.graphics.Color

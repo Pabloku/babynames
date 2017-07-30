@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.main.BabyNamesSearchView
+package com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
 

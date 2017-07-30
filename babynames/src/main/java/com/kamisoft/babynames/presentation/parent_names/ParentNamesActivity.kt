@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.intro
+package com.kamisoft.babynames.presentation.parent_names
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -6,22 +6,21 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.commons.extensions.isEmpty
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.extensions.snackbar
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Parent
-import com.kamisoft.babynames.presentation.main.MainActivity
+import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
 import kotlinx.android.synthetic.main.activity_intro.*
 
 
-class IntroActivity : AppCompatActivity() {
+class ParentNamesActivity : AppCompatActivity() {
 
     private val preferencesManager by lazy { AndroidPrefsManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+        setContentView(R.layout.activity_parent_names)
         if (!isFirstUse()) {
             openMainActivity()
         } else {
@@ -61,7 +60,7 @@ class IntroActivity : AppCompatActivity() {
     }
 
     private fun openMainActivity() {
-        openActivity(MainActivity::class.java)
+        openActivity(FindMatchesActivity::class.java)
         finish()
     }
 

@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.main
+package com.kamisoft.babynames.presentation.find_matches
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.kamisoft.babynames.data.datasource.NamesDataSource
@@ -10,7 +10,7 @@ import com.rahulrav.futures.Future
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 
-class MainPresenter(private val getNamesUseCase: GetNameList) : MvpBasePresenter<MainView>() {
+class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePresenter<FindMatchesView>() {
 
     private var summaryResult = SummaryResult()
     val boyNameListFuture: Future<List<BabyName>> by lazy { createBoyNameListFuture() }

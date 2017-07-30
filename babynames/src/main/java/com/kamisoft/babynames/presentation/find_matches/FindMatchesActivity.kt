@@ -1,4 +1,4 @@
-package com.kamisoft.babynames.presentation.main
+package com.kamisoft.babynames.presentation.find_matches
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -16,11 +16,11 @@ import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
 import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
 import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
-import com.kamisoft.babynames.presentation.main.BabyNamesSearchView.BabyNamesSearchView
+import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
+class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>(), FindMatchesView {
 
     private lateinit var searchMenu: Menu
     private lateinit var searchItem: MenuItem
@@ -33,7 +33,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_find_matches)
         presenter.start()
     }
 
@@ -42,7 +42,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         stepperIndicator.stepCount = 4
     }
 
-    override fun createPresenter(): MainPresenter = MainPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
+    override fun createPresenter(): FindMatchesPresenter = FindMatchesPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
     override fun showChooseGenderView() {
         val chooseGenderFragment = ChooseGenderFragment.createInstance(genderSelectCallBack = { presenter.onGenderSelected(it) })
