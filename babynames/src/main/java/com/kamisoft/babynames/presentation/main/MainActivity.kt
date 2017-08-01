@@ -92,7 +92,6 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     override fun close() = finish()
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {

@@ -3,6 +3,7 @@ package com.kamisoft.babynames.presentation.find_matches
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.GravityCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -19,6 +20,7 @@ import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
 import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import kotlinx.android.synthetic.main.activity_find_matches.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>(), FindMatchesView {
 
@@ -99,8 +101,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     private fun setupToolbars() {
-        setSupportActionBar(toolbar as Toolbar?)
-        setSearchToolbar()
+        initActionToolbar()
+        initSearchToolbar()
     }
 
     private fun onSearchClicked() {
@@ -108,7 +110,16 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         searchItem.expandActionView()
     }
 
-    private fun setSearchToolbar() {
+    private fun initActionToolbar() {
+        val toolbar = (toolbar as Toolbar?)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = null
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar?.setNavigationIcon(R.drawable.ic_close)
+    }
+
+    private fun initSearchToolbar() {
         val searchToolbar = (searchToolbar as Toolbar)
         searchToolbar.inflateMenu(R.menu.menu_search)
         searchMenu = searchToolbar.menu
@@ -158,5 +169,16 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             searchToolbar.circleReveal(posFromRight = 1, containsOverflow = true, isShow = false)
         else
             searchToolbar.gone()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
