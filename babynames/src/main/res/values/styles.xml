@@ -21,6 +21,11 @@
     <item name="android:fontFamily">"sans-serif-light"</item>
   </style>
 
+  <style name="TextViewTitleStyle" parent="@android:style/Widget.TextView">
+    <item name="android:textSize">@dimen/fragment_title_size</item>
+    <item name="android:fontFamily">"sans-serif"</item>
+  </style>
+
   <style name="ButtonBoy" parent="Widget.AppCompat.Button.Colored">
     <item name="colorButtonNormal">@color/boy_color</item>
     <item name="android:textColor">@android:color/white</item>

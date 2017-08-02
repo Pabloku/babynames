@@ -14,11 +14,11 @@
       android:textAllCaps="true"
       android:gravity="center"
       android:padding="@dimen/fragment_title_padding"
-      android:textSize="@dimen/fragment_title_size"
       android:layout_marginTop="8dp"
       android:layout_alignParentTop="true"
       android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"/>
+      android:layout_alignParentStart="true"
+      style="@style/TextViewTitleStyle"/>
 
   <include layout="@layout/loading_view"/>
 
