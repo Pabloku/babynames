@@ -1,9 +1,9 @@
 package com.kamisoft.babynames.presentation.choose_name
 
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceView
-import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 
-interface ChooseNameView : MvpLceView<List<BabyName>> {
+interface ChooseNameView : MvpLceView<List<BabyNameLikable>> {
 
     fun initViews()
 

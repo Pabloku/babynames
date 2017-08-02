@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import kotlinx.android.synthetic.main.row_name.view.*
 
-class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>(),
+class NamesAdapter(val listener: (BabyNameLikable) -> Unit) : RecyclerView.Adapter<NamesAdapter.ViewHolder>(),
         FastScrollRecyclerView.SectionedAdapter {
 
     companion object {
@@ -18,7 +18,7 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
         val ACTION_UNLIKE_BUTTON_CLICKED = "action_unlike_button_button"
     }
 
-    private var nameList: List<BabyName> = emptyList()
+    private var nameList: List<BabyNameLikable> = emptyList()
     private var favoriteList: List<String> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,7 +31,7 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
 
     override fun getItemCount() = nameList.size
 
-    fun setBabyNameList(names: List<BabyName>) {
+    fun setBabyNameList(names: List<BabyNameLikable>) {
         this.nameList = names
         notifyDataSetChanged()
     }
@@ -54,7 +54,7 @@ class NamesAdapter(val listener: (BabyName) -> Unit) : RecyclerView.Adapter<Name
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(babyName: BabyName, listener: (BabyName) -> Unit) = with(itemView) {
+        fun bind(babyName: BabyNameLikable, listener: (BabyNameLikable) -> Unit) = with(itemView) {
             txtName.text = babyName.name
             if (!TextUtils.isEmpty(babyName.origin)) {
                 txtOrigin.text = txtOrigin.context.getString(R.string.origin, babyName.origin)

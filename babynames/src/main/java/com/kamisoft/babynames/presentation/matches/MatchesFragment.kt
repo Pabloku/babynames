@@ -1,6 +1,5 @@
 package com.kamisoft.babynames.presentation.matches
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -44,7 +43,7 @@ class MatchesFragment : Fragment() {
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        namesAdapter.setBabyNameList(nameMatchesList.map { BabyName(it, "", "", false) })
+        namesAdapter.setBabyNameList(nameMatchesList.map { BabyNameLikable(name = it, origin = "", meaning = "", liked = false) }) //TODO Maybe I should use a different model here
     }
 
     class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, ArrayList<String>> {

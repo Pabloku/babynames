@@ -6,6 +6,7 @@ import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import com.rahulrav.futures.Future
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
@@ -29,23 +30,27 @@ class ChooseNamePresenter(
             Logger.debug("Future: loadData launch")
             if (listFuture.ready) {
                 Logger.debug("Future: is ready")
-                val result = listFuture.result?.toList()  ?: emptyList()
-                view?.setData(result)
+                val babyNames = listFuture.result?.toList() ?: emptyList()
+                view?.setData(parseToBabyNamesLikable(babyNames))
                 view?.showContent()
             } else {
                 Logger.debug("Future: not ready")
-                val result = listFuture.await(30000)?.toList() ?: emptyList()//TODO Ese 30000...
-                view?.setData(result)
+                val babyNames = listFuture.await(30000)?.toList() ?: emptyList()//TODO Ese 30000...
+                view?.setData(parseToBabyNamesLikable(babyNames))
                 view?.showContent()
             }
         }
+    }
+
+    private fun parseToBabyNamesLikable(babyNames: List<BabyName>): List<BabyNameLikable> {
+        return babyNames.map { BabyNameLikable(it.name, it.origin, it.meaning, liked = false) }
     }
 
     fun loadFavorites(parent: String?, gender: NamesDataSource.Gender) {
         parent?.let { getFavoritesUseCase.getFavorites(it, gender, { onFavoritesLoaded(it) }) }
     }
 
-    fun manageBabyNameClick(parent: String, gender: NamesDataSource.Gender, babyName: BabyName) {
+    fun manageBabyNameClick(parent: String, gender: NamesDataSource.Gender, babyName: BabyNameLikable) {
         saveFavoriteUseCase.saveFavoriteName(parent, gender, babyName.name)
         babyName.liked = !babyName.liked
 
@@ -57,7 +62,7 @@ class ChooseNamePresenter(
         view?.updateFavoriteCounter(favoriteCounter)
     }
 
-    fun getLikedBabyNames(babyNameList: List<BabyName>): List<BabyName> {
+    fun getLikedBabyNames(babyNameList: List<BabyNameLikable>): List<BabyNameLikable> {
         return babyNameList.filter { it.liked }
     }
 

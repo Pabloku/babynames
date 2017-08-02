@@ -6,6 +6,7 @@ import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.SummaryResult
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import com.rahulrav.futures.Future
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
@@ -38,13 +39,13 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
         view?.showFirstChooseNameView()
     }
 
-    fun onFirstParentChooseNames(babyNamesLiked: List<BabyName>) {
+    fun onFirstParentChooseNames(babyNamesLiked: List<BabyNameLikable>) {
         Logger.debug("First parent chose ${babyNamesLiked.size} names")
         summaryResult = summaryResult.copy(parent1NamesChosen = babyNamesLiked)
         view?.showSecondChooseNameView()
     }
 
-    fun onSecondParentChooseNames(babyNamesLiked: List<BabyName>) {
+    fun onSecondParentChooseNames(babyNamesLiked: List<BabyNameLikable>) {
         Logger.debug("Second parent chose ${babyNamesLiked.size} names")
         summaryResult = summaryResult.copy(parent2NamesChosen = babyNamesLiked)
         view?.showMatchesView()
@@ -79,16 +80,16 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
 
     private fun createBoyNameListFuture() = Future.submit {
         Logger.debug("Future: createBoyNameListFuture")
-        val names = getNamesUseCase.getNames(NamesDataSource.Gender.MALE)
-        Logger.debug("Future: createBoyNameListFuture: names ${names.size}")
-        names
+        val babyNames = getNamesUseCase.getNames(NamesDataSource.Gender.MALE)
+        Logger.debug("Future: createBoyNameListFuture: names ${babyNames.size}")
+        babyNames
     }
 
     private fun createGirlNameListFuture() = Future.submit {
         Logger.debug("Future: createGirlNameListFuture")
-        val names = getNamesUseCase.getNames(NamesDataSource.Gender.FEMALE)
-        Logger.debug("Future: createGirlNameListFuture: names ${names.size}")
-        names
+        val babyNames = getNamesUseCase.getNames(NamesDataSource.Gender.FEMALE)
+        Logger.debug("Future: createGirlNameListFuture: names ${babyNames.size}")
+        babyNames
     }
 
     fun getNameListFuture(): Future<List<BabyName>> {

@@ -18,11 +18,12 @@ import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
+import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import org.jetbrains.anko.support.v4.onUiThread
 
-class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, ChooseNameView,
+class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyNameLikable>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private var parent: String = Parent.DAD.toString()
@@ -38,12 +39,12 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         lateinit var listFuture: Future<List<BabyName>>
         lateinit var searchCallback: () -> Unit
         lateinit var favoriteCallback: (favoriteCount: Int) -> Unit
-        lateinit var namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit
+        lateinit var namesListCallBack: (babyNamesLiked: List<BabyNameLikable>) -> Unit
         fun createInstance(parent: String, gender: NamesDataSource.Gender,
                            namesFuture: Future<List<BabyName>>,
                            searchCallback: () -> Unit,
                            favoriteCallback: (favoriteCount: Int) -> Unit,
-                           namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit): ChooseNameFragment {
+                           namesListCallBack: (babyNamesLiked: List<BabyNameLikable>) -> Unit): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
@@ -106,7 +107,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
             GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
             SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())))
 
-    override fun setData(nameList: List<BabyName>) {
+    override fun setData(nameList: List<BabyNameLikable>) {
         onUiThread {
             showLoading(false)
             namesAdapter.setBabyNameList(nameList)
