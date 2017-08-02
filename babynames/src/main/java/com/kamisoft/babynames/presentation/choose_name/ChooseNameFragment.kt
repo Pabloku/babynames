@@ -32,16 +32,17 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
         presenter.manageBabyNameClick(parent, selectedGender, it)
     })
 
-
     companion object {
         const val ARG_GENDER = "gender"
         const val ARG_PARENT = "parent"
         lateinit var listFuture: Future<List<BabyName>>
         lateinit var searchCallback: () -> Unit
+        lateinit var favoriteCallback: (favoriteCount: Int) -> Unit
         lateinit var namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit
         fun createInstance(parent: String, gender: NamesDataSource.Gender,
                            namesFuture: Future<List<BabyName>>,
                            searchCallback: () -> Unit,
+                           favoriteCallback: (favoriteCount: Int) -> Unit,
                            namesListCallBack: (babyNamesLiked: List<BabyName>) -> Unit): ChooseNameFragment {
             val fragment = ChooseNameFragment()
             val bundle = Bundle()
@@ -50,6 +51,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
             fragment.arguments = bundle
             this.listFuture = namesFuture
             this.searchCallback = searchCallback
+            this.favoriteCallback = favoriteCallback
             this.namesListCallBack = namesListCallBack
             return fragment
         }
@@ -97,7 +99,7 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
 
     override fun onStart() {
         super.onStart()
-        presenter.loadData()
+        presenter.loadData(listFuture)
     }
 
     override fun createPresenter() = ChooseNamePresenter(
@@ -137,6 +139,22 @@ class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyName>, Ch
             contentView.visible()
         }
     }
+
+    override fun updateFavoriteCounter(favoriteCount: Int) {
+        favoriteCallback.invoke(favoriteCount)
+    }
+
+    /*override fun increaseFavoriteCounter() {
+        val currentFavoriteCount: Int = (tsLikesCounter.currentView as TextView).text.toString().toInt()
+        tsLikesCounter.setCurrentText(currentFavoriteCount.toString())
+        tsLikesCounter.setText((currentFavoriteCount + 1).toString())
+    }
+
+    override fun decreaseFavoriteCounter() {
+        val currentFavoriteCount: Int = (tsLikesCounter.currentView as TextView).text.toString().toInt()
+        tsLikesCounter.setCurrentText(currentFavoriteCount.toString())
+        tsLikesCounter.setText((currentFavoriteCount - 1).toString())
+    }*/
 
     fun findNameInList(text: String) {
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)

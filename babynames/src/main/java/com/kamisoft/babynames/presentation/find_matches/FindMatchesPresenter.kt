@@ -97,4 +97,8 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
             NamesDataSource.Gender.FEMALE -> girlNameListFuture
         }
     }
+
+    fun onFavoriteCountUpdated(favoriteCount: Int) {
+        view?.updateFavoriteCounter(favoriteCount)
+    }
 }

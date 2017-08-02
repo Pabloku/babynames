@@ -3,7 +3,6 @@ package com.kamisoft.babynames.presentation.find_matches
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -20,7 +19,7 @@ import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
 import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import kotlinx.android.synthetic.main.activity_find_matches.*
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>(), FindMatchesView {
 
@@ -49,6 +48,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     override fun showChooseGenderView() {
         val chooseGenderFragment = ChooseGenderFragment.createInstance(genderSelectCallBack = { presenter.onGenderSelected(it) })
         showFragment(fragment = chooseGenderFragment, withRightLeftAnimation = false)
+        hideFavoriteCounter()
     }
 
     override fun showWhoChooseFirstView() {
@@ -56,26 +56,31 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 parentSelectCallBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) })
         showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent")
         stepperIndicator.currentStep = 1
+        hideFavoriteCounter()
     }
 
     override fun showFirstChooseNameView() {
         val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent1Name(),
                 presenter.getGender(), presenter.getNameListFuture(),
                 searchCallback = { onSearchClicked() },
+                favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onFirstParentChooseNames(it) })
-        showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameSecondParent")
+        showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameFirstParent")
         babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
         stepperIndicator.currentStep = 2
+        showFavoriteCounter()
     }
 
     override fun showSecondChooseNameView() {
         val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent2Name(),
                 presenter.getGender(), presenter.getNameListFuture(),
                 searchCallback = { onSearchClicked() },
+                favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onSecondParentChooseNames(it) })
         showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameSecondParent")
         babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
         stepperIndicator.currentStep = 3
+        showFavoriteCounter()
     }
 
     override fun showMatchesView() {
@@ -87,7 +92,17 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name }))
         showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
         stepperIndicator.currentStep = 4
+        hideFavoriteCounter()
     }
+
+    override fun updateFavoriteCounter(favoriteCount: Int) {
+        tsLikesCounter.setCurrentText((favoriteCount - 1).toString())
+        tsLikesCounter.setText(favoriteCount.toString())
+    }
+
+    private fun showFavoriteCounter() = layFavoriteCounter.visible()
+
+    private fun hideFavoriteCounter() = layFavoriteCounter.gone()
 
     private fun showFragment(fragment: Fragment, backStackTag: String? = null, withRightLeftAnimation: Boolean = true) {
         val transaction = supportFragmentManager.beginTransaction()

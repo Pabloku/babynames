@@ -15,4 +15,6 @@ interface FindMatchesView : MvpView {
     fun showSecondChooseNameView()
 
     fun showMatchesView()
+
+    fun updateFavoriteCounter(favoriteCount: Int)
 }

@@ -8,4 +8,6 @@ interface ChooseNameView : MvpLceView<List<BabyName>> {
     fun initViews()
 
     fun setFavoriteList(favorites: List<String>)
+
+    fun updateFavoriteCounter(favoriteCount: Int)
 }

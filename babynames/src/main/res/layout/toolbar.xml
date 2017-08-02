@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     app:titleTextColor="@android:color/white"
     app:contentInsetRight="0dp"
     app:contentInsetLeft="0dp"
@@ -19,4 +20,45 @@
       android:paddingEnd="12dp"
       android:paddingRight="12dp"
       android:layout_gravity="start"/>
+
+  <LinearLayout
+      android:id="@+id/layFavoriteCounter"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:gravity="center"
+      android:paddingStart="12dp"
+      android:paddingLeft="12dp"
+      android:paddingEnd="12dp"
+      android:paddingRight="12dp"
+      android:visibility="gone">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_heart_white"
+        android:padding="5dp"
+        android:contentDescription="@string/no_description"/>
+
+    <TextSwitcher
+        android:id="@+id/tsLikesCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inAnimation="@anim/slide_in_likes_counter"
+        android:outAnimation="@anim/slide_out_likes_counter">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:text="23"
+          android:textColor="@android:color/white"
+          android:textStyle="bold"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@android:color/white"
+          android:textStyle="bold"/>
+    </TextSwitcher>
+  </LinearLayout>
 </android.support.v7.widget.Toolbar>
