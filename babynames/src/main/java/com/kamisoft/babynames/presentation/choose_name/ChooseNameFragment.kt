@@ -1,9 +1,9 @@
 package com.kamisoft.babynames.presentation.choose_name
 
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import android.widget.FrameLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.gone
@@ -23,7 +23,7 @@ import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import org.jetbrains.anko.support.v4.onUiThread
 
-class ChooseNameFragment : MvpLceFragment<SwipeRefreshLayout, List<BabyNameLikable>, ChooseNameView,
+open class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private var parent: String = Parent.DAD.toString()

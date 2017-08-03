@@ -52,7 +52,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     override fun showWhoChooseFirstView() {
-        val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1,
+        val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1, //TODO maybe not necessary
                 parentSelectCallBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) })
         showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent")
         stepperIndicator.currentStep = 1
@@ -89,7 +89,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             val babyName2 = presenter.getParent2NamesChosen()?.find { it.name == name1 }
             return@filter babyName2 != null
         }
-        val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name }))
+        val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name } ?: emptyList()))
         showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
         stepperIndicator.currentStep = 4
         hideFavoriteCounter()

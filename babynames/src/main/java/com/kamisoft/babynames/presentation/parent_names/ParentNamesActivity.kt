@@ -34,10 +34,10 @@ class ParentNamesActivity : AppCompatActivity() {
 
         edtParent1Name.setText(preferencesManager.getParent1Name())
         edtParent2Name.setText(preferencesManager.getParent2Name())
-        if (preferencesManager.getParent1() == Parent.DAD.value) {
-            btnParent1Dad.performClick()
-        }else {
+        if (preferencesManager.getParent1() == Parent.MOM.value) {
             btnParent1Mom.performClick()
+        }else {
+            btnParent1Dad.performClick()
         }
         if (preferencesManager.getParent2() == Parent.DAD.value) {
             btnParent2Dad.performClick()
