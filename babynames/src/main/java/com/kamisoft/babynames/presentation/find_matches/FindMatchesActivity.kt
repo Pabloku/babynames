@@ -45,7 +45,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     override fun initViews() {
         setupToolbars()
-        stepperIndicator.stepCount = CurrentStep.values().size
+        stepperIndicator.stepCount = CurrentStep.values().size - 1
         stepperIndicator.currentStep = CurrentStep.CHOOSE_GENDER.value
     }
 

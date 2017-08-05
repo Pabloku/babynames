@@ -55,8 +55,8 @@
       android:layout_marginStart="8dp"
       android:layout_marginEnd="8dp"
       android:textSize="30sp"
-      android:theme="@style/ButtonBoy"
-      android:layout_alignParentBottom="true"/>
+      android:layout_alignParentBottom="true"
+      android:theme="@style/ButtonDefault"/>
 
 
 </RelativeLayout>
