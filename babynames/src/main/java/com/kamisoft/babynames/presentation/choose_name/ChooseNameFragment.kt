@@ -23,7 +23,7 @@ import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import org.jetbrains.anko.support.v4.onUiThread
 
-open class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
+class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private var parent: String = Parent.DAD.toString()
