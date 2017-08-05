@@ -23,7 +23,14 @@ import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import org.jetbrains.anko.support.v4.onUiThread
 
-class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
+/*/ TODO This is a horrible copied class from ChooseName[FirstParent]Fragment.
+I think there is a bug managing fragments (or surely I am doing something wrong) when 2 consecutive
+ fragments are instances of the same class. After doing a replace, and coming back to previous
+ fragment of the same instance, this fragment acts as it was the second instance instead the first.
+So, that's why I created this copied class, to avoid having two consecutive fragments instances of the
+same class.
+ */
+class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
     private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
     private var parent: String = Parent.DAD.toString()
@@ -44,8 +51,8 @@ class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, Ch
                            namesFuture: Future<List<BabyName>>,
                            searchCallback: () -> Unit,
                            favoriteCallback: (favoriteCount: Int) -> Unit,
-                           namesListCallBack: (babyNamesLiked: List<BabyNameLikable>) -> Unit): ChooseNameFragment {
-            val fragment = ChooseNameFragment()
+                           namesListCallBack: (babyNamesLiked: List<BabyNameLikable>) -> Unit): ChooseNameSecondParentFragment {
+            val fragment = ChooseNameSecondParentFragment()
             val bundle = Bundle()
             bundle.putString(ARG_GENDER, gender.toString())
             bundle.putString(ARG_PARENT, parent)

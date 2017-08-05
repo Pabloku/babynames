@@ -14,7 +14,8 @@ import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.presentation.choose_gender.ChooseGenderFragment
-import com.kamisoft.babynames.presentation.choose_name.ChooseNameFragment
+import com.kamisoft.babynames.presentation.choose_name.ChooseNameFirstParentFragment
+import com.kamisoft.babynames.presentation.choose_name.ChooseNameSecondParentFragment
 import com.kamisoft.babynames.presentation.choose_parent.ChooseParentFragment
 import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.BabyNamesSearchView
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
@@ -60,7 +61,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     override fun showFirstChooseNameView() {
-        val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent1Name(),
+        val chooseNameFragment = ChooseNameFirstParentFragment.createInstance(presenter.getParent1Name(),
                 presenter.getGender(), presenter.getNameListFuture(),
                 searchCallback = { onSearchClicked() },
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
@@ -72,7 +73,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     override fun showSecondChooseNameView() {
-        val chooseNameFragment = ChooseNameFragment.createInstance(presenter.getParent2Name(),
+        val chooseNameFragment = ChooseNameSecondParentFragment.createInstance(presenter.getParent2Name(),
                 presenter.getGender(), presenter.getNameListFuture(),
                 searchCallback = { onSearchClicked() },
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
