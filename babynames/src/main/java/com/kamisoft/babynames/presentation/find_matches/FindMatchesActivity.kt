@@ -44,7 +44,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     override fun initViews() {
-        setupToolbars()
+        initToolbars()
+        babyNamesSearchView.setQueryListenerToSearchView({ onSearchItem(it) })
         stepperIndicator.stepCount = CurrentStep.values().size - 1
         stepperIndicator.currentStep = CurrentStep.CHOOSE_GENDER.value
     }
@@ -58,15 +59,15 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     override fun showChooseGenderView() {
         val chooseGenderFragment = ChooseGenderFragment.createInstance(genderSelectCallBack = { presenter.onGenderSelected(it) })
         showFragment(fragment = chooseGenderFragment, withRightLeftAnimation = false)
-        manageCurrentStep(stepperIndicator.currentStep)
+        manageCurrentStep()
     }
 
     override fun showWhoChooseFirstView() {
         val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1, //TODO maybe not necessary
                 parentSelectCallBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) })
-        showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent")
+        showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent") //TODO tag strings
         stepperIndicator.currentStep = CurrentStep.WHO_CHOOSE.value
-        manageCurrentStep(stepperIndicator.currentStep)
+        manageCurrentStep()
     }
 
     override fun showFirstChooseNameView() {
@@ -76,9 +77,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onFirstParentChooseNames(it) })
         showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameFirstParent")
-        babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
         stepperIndicator.currentStep = CurrentStep.FIRST_PARENT_CHOOSE_NAME.value
-        manageCurrentStep(stepperIndicator.currentStep)
+        manageCurrentStep()
     }
 
     override fun showSecondChooseNameView() {
@@ -88,9 +88,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onSecondParentChooseNames(it) })
         showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameSecondParent")
-        babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
         stepperIndicator.currentStep = CurrentStep.SECOND_PARENT_CHOOSE_NAME.value
-        manageCurrentStep(stepperIndicator.currentStep)
+        manageCurrentStep()
     }
 
     override fun showMatchesView() {
@@ -102,7 +101,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name } ?: emptyList()))
         showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
         stepperIndicator.currentStep = CurrentStep.MATCHES.value
-        manageCurrentStep(stepperIndicator.currentStep)
+        manageCurrentStep()
     }
 
     override fun updateFavoriteCounter(favoriteCount: Int) {
@@ -120,12 +119,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                     R.anim.enter_from_left, R.anim.exit_to_right)
         }
-        transaction.replace(R.id.contentView, fragment)
+        transaction.replace(R.id.contentView, fragment, backStackTag)
         backStackTag?.let { transaction.addToBackStack(backStackTag) }
         transaction.commit()
     }
 
-    private fun setupToolbars() {
+    private fun initToolbars() {
         initActionToolbar()
         initSearchToolbar()
     }
@@ -177,7 +176,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             if (stepperIndicator.currentStep > 0) {
                 stepperIndicator.currentStep -= 1
             }
-            manageCurrentStep(stepperIndicator.currentStep)
+            manageCurrentStep()
         }
     }
 
@@ -208,10 +207,25 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         return super.onOptionsItemSelected(item)
     }
 
-    private fun manageCurrentStep(currentStep: Int) {
-        when (currentStep) {
-            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
+    private fun onSearchItem(item: String) {
+        when (stepperIndicator.currentStep) {
+            CurrentStep.FIRST_PARENT_CHOOSE_NAME.value -> {
+                val chooseNameFragment = supportFragmentManager.findFragmentByTag("chooseNameFirstParent") as ChooseNameFirstParentFragment? //TODO tags string
+                chooseNameFragment?.findNameInList(item)
+            }
+            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> {
+                val chooseNameFragment = supportFragmentManager.findFragmentByTag("chooseNameSecondParent") as ChooseNameSecondParentFragment? //TODO tags string
+                chooseNameFragment?.findNameInList(item)
+            }
+            else -> {}
+        }
+
+    }
+
+    private fun manageCurrentStep() {
+        when (stepperIndicator.currentStep) {
             CurrentStep.FIRST_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
+            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
             else -> hideFavoriteCounter()
         }
     }

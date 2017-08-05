@@ -57,9 +57,9 @@ class BabyNamesSearchView :
         val searchTextView = findViewById(android.support.v7.appcompat.R.id.search_src_text) as AutoCompleteTextView
 
         try {
-            val mCursorDrawableRes = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-            mCursorDrawableRes.isAccessible = true
-            mCursorDrawableRes.set(searchTextView, R.drawable.search_cursor) //This sets the cursor resource ID to 0 or @null which will make it visible on white background
+            val cursorDrawableRes = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+            cursorDrawableRes.isAccessible = true
+            cursorDrawableRes.set(searchTextView, R.drawable.search_cursor) //This sets the cursor resource ID to 0 or @null which will make it visible on white background
         } catch (e: Exception) {
             Logger.error(e, "setSearchViewCursor error")
         }
