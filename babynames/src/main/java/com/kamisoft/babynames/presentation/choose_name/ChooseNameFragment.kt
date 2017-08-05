@@ -86,7 +86,7 @@ open class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.start()
+        presenter.start(listFuture)
     }
 
     override fun initViews() {
@@ -96,11 +96,6 @@ open class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
         btnOk.setOnClickListener { namesListCallBack.invoke(presenter.getLikedBabyNames(namesAdapter.getBabyNameList())) }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter.loadData(listFuture)
     }
 
     override fun createPresenter() = ChooseNamePresenter(
@@ -144,18 +139,6 @@ open class ChooseNameFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable
     override fun updateFavoriteCounter(favoriteCount: Int) {
         favoriteCallback.invoke(favoriteCount)
     }
-
-    /*override fun increaseFavoriteCounter() {
-        val currentFavoriteCount: Int = (tsLikesCounter.currentView as TextView).text.toString().toInt()
-        tsLikesCounter.setCurrentText(currentFavoriteCount.toString())
-        tsLikesCounter.setText((currentFavoriteCount + 1).toString())
-    }
-
-    override fun decreaseFavoriteCounter() {
-        val currentFavoriteCount: Int = (tsLikesCounter.currentView as TextView).text.toString().toInt()
-        tsLikesCounter.setCurrentText(currentFavoriteCount.toString())
-        tsLikesCounter.setText((currentFavoriteCount - 1).toString())
-    }*/
 
     fun findNameInList(text: String) {
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)

@@ -18,13 +18,14 @@ class ChooseNamePresenter(
 
     private var favoriteCounter = 0
 
-    fun start() {
+    fun start(listFuture: Future<List<BabyName>>) {
         val pullToRefresh = true
         view?.initViews()
         view?.showLoading(!pullToRefresh)
+        loadData(listFuture)
     }
 
-    fun loadData(listFuture: Future<List<BabyName>>) {
+    private fun loadData(listFuture: Future<List<BabyName>>) {
         Logger.debug("Future: loadData")
         launch(CommonPool) {
             Logger.debug("Future: loadData launch")
