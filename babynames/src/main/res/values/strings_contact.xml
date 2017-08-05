@@ -1,0 +1,8 @@
+<resources>
+  <string name="contact_description">Any doubt or suggestion? Please contact me! Even if you want me to add a new name</string>
+  <string name="contact_answer_asap">I will get back to you as soon as possible!</string>
+  <string name="contact_txt_dialog_email">Send me an email with&#8230;</string>
+  <string name="contact_email_label">Email</string>
+  <string name="contact_email">babynames@gmail.com</string> <!--TODO create gmail account!! -->
+  <string name="contact_email_subject">I have this suggestion</string>
+</resources>

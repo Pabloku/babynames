@@ -1,5 +1,6 @@
 <resources>
   <string name="app_name">BabyNames</string>
+  <string name="app_version">Versión %1$s</string>
   <string name="no_description">Sin descripción</string>
   <string name="boy">Niño</string>
   <string name="girl">Niña</string>

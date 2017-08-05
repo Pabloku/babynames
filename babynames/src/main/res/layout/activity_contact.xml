@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/primary_dark">
+
+  <include
+      android:id="@+id/toolbar"
+      layout="@layout/toolbar"/>
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp">
+
+      <ImageView
+          android:id="@+id/imgLogo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true"
+          app:srcCompat="@drawable/ic_logo_with_text"/>
+
+      <TextView
+          android:id="@+id/txtVersion"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/imgLogo"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="30dp"
+          android:textSize="12sp"
+          android:textColor="@android:color/white"
+          tools:text="Versión 5.7.8.2"/>
+
+      <TextView
+          android:id="@+id/txtDescription"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/txtVersion"
+          android:layout_centerHorizontal="true"
+          android:layout_marginBottom="12dp"
+          android:layout_marginTop="12dp"
+          android:gravity="center"
+          android:text="@string/contact_description"
+          android:textSize="18sp"
+          android:textColor="@android:color/white"/>
+
+      <TextView
+          android:id="@+id/txtEmailLabel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:layout_below="@+id/txtDescription"
+          android:text="@string/contact_email_label"
+          android:textStyle="bold"
+          android:textColor="@android:color/white"/>
+
+      <TextView
+          android:id="@+id/txtEmail"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:layout_below="@+id/txtEmailLabel"
+          android:layout_marginBottom="12dp"
+          android:text="@string/contact_email"
+          android:textColor="@android:color/white"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/txtEmail"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="20dp"
+          android:gravity="center"
+          android:text="@string/contact_answer_asap"
+          android:textColor="@android:color/white"
+          android:textSize="18sp"/>
+    </RelativeLayout>
+  </ScrollView>
+</LinearLayout>
