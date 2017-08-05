@@ -29,8 +29,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     private val babyNamesSearchView by lazy { createBabyNamesSearchView() }
 
-    fun createBabyNamesSearchView(): BabyNamesSearchView {
-        return MenuItemCompat.getActionView(searchItem) as BabyNamesSearchView
+    enum class CurrentStep(val value: Int) {
+        CHOOSE_GENDER(0),
+        WHO_CHOOSE(1),
+        FIRST_PARENT_CHOOSE_NAME(2),
+        SECOND_PARENT_CHOOSE_NAME(3),
+        MATCHES(4);
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,23 +45,28 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     override fun initViews() {
         setupToolbars()
-        stepperIndicator.stepCount = 4
+        stepperIndicator.stepCount = CurrentStep.values().size
+        stepperIndicator.currentStep = CurrentStep.CHOOSE_GENDER.value
     }
 
     override fun createPresenter(): FindMatchesPresenter = FindMatchesPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
 
+    private fun createBabyNamesSearchView(): BabyNamesSearchView {
+        return MenuItemCompat.getActionView(searchItem) as BabyNamesSearchView
+    }
+
     override fun showChooseGenderView() {
         val chooseGenderFragment = ChooseGenderFragment.createInstance(genderSelectCallBack = { presenter.onGenderSelected(it) })
         showFragment(fragment = chooseGenderFragment, withRightLeftAnimation = false)
-        hideFavoriteCounter()
+        manageCurrentStep(stepperIndicator.currentStep)
     }
 
     override fun showWhoChooseFirstView() {
         val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1, //TODO maybe not necessary
                 parentSelectCallBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) })
         showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent")
-        stepperIndicator.currentStep = 1
-        hideFavoriteCounter()
+        stepperIndicator.currentStep = CurrentStep.WHO_CHOOSE.value
+        manageCurrentStep(stepperIndicator.currentStep)
     }
 
     override fun showFirstChooseNameView() {
@@ -68,8 +77,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 namesListCallBack = { presenter.onFirstParentChooseNames(it) })
         showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameFirstParent")
         babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
-        stepperIndicator.currentStep = 2
-        showFavoriteCounter()
+        stepperIndicator.currentStep = CurrentStep.FIRST_PARENT_CHOOSE_NAME.value
+        manageCurrentStep(stepperIndicator.currentStep)
     }
 
     override fun showSecondChooseNameView() {
@@ -80,8 +89,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 namesListCallBack = { presenter.onSecondParentChooseNames(it) })
         showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameSecondParent")
         babyNamesSearchView.setQueryListenerToSearchView({ chooseNameFragment.findNameInList(it) })
-        stepperIndicator.currentStep = 3
-        showFavoriteCounter()
+        stepperIndicator.currentStep = CurrentStep.SECOND_PARENT_CHOOSE_NAME.value
+        manageCurrentStep(stepperIndicator.currentStep)
     }
 
     override fun showMatchesView() {
@@ -92,8 +101,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         }
         val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name } ?: emptyList()))
         showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
-        stepperIndicator.currentStep = 4
-        hideFavoriteCounter()
+        stepperIndicator.currentStep = CurrentStep.MATCHES.value
+        manageCurrentStep(stepperIndicator.currentStep)
     }
 
     override fun updateFavoriteCounter(favoriteCount: Int) {
@@ -168,6 +177,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             if (stepperIndicator.currentStep > 0) {
                 stepperIndicator.currentStep -= 1
             }
+            manageCurrentStep(stepperIndicator.currentStep)
         }
     }
 
@@ -196,5 +206,13 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun manageCurrentStep(currentStep: Int) {
+        when (currentStep) {
+            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
+            CurrentStep.FIRST_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
+            else -> hideFavoriteCounter()
+        }
     }
 }
