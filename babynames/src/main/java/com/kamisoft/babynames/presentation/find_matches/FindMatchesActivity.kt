@@ -98,7 +98,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             val babyName2 = presenter.getParent2NamesChosen()?.find { it.name == name1 }
             return@filter babyName2 != null
         }
-        val matchesFragment = MatchesFragment.createInstance(ArrayList(list?.map { it.name } ?: emptyList()))
+        val matchesMap = HashMap<String, String>(list?.map { it.name to it.origin + "|" + it.meaning }?.toMap() ?: emptyMap<String, String>())
+        val matchesFragment = MatchesFragment.createInstance(matchesMap)
         showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
         stepperIndicator.currentStep = CurrentStep.MATCHES.value
         manageCurrentStep()
@@ -217,7 +218,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 val chooseNameFragment = supportFragmentManager.findFragmentByTag("chooseNameSecondParent") as ChooseNameSecondParentFragment? //TODO tags string
                 chooseNameFragment?.findNameInList(item)
             }
-            else -> {}
+            else -> {
+            }
         }
 
     }
