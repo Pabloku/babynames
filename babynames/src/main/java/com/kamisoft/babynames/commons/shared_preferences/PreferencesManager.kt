@@ -3,6 +3,18 @@ package com.kamisoft.babynames.commons.shared_preferences
 
 interface PreferencesManager {
 
+    fun getAppVersionRequired(): Int
+
+    fun setAppVersionRequired(version: Int)
+
+    fun getAppLastVersion(): Int
+
+    fun setAppLastVersion(version: Int)
+
+    fun getLastNewVersionCheckDate(): Long
+
+    fun setLastNewVersionCheckDate(dateInMillis: Long)
+
     fun getParentNamesSetDatetime(): Long
 
     fun setParentNamesSetDatetime(firstUseInMillis: Long)

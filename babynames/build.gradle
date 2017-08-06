@@ -60,7 +60,7 @@ dependencies {
   compile appDependencies.playServices
   compile appDependencies.firebaseCore
   compile appDependencies.firebaseRealtimeDB
-
+  compile appDependencies.firebaseRemoteConfig
   androidTestCompile(appTestDependencies.espresso, {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
@@ -79,6 +79,7 @@ dependencies {
   compile appDependencies.kotlinCoroutines
   compile appDependencies.futures
   debugCompile appDependencies.stetho
+  compile appDependencies.materialDialogs
 }
 
 apply plugin: 'com.google.gms.google-services'

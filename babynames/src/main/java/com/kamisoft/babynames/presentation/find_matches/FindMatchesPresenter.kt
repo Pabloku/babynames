@@ -1,7 +1,7 @@
 package com.kamisoft.babynames.presentation.find_matches
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.commons.TimeOutUtils
+import com.kamisoft.babynames.commons.Constants
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.model.SummaryResult
@@ -68,14 +68,14 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
     private fun loadBoyNameList() {
         launch(CommonPool) {
             Logger.debug("boyNameListFuture: launch")
-            boyNameListFuture.await(TimeOutUtils.defaultTimeout)
+            boyNameListFuture.await(Constants.TIMEOUT_DEFAULT)
         }
     }
 
     private fun loadGirlNameList() {
         launch(CommonPool) {
             Logger.debug("girlNameListFuture: launch")
-            girlNameListFuture.await(TimeOutUtils.defaultTimeout)
+            girlNameListFuture.await(Constants.TIMEOUT_DEFAULT)
         }
     }
 

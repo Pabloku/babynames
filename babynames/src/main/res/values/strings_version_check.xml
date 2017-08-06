@@ -1,0 +1,11 @@
+<resources>
+  <string name="required_app_version_title">You need to update %1$s</string>
+  <string name="required_app_version_message">Your %1$s version is too old and some functions may stop working</string>
+  <string name="required_app_version_cancel">Cancel</string>
+  <string name="required_app_version_ok">Update</string>
+
+  <string name="new_app_version_title">Download the latest version!</string>
+  <string name="new_app_version_message">Update %1$s and enjoy our new features</string>
+  <string name="new_app_version_cancel">No, thanks</string>
+  <string name="new_app_version_ok">Update</string>
+</resources>

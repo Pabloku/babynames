@@ -1,7 +1,7 @@
 package com.kamisoft.babynames.presentation.choose_name
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.commons.TimeOutUtils
+import com.kamisoft.babynames.commons.Constants
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
@@ -36,7 +36,7 @@ class ChooseNamePresenter(
                 loadNames(babyNames)
             } else {
                 Logger.debug("Future: not ready")
-                val babyNames = listFuture.await(TimeOutUtils.defaultTimeout)?.toList() ?: emptyList()
+                val babyNames = listFuture.await(Constants.TIMEOUT_DEFAULT)?.toList() ?: emptyList()
                 loadNames(babyNames)
             }
         }

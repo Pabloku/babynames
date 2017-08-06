@@ -15,5 +15,9 @@ interface MainView : MvpView {
 
     fun openContactActivity()
 
+    fun showNewVersionAvailable()
+
+    fun showNewRequiredVersionAvailable()
+
     fun close()
 }

@@ -1,9 +1,12 @@
 ﻿package com.kamisoft.babynames.presentation.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import com.afollestad.materialdialogs.MaterialDialog
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.openActivity
@@ -98,5 +101,36 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun showNewVersionAvailable() {
+        MaterialDialog.Builder(this).cancelable(true)
+                .title(R.string.new_app_version_title)
+                .content(getString(R.string.new_app_version_message, getString(R.string.app_name)))
+                .positiveText(R.string.new_app_version_ok)
+                .negativeText(R.string.new_app_version_cancel)
+                .autoDismiss(true)
+                .onPositive({ _, _ ->
+                    val googlePlayWeplanUrl = getString(R.string.app_url_play_store)
+                    val intentWeb = Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayWeplanUrl))
+                    startActivity(intentWeb)
+                })
+                .show()
+    }
+
+    override fun showNewRequiredVersionAvailable() {
+        MaterialDialog.Builder(this).cancelable(false)
+                .title(getString(R.string.required_app_version_title, getString(R.string.app_name)))
+                .content(getString(R.string.required_app_version_message, getString(R.string.app_name)))
+                .positiveText(R.string.required_app_version_ok)
+                .negativeText(R.string.required_app_version_cancel)
+                .autoDismiss(true)
+                .onPositive({ _, _ ->
+                    val googlePlayWeplanUrl = getString(R.string.app_url_play_store)
+                    val intentWeb = Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayWeplanUrl))
+                    startActivity(intentWeb)
+                })
+                .dismissListener({ finish() })
+                .show()
     }
 }

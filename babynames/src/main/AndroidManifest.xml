@@ -38,6 +38,28 @@
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
+
+
+    <receiver
+        android:name="com.kamisoft.babynames.broadcast_receivers.BootReceiver"
+        android:enabled="true"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+      </intent-filter>
+    </receiver>
+    <receiver
+        android:name="com.kamisoft.babynames.broadcast_receivers.UpgradeReceiver"
+        android:enabled="true"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+      </intent-filter>
+    </receiver>
+
+    <!-- ALARMS RECEIVER -->
+    <receiver android:name="com.kamisoft.babynames.alarms.AlarmDaily"/>
   </application>
 
 </manifest>
