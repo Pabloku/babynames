@@ -59,9 +59,7 @@ class NamesListActivity : MvpLceActivity<RecyclerView, List<BabyName>, NamesList
         rvList.adapter = namesAdapter
     }
 
-    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String = getString(R.string.error_get_names)
 
     override fun loadData(pullToRefresh: Boolean) {
         presenter.loadData(gender)

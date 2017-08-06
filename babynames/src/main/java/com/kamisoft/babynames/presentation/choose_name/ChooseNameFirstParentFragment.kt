@@ -90,7 +90,6 @@ class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameL
 
     override fun initViews() {
         txtChooseNames.text = getString(R.string.name_list_title, parent)
-        //TODO errorView is pending
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()

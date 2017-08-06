@@ -97,7 +97,6 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
 
     override fun initViews() {
         txtChooseNames.text = getString(R.string.name_list_title, parent)
-        //TODO errorView is pending
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
@@ -125,13 +124,17 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
         presenter.loadFavorites(parent, selectedGender)
     }
 
-    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String = getString(R.string.error_get_names)
 
     override fun showContent() {
         onUiThread {
             super.showContent()
+        }
+    }
+
+    override fun showError(e: Throwable?, pullToRefresh: Boolean) {
+        onUiThread {
+            super.showError(e, pullToRefresh)
         }
     }
 

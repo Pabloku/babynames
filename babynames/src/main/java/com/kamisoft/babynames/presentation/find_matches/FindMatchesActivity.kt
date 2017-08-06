@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
+import com.kamisoft.babynames.commons.OSVersionUtils
 import com.kamisoft.babynames.commons.extensions.*
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.repository.NamesDataRepository
@@ -29,12 +30,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     private val babyNamesSearchView by lazy { createBabyNamesSearchView() }
 
-    enum class CurrentStep(val value: Int) {
-        CHOOSE_GENDER(0),
-        WHO_CHOOSE(1),
-        FIRST_PARENT_CHOOSE_NAME(2),
-        SECOND_PARENT_CHOOSE_NAME(3),
-        MATCHES(4);
+    enum class CurrentStep(val value: String) {
+        CHOOSE_GENDER("ChooseGender"),
+        WHO_CHOOSE("WhoChoose"),
+        FIRST_PARENT_CHOOSE_NAME("FirstParentChooseName"),
+        SECOND_PARENT_CHOOSE_NAME("SecondParentChooseName"),
+        MATCHES("Matches");
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         initToolbars()
         babyNamesSearchView.setQueryListenerToSearchView({ onSearchItem(it) })
         stepperIndicator.stepCount = CurrentStep.values().size - 1
-        stepperIndicator.currentStep = CurrentStep.CHOOSE_GENDER.value
+        stepperIndicator.currentStep = CurrentStep.CHOOSE_GENDER.ordinal
     }
 
     override fun createPresenter(): FindMatchesPresenter = FindMatchesPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
@@ -63,10 +64,10 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     override fun showWhoChooseFirstView() {
-        val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1, //TODO maybe not necessary
+        val whoChooseFragment = ChooseParentFragment.createInstance(parentPosition = 1,
                 parentSelectCallBack = { firstParentName: String, secondParentName: String -> presenter.onWhoChooseFirst(firstParentName, secondParentName) })
-        showFragment(fragment = whoChooseFragment, backStackTag = "whoChooseFirstParent") //TODO tag strings
-        stepperIndicator.currentStep = CurrentStep.WHO_CHOOSE.value
+        showFragment(fragment = whoChooseFragment, backStackTag = CurrentStep.WHO_CHOOSE.value)
+        stepperIndicator.currentStep = CurrentStep.WHO_CHOOSE.ordinal
         manageCurrentStep()
     }
 
@@ -76,8 +77,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 searchCallback = { onSearchClicked() },
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onFirstParentChooseNames(it) })
-        showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameFirstParent")
-        stepperIndicator.currentStep = CurrentStep.FIRST_PARENT_CHOOSE_NAME.value
+        showFragment(fragment = chooseNameFragment, backStackTag = CurrentStep.FIRST_PARENT_CHOOSE_NAME.value)
+        stepperIndicator.currentStep = CurrentStep.FIRST_PARENT_CHOOSE_NAME.ordinal
         manageCurrentStep()
     }
 
@@ -87,8 +88,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
                 searchCallback = { onSearchClicked() },
                 favoriteCallback = { presenter.onFavoriteCountUpdated(it) },
                 namesListCallBack = { presenter.onSecondParentChooseNames(it) })
-        showFragment(fragment = chooseNameFragment, backStackTag = "chooseNameSecondParent")
-        stepperIndicator.currentStep = CurrentStep.SECOND_PARENT_CHOOSE_NAME.value
+        showFragment(fragment = chooseNameFragment, backStackTag = CurrentStep.SECOND_PARENT_CHOOSE_NAME.value)
+        stepperIndicator.currentStep = CurrentStep.SECOND_PARENT_CHOOSE_NAME.ordinal
         manageCurrentStep()
     }
 
@@ -100,8 +101,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
         }
         val matchesMap = HashMap<String, String>(list?.map { it.name to it.origin + "|" + it.meaning }?.toMap() ?: emptyMap<String, String>())
         val matchesFragment = MatchesFragment.createInstance(matchesMap)
-        showFragment(fragment = matchesFragment, backStackTag = "matchesFragment")
-        stepperIndicator.currentStep = CurrentStep.MATCHES.value
+        showFragment(fragment = matchesFragment, backStackTag = CurrentStep.MATCHES.value)
+        stepperIndicator.currentStep = CurrentStep.MATCHES.ordinal
         manageCurrentStep()
     }
 
@@ -210,12 +211,12 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     private fun onSearchItem(item: String) {
         when (stepperIndicator.currentStep) {
-            CurrentStep.FIRST_PARENT_CHOOSE_NAME.value -> {
-                val chooseNameFragment = supportFragmentManager.findFragmentByTag("chooseNameFirstParent") as ChooseNameFirstParentFragment? //TODO tags string
+            CurrentStep.FIRST_PARENT_CHOOSE_NAME.ordinal -> {
+                val chooseNameFragment = supportFragmentManager.findFragmentByTag(CurrentStep.FIRST_PARENT_CHOOSE_NAME.value) as ChooseNameFirstParentFragment?
                 chooseNameFragment?.findNameInList(item)
             }
-            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> {
-                val chooseNameFragment = supportFragmentManager.findFragmentByTag("chooseNameSecondParent") as ChooseNameSecondParentFragment? //TODO tags string
+            CurrentStep.SECOND_PARENT_CHOOSE_NAME.ordinal -> {
+                val chooseNameFragment = supportFragmentManager.findFragmentByTag(CurrentStep.SECOND_PARENT_CHOOSE_NAME.value) as ChooseNameSecondParentFragment?
                 chooseNameFragment?.findNameInList(item)
             }
             else -> {
@@ -226,8 +227,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
 
     private fun manageCurrentStep() {
         when (stepperIndicator.currentStep) {
-            CurrentStep.FIRST_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
-            CurrentStep.SECOND_PARENT_CHOOSE_NAME.value -> showFavoriteCounter()
+            CurrentStep.FIRST_PARENT_CHOOSE_NAME.ordinal -> showFavoriteCounter()
+            CurrentStep.SECOND_PARENT_CHOOSE_NAME.ordinal -> showFavoriteCounter()
             else -> hideFavoriteCounter()
         }
     }

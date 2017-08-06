@@ -18,7 +18,12 @@ class NamesListPresenter(private val getNamesUseCase: GetNameList) : MvpBasePres
     }
 
     private fun namesLoaded(namesList: List<BabyName>) {
-        view?.setData(namesList)
-        view?.showContent()
+        if (namesList.isNotEmpty()) {
+            view?.setData(namesList)
+            view?.showContent()
+        } else {
+            val pullToRefresh = true
+            view?.showError(Exception(), !pullToRefresh)
+        }
     }
 }
