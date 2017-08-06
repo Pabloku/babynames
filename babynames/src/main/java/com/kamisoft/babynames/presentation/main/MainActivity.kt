@@ -8,7 +8,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
-import com.kamisoft.babynames.data.datasource.NamesDataSource
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.presentation.contact.ContactActivity
 import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
 import com.kamisoft.babynames.presentation.names_list.NamesListActivity
@@ -61,7 +61,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     override fun openParentNamesActivity() = openActivity(ParentNamesActivity::class.java)
 
-    override fun openNamesListActivity(gender: NamesDataSource.Gender) {
+    override fun openNamesListActivity(gender: Gender) {
         val params = Bundle()
         params.putString(NamesListActivity.ARG_GENDER, gender.value)
         openActivity(NamesListActivity::class.java, params)

@@ -9,9 +9,9 @@ import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.data.repository.FavoritesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
@@ -33,7 +33,7 @@ same class.
  */
 class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
         ChooseNamePresenter>(), ChooseNameView {
-    private var selectedGender: NamesDataSource.Gender = NamesDataSource.Gender.MALE
+    private var selectedGender: Gender = Gender.MALE
     private var parent: String = Parent.DAD.toString()
 
     private val namesAdapter: NamesAdapter = NamesAdapter({
@@ -48,7 +48,7 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
         lateinit var searchCallback: () -> Unit
         lateinit var favoriteCallback: (favoriteCount: Int) -> Unit
         lateinit var namesListCallBack: (babyNamesLiked: List<BabyNameLikable>) -> Unit
-        fun createInstance(parent: String, gender: NamesDataSource.Gender,
+        fun createInstance(parent: String, gender: Gender,
                            namesFuture: Future<List<BabyName>>,
                            searchCallback: () -> Unit,
                            favoriteCallback: (favoriteCount: Int) -> Unit,
@@ -73,7 +73,7 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        selectedGender = NamesDataSource.Gender.valueOf(arguments.getString(ARG_GENDER).toUpperCase())
+        selectedGender = Gender.valueOf(arguments.getString(ARG_GENDER).toUpperCase())
         parent = arguments.getString(ARG_PARENT)
     }
 

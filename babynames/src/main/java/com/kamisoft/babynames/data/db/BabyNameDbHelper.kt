@@ -22,7 +22,7 @@ class BabyNameDbHelper(ctx: Context = BabyNamesApp.instance) : ManagedSQLiteOpen
                 FavoriteTable.BABY_NAME to TEXT)
     }
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-        //TODO Not implemented yet.
+        //Not implemented yet.
     }
 
 }

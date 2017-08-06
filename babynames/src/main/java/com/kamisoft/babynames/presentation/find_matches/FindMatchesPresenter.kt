@@ -1,8 +1,8 @@
 package com.kamisoft.babynames.presentation.find_matches
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.model.SummaryResult
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.logger.Logger
@@ -24,7 +24,7 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
         }
     }
 
-    fun onGenderSelected(gender: NamesDataSource.Gender) {
+    fun onGenderSelected(gender: Gender) {
         Logger.debug("Gender selected: $gender")
 
         summaryResult = summaryResult.copy(gender = gender)
@@ -59,8 +59,8 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
 
     private fun loadNameList() {
         when (summaryResult.gender) {
-            NamesDataSource.Gender.MALE -> loadBoyNameList()
-            NamesDataSource.Gender.FEMALE -> loadGirlNameList()
+            Gender.MALE -> loadBoyNameList()
+            Gender.FEMALE -> loadGirlNameList()
         }
     }
 
@@ -80,22 +80,22 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
 
     private fun createBoyNameListFuture() = Future.submit {
         Logger.debug("Future: createBoyNameListFuture")
-        val babyNames = getNamesUseCase.getNames(NamesDataSource.Gender.MALE)
+        val babyNames = getNamesUseCase.getNames(Gender.MALE)
         Logger.debug("Future: createBoyNameListFuture: names ${babyNames.size}")
         babyNames
     }
 
     private fun createGirlNameListFuture() = Future.submit {
         Logger.debug("Future: createGirlNameListFuture")
-        val babyNames = getNamesUseCase.getNames(NamesDataSource.Gender.FEMALE)
+        val babyNames = getNamesUseCase.getNames(Gender.FEMALE)
         Logger.debug("Future: createGirlNameListFuture: names ${babyNames.size}")
         babyNames
     }
 
     fun getNameListFuture(): Future<List<BabyName>> {
         return when (summaryResult.gender) {
-            NamesDataSource.Gender.MALE -> boyNameListFuture
-            NamesDataSource.Gender.FEMALE -> girlNameListFuture
+            Gender.MALE -> boyNameListFuture
+            Gender.FEMALE -> girlNameListFuture
         }
     }
 

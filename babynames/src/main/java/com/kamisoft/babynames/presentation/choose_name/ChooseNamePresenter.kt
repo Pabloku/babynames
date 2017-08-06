@@ -1,8 +1,8 @@
 package com.kamisoft.babynames.presentation.choose_name
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.usecase.GetFavoriteList
 import com.kamisoft.babynames.domain.usecase.SaveFavoriteName
 import com.kamisoft.babynames.logger.Logger
@@ -47,11 +47,11 @@ class ChooseNamePresenter(
         return babyNames.map { BabyNameLikable(it.name, it.origin, it.meaning, liked = false) }
     }
 
-    fun loadFavorites(parent: String?, gender: NamesDataSource.Gender) {
+    fun loadFavorites(parent: String?, gender: Gender) {
         parent?.let { getFavoritesUseCase.getFavorites(it, gender, { onFavoritesLoaded(it) }) }
     }
 
-    fun manageBabyNameClick(parent: String, gender: NamesDataSource.Gender, babyName: BabyNameLikable) {
+    fun manageBabyNameClick(parent: String, gender: Gender, babyName: BabyNameLikable) {
         saveFavoriteUseCase.saveFavoriteName(parent, gender, babyName.name)
         babyName.liked = !babyName.liked
 
@@ -67,7 +67,7 @@ class ChooseNamePresenter(
         val likedBabyNames = view?.getLikedBabyNames() ?: emptyList()
         if (likedBabyNames.isNotEmpty()) {
             view?.onLikedNamesChosen()
-        }else {
+        } else {
             view?.showNoFavoritesMessage()
         }
     }

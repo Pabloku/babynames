@@ -9,9 +9,9 @@ import android.view.MenuItem
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.presentation.names_list.adapter.NamesAdapter
 import kotlinx.android.synthetic.main.activity_names_list.*
@@ -24,7 +24,7 @@ class NamesListActivity : MvpLceActivity<RecyclerView, List<BabyName>, NamesList
         const val ARG_GENDER = "gender"
     }
 
-    private val gender: NamesDataSource.Gender by NamesListArgument(ARG_GENDER)
+    private val gender: Gender by NamesListArgument(ARG_GENDER)
     private val namesAdapter: NamesAdapter = NamesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +38,8 @@ class NamesListActivity : MvpLceActivity<RecyclerView, List<BabyName>, NamesList
         initToolbar()
         initRecyclerView()
         when (gender) {
-            NamesDataSource.Gender.FEMALE -> txtNamesLabel.text = getString(R.string.girl_names)
-            NamesDataSource.Gender.MALE -> txtNamesLabel.text = getString(R.string.boy_names)
+            Gender.FEMALE -> txtNamesLabel.text = getString(R.string.girl_names)
+            Gender.MALE -> txtNamesLabel.text = getString(R.string.boy_names)
         }
     }
 
@@ -71,9 +71,9 @@ class NamesListActivity : MvpLceActivity<RecyclerView, List<BabyName>, NamesList
         namesAdapter.setBabyNameList(data ?: emptyList())
     }
 
-    class NamesListArgument(private val arg: String) : ReadOnlyProperty<Activity, NamesDataSource.Gender> {
-        override fun getValue(thisRef: Activity, property: KProperty<*>): NamesDataSource.Gender {
-            return NamesDataSource.Gender.valueOf(thisRef.intent.extras.getString(arg).toUpperCase())
+    class NamesListArgument(private val arg: String) : ReadOnlyProperty<Activity, Gender> {
+        override fun getValue(thisRef: Activity, property: KProperty<*>): Gender {
+            return Gender.valueOf(thisRef.intent.extras.getString(arg).toUpperCase())
         }
     }
 

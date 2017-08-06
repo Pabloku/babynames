@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
-import com.kamisoft.babynames.data.datasource.NamesDataSource
+import com.kamisoft.babynames.domain.model.Gender
 import kotlinx.android.synthetic.main.fragment_choose_gender.*
 
 class ChooseGenderFragment : Fragment() {
 
     companion object {
-        lateinit var genderSelectCallBack: (NamesDataSource.Gender) -> Unit
-        fun createInstance(genderSelectCallBack: (NamesDataSource.Gender) -> Unit): ChooseGenderFragment {
+        lateinit var genderSelectCallBack: (Gender) -> Unit
+        fun createInstance(genderSelectCallBack: (Gender) -> Unit): ChooseGenderFragment {
             this.genderSelectCallBack = genderSelectCallBack
             return ChooseGenderFragment()
         }
@@ -25,7 +25,7 @@ class ChooseGenderFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnBoy.setOnClickListener { genderSelectCallBack.invoke(NamesDataSource.Gender.MALE) }
-        btnGirl.setOnClickListener { genderSelectCallBack.invoke(NamesDataSource.Gender.FEMALE) }
+        btnBoy.setOnClickListener { genderSelectCallBack.invoke(Gender.MALE) }
+        btnGirl.setOnClickListener { genderSelectCallBack.invoke(Gender.FEMALE) }
     }
 }

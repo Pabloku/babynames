@@ -1,7 +1,7 @@
 package com.kamisoft.babynames.presentation.main
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import com.kamisoft.babynames.data.datasource.NamesDataSource
+import com.kamisoft.babynames.domain.model.Gender
 
 interface MainView : MvpView {
 
@@ -11,7 +11,7 @@ interface MainView : MvpView {
 
     fun openParentNamesActivity()
 
-    fun openNamesListActivity(gender: NamesDataSource.Gender)
+    fun openNamesListActivity(gender: Gender)
 
     fun openContactActivity()
 

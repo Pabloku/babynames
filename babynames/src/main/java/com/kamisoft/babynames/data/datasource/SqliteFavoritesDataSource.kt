@@ -9,13 +9,14 @@ import com.kamisoft.babynames.data.db.DbDataMapper
 import com.kamisoft.babynames.data.db.FavoriteTable
 import com.kamisoft.babynames.data.entity.SqliteFavorite
 import com.kamisoft.babynames.domain.model.Favorite
+import com.kamisoft.babynames.domain.model.Gender
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 
 class SqliteFavoritesDataSource(val babyNameDbHelper: BabyNameDbHelper = BabyNameDbHelper.instance,
                                 val dataMapper: DbDataMapper = DbDataMapper()) : FavoritesDataSource {
 
-    override fun isFavorite(parent: String, gender: NamesDataSource.Gender, name: String): Boolean {
+    override fun isFavorite(parent: String, gender: Gender, name: String): Boolean {
         return babyNameDbHelper.use {
             val where = "${FavoriteTable.PARENT} = ? AND ${FavoriteTable.GENDER} = ? AND ${FavoriteTable.BABY_NAME} = ?"
             val sqliteFavorite = select(FavoriteTable.NAME)
@@ -36,7 +37,7 @@ class SqliteFavoritesDataSource(val babyNameDbHelper: BabyNameDbHelper = BabyNam
         deleteWhere(FavoriteTable.NAME, where)
     }
 
-    override fun getFavorites(parent: String, gender: NamesDataSource.Gender): List<String> {
+    override fun getFavorites(parent: String, gender: Gender): List<String> {
         return babyNameDbHelper.use {
             val where = "${FavoriteTable.PARENT} = ? AND ${FavoriteTable.GENDER} = ?"
             select(FavoriteTable.NAME)

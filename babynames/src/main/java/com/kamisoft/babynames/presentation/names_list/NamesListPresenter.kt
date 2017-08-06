@@ -1,8 +1,8 @@
 package com.kamisoft.babynames.presentation.names_list
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.domain.model.BabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.usecase.GetNameList
 
 class NamesListPresenter(private val getNamesUseCase: GetNameList) : MvpBasePresenter<NamesListView>() {
@@ -11,10 +11,10 @@ class NamesListPresenter(private val getNamesUseCase: GetNameList) : MvpBasePres
         view?.initViews()
     }
 
-    fun loadData(gender: NamesDataSource.Gender) {
+    fun loadData(gender: Gender) {
         val pullToRefresh = true
         view?.showLoading(!pullToRefresh)
-        getNamesUseCase.getNames(gender, {namesLoaded(it)} )
+        getNamesUseCase.getNames(gender, { namesLoaded(it) })
     }
 
     private fun namesLoaded(namesList: List<BabyName>) {

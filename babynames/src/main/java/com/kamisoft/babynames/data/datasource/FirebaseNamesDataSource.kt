@@ -8,18 +8,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kamisoft.babynames.data.entity.FireBaseBabyName
+import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.logger.Logger
 import java.text.Collator
 import java.util.*
 
 
-//TODO [Paloga] Proguard config for firebase real time database https://firebase.google.com/docs/database/android/start/
+//Proguard config for firebase real time database https://firebase.google.com/docs/database/android/start/
 class FirebaseNamesDataSource : NamesDataSource {
-    override fun getNamesList(gender: NamesDataSource.Gender): List<FireBaseBabyName> {
+    override fun getNamesList(gender: Gender): List<FireBaseBabyName> {
         return Tasks.await(getNameListTask(gender))
     }
 
-    fun getNameListTask(gender: NamesDataSource.Gender): Task<List<FireBaseBabyName>> {
+    fun getNameListTask(gender: Gender): Task<List<FireBaseBabyName>> {
         val firebaseBabyNamesDBReference = FirebaseDatabase.getInstance().reference.child(FirebaseDBCommons.Node.BABY_NAMES.toString())
         val firebaseQuery = firebaseBabyNamesDBReference.child(FirebaseDBCommons.Node.valueOf(gender.toString().toUpperCase()).toString())
 
@@ -32,7 +33,7 @@ class FirebaseNamesDataSource : NamesDataSource {
                     firebaseBabyName.name = it.key
                     return@map firebaseBabyName
                 }
-                
+
                 // This strategy mean it'll ignore the accents. Maybe better way to do this in kotlin?
                 Collections.sort(list) { babyName1, babyName2 ->
                     val collator = Collator.getInstance()
