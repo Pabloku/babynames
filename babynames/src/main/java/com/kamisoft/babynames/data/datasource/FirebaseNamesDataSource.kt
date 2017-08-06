@@ -3,6 +3,7 @@ package com.kamisoft.babynames.data.datasource
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.crash.FirebaseCrash
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -45,8 +46,8 @@ class FirebaseNamesDataSource : NamesDataSource {
             }
 
             override fun onCancelled(databaseError: DatabaseError?) {
-                //TODO [Paloga] Report it to online error handler?
                 databaseError?.toException()?.let {
+                    FirebaseCrash.report(it)
                     Logger.error(it, "Error on getNameListTask")
                     taskCompletionSource.setException(it)
                 }
