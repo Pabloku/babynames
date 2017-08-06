@@ -114,7 +114,7 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
         onUiThread {
             showLoading(false)
             namesAdapter.setBabyNameList(nameList)
-            presenter.loadFavorites(parent, selectedGender)
+            loadData(pullToRefresh = false)
         }
     }
 
@@ -123,24 +123,16 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        presenter.loadFavorites(parent, selectedGender)
     }
 
     override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun showLoading(pullToRefresh: Boolean) {
-        super.showLoading(pullToRefresh)
-        loadingView.visible()
-        contentView.gone()
-    }
-
     override fun showContent() {
         onUiThread {
             super.showContent()
-            loadingView.gone()
-            contentView.visible()
         }
     }
 
