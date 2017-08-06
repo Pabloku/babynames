@@ -63,8 +63,13 @@ class ChooseNamePresenter(
         view?.updateFavoriteCounter(favoriteCounter)
     }
 
-    fun getLikedBabyNames(babyNameList: List<BabyNameLikable>): List<BabyNameLikable> {
-        return babyNameList.filter { it.liked }
+    fun onOkClicked() {
+        val likedBabyNames = view?.getLikedBabyNames() ?: emptyList()
+        if (likedBabyNames.isNotEmpty()) {
+            view?.onLikedNamesChosen()
+        }else {
+            view?.showNoFavoritesMessage()
+        }
     }
 
     fun onFavoritesLoaded(favoriteList: List<String>) {

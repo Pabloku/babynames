@@ -10,4 +10,11 @@ interface ChooseNameView : MvpLceView<List<BabyNameLikable>> {
     fun setFavoriteList(favorites: List<String>)
 
     fun updateFavoriteCounter(favoriteCount: Int)
+
+    fun showNoFavoritesMessage()
+
+    fun getLikedBabyNames(): List<BabyNameLikable>
+
+    fun onLikedNamesChosen()
+
 }

@@ -46,7 +46,7 @@ class NamesAdapter(val listener: (BabyNameLikable) -> Unit) : RecyclerView.Adapt
         }
     }
 
-    fun getBabyNameList() = nameList
+    fun getLikedBabyNames() = nameList.filter { it.liked }
 
     private fun getInitialLetter(name: String) = name[0].toString()
 

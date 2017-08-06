@@ -1,4 +1,5 @@
 <resources>
   <string name="choose_favorites">%1$s, elige tus nombres favoritos</string>
   <string name="origin">Origen: %1$s</string>
+  <string name="name_list_no_favorites">Debes elegir al menos 1 nombre favorito</string>
 </resources>

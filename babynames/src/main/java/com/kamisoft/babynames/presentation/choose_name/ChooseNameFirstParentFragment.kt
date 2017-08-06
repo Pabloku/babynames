@@ -21,6 +21,7 @@ import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import com.kamisoft.babynames.presentation.model.BabyNameLikable
 import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.support.v4.onUiThread
 
 class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameLikable>, ChooseNameView,
@@ -95,7 +96,7 @@ class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameL
         rvList.layoutManager = LinearLayoutManager(activity)
         rvList.adapter = namesAdapter
         rvList.itemAnimator = NameItemAnimator()
-        btnOk.setOnClickListener { namesListCallBack.invoke(presenter.getLikedBabyNames(namesAdapter.getBabyNameList())) }
+        btnOk.setOnClickListener { presenter.onOkClicked() }
     }
 
     override fun createPresenter() = ChooseNamePresenter(
@@ -142,5 +143,15 @@ class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameL
 
     fun findNameInList(text: String) {
         (rvList.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(namesAdapter.getFirstItemPositionStartingWith(text), 20)
+    }
+
+    override fun showNoFavoritesMessage() {
+        snackbar(contentView, R.string.name_list_no_favorites)
+    }
+
+    override fun getLikedBabyNames(): List<BabyNameLikable> = namesAdapter.getLikedBabyNames()
+
+    override fun onLikedNamesChosen() {
+        namesListCallBack.invoke(getLikedBabyNames())
     }
 }
