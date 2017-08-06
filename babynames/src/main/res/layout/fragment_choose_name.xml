@@ -23,7 +23,6 @@
   <include layout="@layout/loading_view"/>
 
   <include layout="@layout/error_view"/>
-  <!-- TODO Empty view !-->
 
   <FrameLayout
       android:id="@+id/contentView"

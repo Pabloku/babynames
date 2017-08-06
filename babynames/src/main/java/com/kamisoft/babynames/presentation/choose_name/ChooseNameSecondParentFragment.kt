@@ -110,9 +110,10 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
 
     override fun setData(nameList: List<BabyNameLikable>) {
         onUiThread {
-            showLoading(false)
+            val pullToRefresh = true
+            showLoading(!pullToRefresh)
             namesAdapter.setBabyNameList(nameList)
-            loadData(pullToRefresh = false)
+            loadData(!pullToRefresh)
         }
     }
 

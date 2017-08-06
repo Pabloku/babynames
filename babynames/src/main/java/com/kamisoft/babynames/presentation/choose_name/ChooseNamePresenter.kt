@@ -32,14 +32,22 @@ class ChooseNamePresenter(
             if (listFuture.ready) {
                 Logger.debug("Future: is ready")
                 val babyNames = listFuture.result?.toList() ?: emptyList()
-                view?.setData(parseToBabyNamesLikable(babyNames))
-                view?.showContent()
+                loadNames(babyNames)
             } else {
                 Logger.debug("Future: not ready")
                 val babyNames = listFuture.await(30000)?.toList() ?: emptyList()//TODO Ese 30000...
-                view?.setData(parseToBabyNamesLikable(babyNames))
-                view?.showContent()
+                loadNames(babyNames)
             }
+        }
+    }
+
+    private fun loadNames(babyNames: List<BabyName>) {
+        if (babyNames.isNotEmpty()) {
+            view?.setData(parseToBabyNamesLikable(babyNames))
+            view?.showContent()
+        } else {
+            val pullToRefresh = true
+            view?.showError(Exception(), !pullToRefresh)
         }
     }
 

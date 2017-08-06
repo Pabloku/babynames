@@ -103,9 +103,10 @@ class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameL
 
     override fun setData(nameList: List<BabyNameLikable>) {
         onUiThread {
-            showLoading(false)
+            val pullToRefresh = true
+            showLoading(!pullToRefresh)
             namesAdapter.setBabyNameList(nameList)
-            loadData(pullToRefresh = false)
+            loadData(!pullToRefresh)
         }
     }
 
@@ -117,13 +118,17 @@ class ChooseNameFirstParentFragment : MvpLceFragment<FrameLayout, List<BabyNameL
         presenter.loadFavorites(parent, selectedGender)
     }
 
-    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getErrorMessage(e: Throwable?, pullToRefresh: Boolean): String = getString(R.string.error_get_names)
 
     override fun showContent() {
         onUiThread {
             super.showContent()
+        }
+    }
+
+    override fun showError(e: Throwable?, pullToRefresh: Boolean) {
+        onUiThread {
+            super.showError(e, pullToRefresh)
         }
     }
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="error_default">¡Vaya! Parece que ha habido algún problema. Por favor, pulsa aquí para reintentarlo.\nSi el problema persiste, escríbeme a babynames@gmail.com</string>
+  <string name="error_default">¡Vaya! Parece que ha habido algún problema. Por favor, comprueba tu conexión y reinténtalo en unos minutos.\nSi el problema persiste, escríbeme a babynames@gmail.com</string>
+  <string name="error_get_names">¡Vaya! Parece que no se ha podido cargar el listado de nombres. Por favor, comprueba tu conexión y reinténtalo en unos minutos.\nSi el problema persiste, escríbeme a babynames@gmail.com</string>
 </resources>
