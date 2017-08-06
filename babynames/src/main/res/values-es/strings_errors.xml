@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="error_default">¡Vaya! Parece que ha habido algún problema. Por favor, pulsa aquí para reintentarlo</string>
+  <string name="error_default">¡Vaya! Parece que ha habido algún problema. Por favor, pulsa aquí para reintentarlo.\nSi el problema persiste, escríbeme a babynames@gmail.com</string>
 </resources>

@@ -1,3 +1,4 @@
 <resources>
   <string name="matches_title">¡Estas son vuestras coincidencias!</string>
+  <string name="matches_empty">¡Vaya! ¡Parece que no habéis coincidido! Vuelve a la lista de nombres y haz click para seleccionar tus favoritos</string>
 </resources>

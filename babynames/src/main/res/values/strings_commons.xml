@@ -15,4 +15,5 @@
   <string name="search_hint">Search…</string>
   <string name="go">OK, let\'s start!</string>
   <string name="origin">Origin: %1$s</string>
+  <string name="empty_default">List is empty ¯\\_(ツ)_/¯</string>
 </resources>

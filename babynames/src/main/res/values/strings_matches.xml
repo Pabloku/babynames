@@ -1,3 +1,4 @@
 <resources>
   <string name="matches_title">These are your matches!</string>
+  <string name="matches_empty">Oops! It looks like you have no matches! Go back, find nice names and click on your favourite ones!</string>
 </resources>

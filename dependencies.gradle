@@ -27,7 +27,7 @@ ext {
   ankoVersion = '0.10.1'
   stepperIndicatorVersion = '1.0.6'
   mosbyVersion = '3.0.4'
-  recyclerviewFastscrollVersion = '1.0.15'
+  recyclerviewFastscrollVersion = '1.0.16'
   kotlinCoroutinesVersion = '0.17'
   futuresVersion = '1.1.0'
   stethoVersion = '1.5.0'

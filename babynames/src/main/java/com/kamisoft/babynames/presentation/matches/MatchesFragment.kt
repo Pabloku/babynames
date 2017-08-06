@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kamisoft.babyname.R
+import com.kamisoft.babynames.commons.extensions.gone
+import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.matches.adapter.MatchedNamesAdapter
-import kotlinx.android.synthetic.main.fragment_choose_name.*
+import kotlinx.android.synthetic.main.empty_view.*
+import kotlinx.android.synthetic.main.fragment_matches.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -37,9 +40,20 @@ class MatchesFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvList.layoutManager = LinearLayoutManager(activity)
-        rvList.adapter = namesAdapter
-        rvList.itemAnimator = NameItemAnimator()
+        if (nameMatchesList.isNotEmpty()) {
+            emptyView.gone()
+            txtMatches.visible()
+            rvList.visible()
+            rvList.layoutManager = LinearLayoutManager(activity)
+            rvList.adapter = namesAdapter
+            rvList.itemAnimator = NameItemAnimator()
+        } else {
+            txtMatches.gone()
+            rvList.gone()
+            emptyView.text = getString(R.string.matches_empty)
+            emptyView.visible()
+        }
+        btnOk.setOnClickListener { activity.finish() }
     }
 
     class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, HashMap<String, String>> {
