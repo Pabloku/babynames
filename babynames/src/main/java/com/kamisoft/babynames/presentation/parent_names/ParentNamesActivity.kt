@@ -4,6 +4,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.widget.Button
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.isEmpty
@@ -26,6 +28,8 @@ class ParentNamesActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        initToolbar()
+
         btnParent1Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent1Mom) }
         btnParent1Mom.setOnClickListener { enableMomButton(btnDad = btnParent1Dad, btnMom = it as Button) }
         btnParent2Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent2Mom) }
@@ -44,6 +48,16 @@ class ParentNamesActivity : AppCompatActivity() {
         }else {
             btnParent2Mom.performClick()
         }
+    }
+
+    private fun initToolbar() {
+        val toolbar = toolbar as Toolbar?
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.title = null
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar?.setNavigationIcon(R.drawable.ic_close)
     }
 
     private fun enableDadButton(btnDad: Button, btnMom: Button) {
@@ -106,5 +120,16 @@ class ParentNamesActivity : AppCompatActivity() {
             areOk = false
         }
         return areOk
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
