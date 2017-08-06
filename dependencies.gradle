@@ -30,6 +30,7 @@ ext {
   recyclerviewFastscrollVersion = '1.0.15'
   kotlinCoroutinesVersion = '0.17'
   futuresVersion = '1.1.0'
+  stethoVersion = '1.5.0'
 
   //Testing
   jUnitVersion = '4.12'
@@ -53,7 +54,8 @@ ext {
                      mosbyMvpLce       : "com.hannesdorfmann.mosby3:mvp-lce:$mosbyVersion",
                      recyclerViewFS    : "com.simplecityapps:recyclerview-fastscroll:$recyclerviewFastscrollVersion",
                      kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion",
-                     futures           : "com.rahulrav:com.rahulrav.futures:$futuresVersion"]
+                     futures           : "com.rahulrav:com.rahulrav.futures:$futuresVersion",
+                     stetho            : "com.facebook.stetho:stetho:$stethoVersion"]
 
   appTestDependencies = [junit   : "junit:junit:${jUnitVersion}",
                          espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}"]

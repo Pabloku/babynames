@@ -78,6 +78,7 @@ dependencies {
   compile appDependencies.recyclerViewFS
   compile appDependencies.kotlinCoroutines
   compile appDependencies.futures
+  debugCompile appDependencies.stetho
 }
 
 apply plugin: 'com.google.gms.google-services'
