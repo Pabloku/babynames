@@ -14,4 +14,5 @@
   <string name="search">Buscar</string>
   <string name="search_hint">Buscar…</string>
   <string name="go">¡OK, vamos!</string>
+  <string name="origin">Origen: %1$s</string>
 </resources>

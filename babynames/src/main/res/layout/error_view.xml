@@ -14,7 +14,7 @@
       android:drawablePadding="16dp"
       android:textSize="20sp"
       android:textColor="#656565"
-      android:text="@string/default_error_text"
+      android:text="@string/error_default"
       android:gravity="center"/>
 
 </merge>

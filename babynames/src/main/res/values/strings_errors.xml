@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="default_error_text">Oops! A problem occurred! Click here to retry</string>
+  <string name="error_default">Oops! A problem occurred! Click here to retry</string>
 </resources>

@@ -9,7 +9,7 @@
       android:id="@+id/txtChooseGender"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/choose_sex"
+      android:text="@string/choose_gender_title"
       android:textAllCaps="true"
       android:gravity="center"
       android:padding="@dimen/fragment_title_padding"

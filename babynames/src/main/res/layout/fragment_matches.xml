@@ -10,7 +10,7 @@
       android:id="@+id/txtMatches"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/matches"
+      android:text="@string/matches_title"
       android:textAllCaps="true"
       android:gravity="center"
       android:padding="@dimen/fragment_title_padding"
