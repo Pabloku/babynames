@@ -22,7 +22,7 @@ ext {
   recyclerViewVersion = '25.3.1'
   supportVersion = '25.3.1'
   timberVersion = '4.5.1'
-  playServicesAndFirebaseVersion = '10.2.4'
+  playServicesAndFirebaseVersion = '11.0.4'
   constraintLayoutVersion = '1.0.2'
   ankoVersion = '0.10.1'
   stepperIndicatorVersion = '1.0.6'
