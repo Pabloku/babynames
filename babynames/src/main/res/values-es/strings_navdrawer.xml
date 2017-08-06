@@ -1,8 +1,7 @@
 <resources>
   <string name="drawer_dad_mon">Papá y Mamá</string>
-  <string name="drawer_favorites_dad">Favoritos de Papá</string>
-  <string name="drawer_favorites_mom">Favoritos de Mamá</string>
+  <string name="drawer_boy_names">Nombres de niño</string>
+  <string name="drawer_girl_names">Nombres de niña</string>
   <string name="drawer_more">Más…</string>
-  <string name="drawer_matches">Nuestras coincidencias</string>
   <string name="drawer_contact_us">¡Contáctame!</string>
 </resources>

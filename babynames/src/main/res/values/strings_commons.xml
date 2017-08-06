@@ -4,6 +4,8 @@
   <string name="no_description">No description</string>
   <string name="boy">Boy</string>
   <string name="girl">Girl</string>
+  <string name="boy_names">Boy names</string>
+  <string name="girl_names">Girl names</string>
   <string name="dad">Dad</string>
   <string name="mom">Mom</string>
   <string name="dad_name">Dad: %1$s</string>

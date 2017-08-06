@@ -33,6 +33,11 @@
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
+    <activity
+        android:name="com.kamisoft.babynames.presentation.names_list.NamesListActivity"
+        android:windowSoftInputMode="adjustPan"
+        android:screenOrientation="portrait">
+    </activity>
   </application>
 
 </manifest>

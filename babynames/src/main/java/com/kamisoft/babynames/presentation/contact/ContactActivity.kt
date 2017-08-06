@@ -22,7 +22,7 @@ class ContactActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        val toolbar = (toolbar as Toolbar?)
+        val toolbar = toolbar as Toolbar?
         setSupportActionBar(toolbar)
 
         supportActionBar?.title = null

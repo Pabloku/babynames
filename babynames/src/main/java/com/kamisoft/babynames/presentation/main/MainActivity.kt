@@ -8,9 +8,10 @@ import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
-import com.kamisoft.babynames.domain.model.Parent
+import com.kamisoft.babynames.data.datasource.NamesDataSource
 import com.kamisoft.babynames.presentation.contact.ContactActivity
 import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
+import com.kamisoft.babynames.presentation.names_list.NamesListActivity
 import com.kamisoft.babynames.presentation.parent_names.ParentNamesActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
@@ -33,7 +34,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     }
 
     private fun initToolbar() {
-        val toolbar = (toolbar as Toolbar?)
+        val toolbar = toolbar as Toolbar?
         setSupportActionBar(toolbar)
 
         supportActionBar?.title = null
@@ -47,9 +48,8 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
             val id = menuItem.itemId
             when (id) {
                 R.id.drawerDadAndMom -> presenter.onDrawerItemDadManClicked()
-                R.id.drawerFavoritesDad -> presenter.onDrawerItemFavoritesDadClicked()
-                R.id.drawerFavoritesMom -> presenter.onDrawerItemFavoritesMomClicked()
-                R.id.drawerOurMatches -> presenter.onDrawerItemMatchesClicked()
+                R.id.drawerBoyNames -> presenter.onDrawerItemBoyNamesListClicked()
+                R.id.drawerGirlNames -> presenter.onDrawerItemGirlNameListClicked()
                 R.id.drawerContact -> presenter.onDrawerItemContactClicked()
             }
             drawerLayout.closeDrawers()
@@ -61,12 +61,10 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     override fun openParentNamesActivity() = openActivity(ParentNamesActivity::class.java)
 
-    override fun openFavoritesActivity(parent: Parent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun openMatchesActivity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun openNamesListActivity(gender: NamesDataSource.Gender) {
+        val params = Bundle()
+        params.putString(NamesListActivity.ARG_GENDER, gender.value)
+        openActivity(NamesListActivity::class.java, params)
     }
 
     override fun openContactActivity() = openActivity(ContactActivity::class.java)

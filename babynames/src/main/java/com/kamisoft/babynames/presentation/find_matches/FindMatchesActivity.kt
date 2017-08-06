@@ -136,7 +136,7 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     }
 
     private fun initActionToolbar() {
-        val toolbar = (toolbar as Toolbar?)
+        val toolbar = toolbar as Toolbar?
         setSupportActionBar(toolbar)
         supportActionBar?.title = null
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

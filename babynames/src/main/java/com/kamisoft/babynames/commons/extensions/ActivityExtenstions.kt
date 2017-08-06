@@ -11,6 +11,9 @@ import android.widget.Toast
 
 fun Activity.openActivity(javaClass: Class<*>) = startActivity(Intent(this, javaClass))
 
+fun Activity.openActivity(javaClass: Class<*>, params: Bundle) =
+        startActivity(Intent(this, javaClass).putExtras(params))
+
 fun Activity.openActivityForResult(javaClass: Class<*>, params: Bundle, requestCode: Int) =
         startActivityForResult(Intent(this, javaClass).putExtras(params), requestCode)
 
