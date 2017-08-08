@@ -19,5 +19,7 @@ interface MainView : MvpView {
 
     fun showNewRequiredVersionAvailable()
 
+    fun loadAds()
+
     fun close()
 }

@@ -1,0 +1,6 @@
+<resources>
+  <!--PROD  <string name="banner_main">ca-app-pub-9682684081624763/5888422361</string> -->
+  <!-- TEST AD-->
+  <string name="banner_main">ca-app-pub-3940256099942544/6300978111</string>
+
+</resources>

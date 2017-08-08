@@ -15,6 +15,7 @@ class MainPresenter(private val preferencesManager: PreferencesManager,
         trackPage()
         val currentAppVersion = BuildConfig.VERSION_CODE
         view?.initViews()
+        view?.loadAds()
         if (newAppVersionRequiredAvailable(currentAppVersion)) {
             view?.showNewRequiredVersionAvailable()
         } else {

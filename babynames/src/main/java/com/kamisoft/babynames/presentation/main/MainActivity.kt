@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.openActivity
@@ -134,5 +135,10 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
                 })
                 .dismissListener({ finish() })
                 .show()
+    }
+
+    override fun loadAds() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 }

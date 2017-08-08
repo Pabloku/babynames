@@ -62,6 +62,7 @@ dependencies {
   compile appDependencies.firebaseRealtimeDB
   compile appDependencies.firebaseRemoteConfig
   compile appDependencies.firebaseCrashReporting
+  compile appDependencies.firebaseAds
   androidTestCompile(appTestDependencies.espresso, {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
