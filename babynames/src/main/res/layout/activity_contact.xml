@@ -27,6 +27,7 @@
           android:layout_height="wrap_content"
           android:layout_alignParentTop="true"
           android:layout_centerHorizontal="true"
+          android:contentDescription="@string/no_description"
           app:srcCompat="@drawable/ic_logo_with_text"/>
 
       <TextView
@@ -35,7 +36,7 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/imgLogo"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="30dp"
+          android:layout_marginBottom="30dp"
           android:textSize="12sp"
           android:textColor="@android:color/white"
           tools:text="Versión 5.7.8.2"/>
