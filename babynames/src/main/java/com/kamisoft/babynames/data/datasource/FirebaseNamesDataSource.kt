@@ -29,10 +29,10 @@ class FirebaseNamesDataSource : NamesDataSource {
 
         firebaseQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                val list = dataSnapshot?.children?.map {
+                val list = dataSnapshot?.children?.mapNotNull {
                     val firebaseBabyName = it.getValue(FireBaseBabyName::class.java)
-                    firebaseBabyName.name = it.key
-                    return@map firebaseBabyName
+                    firebaseBabyName?.name = it.key
+                    return@mapNotNull firebaseBabyName
                 }
 
                 // This strategy mean it'll ignore the accents. Maybe better way to do this in kotlin?
