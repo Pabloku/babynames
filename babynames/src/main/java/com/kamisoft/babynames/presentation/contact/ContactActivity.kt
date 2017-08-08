@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.kamisoft.babyname.BuildConfig
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.BuildConfig
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.tracking.TrackerConstants
 import com.kamisoft.babynames.tracking.TrackerManager

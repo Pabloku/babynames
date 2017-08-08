@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.FrameLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
 import com.kamisoft.babynames.data.repository.FavoritesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName

@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName

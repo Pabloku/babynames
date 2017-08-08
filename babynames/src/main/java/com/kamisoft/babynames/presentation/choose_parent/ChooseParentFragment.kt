@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager

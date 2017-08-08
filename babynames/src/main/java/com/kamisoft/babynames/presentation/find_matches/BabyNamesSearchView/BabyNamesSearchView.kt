@@ -8,7 +8,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.custom_view.MvpSearchView
 

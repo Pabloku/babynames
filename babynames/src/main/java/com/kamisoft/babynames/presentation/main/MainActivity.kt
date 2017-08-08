@@ -9,7 +9,7 @@ import android.view.MenuItem
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Gender

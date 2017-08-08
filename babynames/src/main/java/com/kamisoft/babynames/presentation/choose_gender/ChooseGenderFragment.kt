@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.tracking.TrackerConstants
 import com.kamisoft.babynames.tracking.TrackerManager

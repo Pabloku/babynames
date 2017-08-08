@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.Button
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.isEmpty
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.extensions.snackbar

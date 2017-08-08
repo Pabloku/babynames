@@ -1,7 +1,7 @@
 package com.kamisoft.babynames.presentation.main
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.kamisoft.babyname.BuildConfig
+import com.kamisoft.babynames.BuildConfig
 import com.kamisoft.babynames.commons.shared_preferences.PreferencesManager
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.tracking.TrackerConstants

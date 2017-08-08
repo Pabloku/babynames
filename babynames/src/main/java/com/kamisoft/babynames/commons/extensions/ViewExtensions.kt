@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.widget.Toast
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 
 fun View.getLayoutInflater() = LayoutInflater.from(context)
 

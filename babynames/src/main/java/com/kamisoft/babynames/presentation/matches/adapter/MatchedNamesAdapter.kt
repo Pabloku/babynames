@@ -5,7 +5,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.invisible
 import com.kamisoft.babynames.domain.model.BabyName
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView

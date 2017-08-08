@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kamisoft.babyname">
+    package="com.kamisoft.babynames">
 
   <application
-      android:name="com.kamisoft.babynames.BabyNamesApp"
+      android:name=".BabyNamesApp"
       android:allowBackup="false"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
@@ -11,7 +11,7 @@
       android:theme="@style/AppTheme">
 
     <activity
-        android:name="com.kamisoft.babynames.presentation.main.MainActivity"
+        android:name=".presentation.main.MainActivity"
         android:theme="@style/AppTheme.Splash">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -19,29 +19,29 @@
       </intent-filter>
     </activity>
     <activity
-        android:name="com.kamisoft.babynames.presentation.parent_names.ParentNamesActivity"
+        android:name=".presentation.parent_names.ParentNamesActivity"
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
     <activity
-        android:name="com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity"
+        android:name=".presentation.find_matches.FindMatchesActivity"
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
     <activity
-        android:name="com.kamisoft.babynames.presentation.contact.ContactActivity"
+        android:name=".presentation.contact.ContactActivity"
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
     <activity
-        android:name="com.kamisoft.babynames.presentation.names_list.NamesListActivity"
+        android:name=".presentation.names_list.NamesListActivity"
         android:windowSoftInputMode="adjustPan"
         android:screenOrientation="portrait">
     </activity>
 
 
     <receiver
-        android:name="com.kamisoft.babynames.broadcast_receivers.BootReceiver"
+        android:name=".broadcast_receivers.BootReceiver"
         android:enabled="true"
         android:exported="true">
       <intent-filter>
@@ -50,7 +50,7 @@
       </intent-filter>
     </receiver>
     <receiver
-        android:name="com.kamisoft.babynames.broadcast_receivers.UpgradeReceiver"
+        android:name=".broadcast_receivers.UpgradeReceiver"
         android:enabled="true"
         android:exported="true">
       <intent-filter>
@@ -59,7 +59,7 @@
     </receiver>
 
     <!-- ALARMS RECEIVER -->
-    <receiver android:name="com.kamisoft.babynames.alarms.AlarmDaily"/>
+    <receiver android:name=".alarms.AlarmDaily"/>
   </application>
 
 </manifest>

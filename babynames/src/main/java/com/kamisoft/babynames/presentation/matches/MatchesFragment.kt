@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.domain.model.BabyName

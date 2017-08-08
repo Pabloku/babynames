@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
-import com.kamisoft.babyname.R
+import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.OSVersionUtils
 import com.kamisoft.babynames.commons.extensions.*
 import com.kamisoft.babynames.data.datasource.NamesDataFactory
