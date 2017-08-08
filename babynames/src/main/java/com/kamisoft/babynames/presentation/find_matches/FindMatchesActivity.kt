@@ -7,6 +7,7 @@ import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.OSVersionUtils
@@ -231,5 +232,10 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
             CurrentStep.SECOND_PARENT_CHOOSE_NAME.ordinal -> showFavoriteCounter()
             else -> hideFavoriteCounter()
         }
+    }
+
+    override fun loadAds() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 }

@@ -17,4 +17,6 @@ interface FindMatchesView : MvpView {
     fun showMatchesView()
 
     fun updateFavoriteCounter(favoriteCount: Int)
+
+    fun loadAds()
 }

@@ -31,7 +31,8 @@
       android:id="@+id/contentView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/txtNamesLabel">
+      android:layout_below="@+id/txtNamesLabel"
+      android:layout_above="@+id/adView">
 
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/rvList"
@@ -43,5 +44,14 @@
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
         app:fastScrollThumbColor="@color/accent"/>
   </FrameLayout>
+
+  <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_alignParentBottom="true"
+      app:adSize="BANNER"
+      app:adUnitId="@string/banner_main"/>
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ class NamesListPresenter(private val getNamesUseCase: GetNameList,
 
     fun start() {
         view?.initViews()
+        view?.loadAds()
     }
 
     fun loadData(gender: Gender) {

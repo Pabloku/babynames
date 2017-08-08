@@ -21,6 +21,7 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
     fun start() {
         view?.let {
             it.initViews()
+            it.loadAds()
             it.showChooseGenderView()
         }
     }

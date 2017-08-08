@@ -7,4 +7,6 @@ interface NamesListView : MvpLceView<List<BabyName>> {
 
     fun initViews()
 
+    fun loadAds()
+
 }
