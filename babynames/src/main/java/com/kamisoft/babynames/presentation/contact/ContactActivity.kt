@@ -9,14 +9,19 @@ import android.view.MenuItem
 import com.kamisoft.babyname.BuildConfig
 import com.kamisoft.babyname.R
 import com.kamisoft.babynames.commons.extensions.gone
+import com.kamisoft.babynames.tracking.TrackerConstants
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class ContactActivity : AppCompatActivity() {
 
+    private val trackerManager by lazy { TrackerManager(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
+        trackPage()
         initToolbar()
         initViews()
     }
@@ -36,6 +41,7 @@ class ContactActivity : AppCompatActivity() {
         txtVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
         txtEmail.setOnClickListener {
+            trackEvent(TrackerConstants.Label.ContactScreen.EMAIL_SUPPORT)
             val email = getString(R.string.contact_email)
             val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null))
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_subject))
@@ -53,6 +59,18 @@ class ContactActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun trackPage() {
+        trackerManager.sendScreen(TrackerConstants.Section.CONTACT.value,
+                TrackerConstants.Section.Contact.MAIN.value)
+    }
+
+    private fun trackEvent(label: TrackerConstants.Label.ContactScreen) {
+        trackerManager.sendEvent(
+                category = TrackerConstants.Section.ParentsSetup.MAIN.value,
+                action = TrackerConstants.Action.CLICK.value,
+                label = label.value)
     }
 
 }

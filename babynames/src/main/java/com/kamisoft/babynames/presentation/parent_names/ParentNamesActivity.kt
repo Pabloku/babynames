@@ -14,38 +14,54 @@ import com.kamisoft.babynames.commons.extensions.snackbar
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Parent
 import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
+import com.kamisoft.babynames.tracking.TrackerConstants
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_parent_names.*
 
 
 class ParentNamesActivity : AppCompatActivity() {
 
     private val preferencesManager by lazy { AndroidPrefsManager(this) }
+    private val trackerManager by lazy { TrackerManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent_names)
+        trackPage()
         initViews()
     }
 
     private fun initViews() {
         initToolbar()
 
-        btnParent1Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent1Mom) }
-        btnParent1Mom.setOnClickListener { enableMomButton(btnDad = btnParent1Dad, btnMom = it as Button) }
-        btnParent2Dad.setOnClickListener { enableDadButton(btnDad = it as Button, btnMom = btnParent2Mom) }
-        btnParent2Mom.setOnClickListener { enableMomButton(btnDad = btnParent2Dad, btnMom = it as Button) }
+        btnParent1Dad.setOnClickListener {
+            trackEvent(TrackerConstants.Label.ParentsScreen.PARENT1_DAD)
+            enableDadButton(btnDad = it as Button, btnMom = btnParent1Mom)
+        }
+        btnParent1Mom.setOnClickListener {
+            trackEvent(TrackerConstants.Label.ParentsScreen.PARENT1_MOM)
+            enableMomButton(btnDad = btnParent1Dad, btnMom = it as Button)
+        }
+        btnParent2Dad.setOnClickListener {
+            trackEvent(TrackerConstants.Label.ParentsScreen.PARENT2_DAD)
+            enableDadButton(btnDad = it as Button, btnMom = btnParent2Mom)
+        }
+        btnParent2Mom.setOnClickListener {
+            trackEvent(TrackerConstants.Label.ParentsScreen.PARENT2_MOM)
+            enableMomButton(btnDad = btnParent2Dad, btnMom = it as Button)
+        }
         btnGo.setOnClickListener { go() }
 
         edtParent1Name.setText(preferencesManager.getParent1Name())
         edtParent2Name.setText(preferencesManager.getParent2Name())
         if (preferencesManager.getParent1() == Parent.MOM.value) {
             btnParent1Mom.performClick()
-        }else {
+        } else {
             btnParent1Dad.performClick()
         }
         if (preferencesManager.getParent2() == Parent.DAD.value) {
             btnParent2Dad.performClick()
-        }else {
+        } else {
             btnParent2Mom.performClick()
         }
     }
@@ -72,12 +88,15 @@ class ParentNamesActivity : AppCompatActivity() {
 
     private fun go() {
         if (areInputNamesOK()) {
+            trackEvent(TrackerConstants.Label.ParentsScreen.GO_OK)
             preferencesManager.setParentNamesSetDatetime(System.currentTimeMillis())
             preferencesManager.setParent1(getParent1())
             preferencesManager.setParent1Name(edtParent1Name.text.toString())
             preferencesManager.setParent2(getParent2())
             preferencesManager.setParent2Name(edtParent2Name.text.toString())
             openMainActivity()
+        } else {
+            trackEvent(TrackerConstants.Label.ParentsScreen.GO_KO)
         }
     }
 
@@ -131,5 +150,17 @@ class ParentNamesActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun trackPage() {
+        trackerManager.sendScreen(TrackerConstants.Section.PARENTS_SETUP.value,
+                TrackerConstants.Section.ParentsSetup.MAIN.value)
+    }
+
+    private fun trackEvent(label: TrackerConstants.Label.ParentsScreen) {
+        trackerManager.sendEvent(
+                category = TrackerConstants.Section.ParentsSetup.MAIN.value,
+                action = TrackerConstants.Action.CLICK.value,
+                label = label.value)
     }
 }

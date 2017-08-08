@@ -14,6 +14,7 @@ import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.usecase.GetNameList
 import com.kamisoft.babynames.presentation.names_list.adapter.NamesAdapter
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_names_list.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -43,7 +44,7 @@ class NamesListActivity : MvpLceActivity<RecyclerView, List<BabyName>, NamesList
         }
     }
 
-    override fun createPresenter() = NamesListPresenter(GetNameList(NamesDataRepository(NamesDataFactory())))
+    override fun createPresenter() = NamesListPresenter(GetNameList(NamesDataRepository(NamesDataFactory())), TrackerManager(this))
 
     private fun initToolbar() {
         val toolbar = toolbar as Toolbar?

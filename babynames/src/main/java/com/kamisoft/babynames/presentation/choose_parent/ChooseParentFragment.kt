@@ -10,6 +10,8 @@ import com.kamisoft.babynames.commons.extensions.gone
 import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Parent
+import com.kamisoft.babynames.tracking.TrackerConstants
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.fragment_who_choose.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -17,6 +19,8 @@ import kotlin.reflect.KProperty
 class ChooseParentFragment : Fragment() {
 
     private val preferencesManager by lazy { AndroidPrefsManager(activity) }
+    private val trackerManager by lazy { TrackerManager(activity) }
+
     private val parentPosition: Int by ParentArgument(ARG_PARENT_POSITION)
 
     companion object {
@@ -40,6 +44,7 @@ class ChooseParentFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        trackPage()
 
         if (parentPosition == 1) {
             txtWhoChoose.setText(R.string.who_choose_first)
@@ -72,8 +77,14 @@ class ChooseParentFragment : Fragment() {
 
         val firstParentToChoose = parent1Name
         val secondParentToChoose = parent2Name
-        btnParent1Dad.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
-        btnParent1Mom.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent1Dad.setOnClickListener {
+            trackEvent(TrackerConstants.Label.WhoChooseScreen.PARENT1_DAD)
+            parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose)
+        }
+        btnParent1Mom.setOnClickListener {
+            trackEvent(TrackerConstants.Label.WhoChooseScreen.PARENT1_MOM)
+            parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose)
+        }
     }
 
     private fun initParent2Buttons() {
@@ -92,13 +103,31 @@ class ChooseParentFragment : Fragment() {
         }
         val firstParentToChoose = parent2Name
         val secondParentToChoose = parent1Name
-        btnParent2Dad.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
-        btnParent2Mom.setOnClickListener { parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose) }
+        btnParent2Dad.setOnClickListener {
+            trackEvent(TrackerConstants.Label.WhoChooseScreen.PARENT2_DAD)
+            parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose)
+        }
+        btnParent2Mom.setOnClickListener {
+            trackEvent(TrackerConstants.Label.WhoChooseScreen.PARENT2_MOM)
+            parentSelectCallBack.invoke(firstParentToChoose, secondParentToChoose)
+        }
     }
 
     class ParentArgument(private val arg: String) : ReadOnlyProperty<Fragment, Int> {
         override fun getValue(thisRef: Fragment, property: KProperty<*>): Int {
             return thisRef.arguments.getInt(arg)
         }
+    }
+
+    private fun trackPage() {
+        trackerManager.sendScreen(TrackerConstants.Section.FIND_MATCHES.value,
+                TrackerConstants.Section.FindMatches.WHO_CHOOSE.value)
+    }
+
+    private fun trackEvent(label: TrackerConstants.Label.WhoChooseScreen) {
+        trackerManager.sendEvent(
+                category = TrackerConstants.Section.ParentsSetup.MAIN.value,
+                action = TrackerConstants.Action.CLICK.value,
+                label = label.value)
     }
 }

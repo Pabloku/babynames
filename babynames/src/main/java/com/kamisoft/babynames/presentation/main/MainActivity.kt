@@ -16,13 +16,15 @@ import com.kamisoft.babynames.presentation.contact.ContactActivity
 import com.kamisoft.babynames.presentation.find_matches.FindMatchesActivity
 import com.kamisoft.babynames.presentation.names_list.NamesListActivity
 import com.kamisoft.babynames.presentation.parent_names.ParentNamesActivity
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
 
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
-    override fun createPresenter() = MainPresenter(AndroidPrefsManager(this))
+    override fun createPresenter() = MainPresenter(AndroidPrefsManager(this),
+            TrackerManager(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,7 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         navDrawer.setNavigationItemSelectedListener { menuItem ->
             val id = menuItem.itemId
             when (id) {
-                R.id.drawerDadAndMom -> presenter.onDrawerItemDadManClicked()
+                R.id.drawerDadAndMom -> presenter.onDrawerItemDadMomClicked()
                 R.id.drawerBoyNames -> presenter.onDrawerItemBoyNamesListClicked()
                 R.id.drawerGirlNames -> presenter.onDrawerItemGirlNameListClicked()
                 R.id.drawerContact -> presenter.onDrawerItemContactClicked()

@@ -17,6 +17,7 @@ import com.kamisoft.babynames.logger.Logger
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.choose_name.adapter.NamesAdapter
 import com.kamisoft.babynames.presentation.model.BabyNameLikable
+import com.kamisoft.babynames.tracking.TrackerManager
 import com.rahulrav.futures.Future
 import kotlinx.android.synthetic.main.fragment_choose_name.*
 import org.jetbrains.anko.design.snackbar
@@ -83,16 +84,20 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.actionSearch -> {
-                searchCallback.invoke()
+                presenter.onSearchClicked()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
+    override fun showSearchView() {
+        searchCallback.invoke()
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.start(listFuture)
+        presenter.start(listFuture, parentPosition = 2)
     }
 
     override fun initViews() {
@@ -105,7 +110,8 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
 
     override fun createPresenter() = ChooseNamePresenter(
             GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
-            SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())))
+            SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())),
+            TrackerManager(activity))
 
     override fun setData(nameList: List<BabyNameLikable>) {
         onUiThread {

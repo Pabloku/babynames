@@ -12,12 +12,16 @@ import com.kamisoft.babynames.commons.extensions.visible
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.presentation.choose_name.adapter.NameItemAnimator
 import com.kamisoft.babynames.presentation.matches.adapter.MatchedNamesAdapter
+import com.kamisoft.babynames.tracking.TrackerConstants
+import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.fragment_matches.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 class MatchesFragment : Fragment() {
+
+    private val trackerManager by lazy { TrackerManager(activity) }
 
     companion object {
         const val ARG_MATCH_LIST = "matchList"
@@ -40,6 +44,7 @@ class MatchesFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        trackPage()
         if (nameMatchesList.isNotEmpty()) {
             emptyView.gone()
             txtMatches.visible()
@@ -56,9 +61,14 @@ class MatchesFragment : Fragment() {
         btnOk.setOnClickListener { activity.finish() }
     }
 
-    class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, HashMap<String, String>> {
+    inner class MatchesArgument(private val arg: String) : ReadOnlyProperty<Fragment, HashMap<String, String>> {
         override fun getValue(thisRef: Fragment, property: KProperty<*>): HashMap<String, String> {
             return thisRef.arguments.getSerializable(arg) as HashMap<String, String>
         }
+    }
+
+    private fun trackPage() {
+        trackerManager.sendScreen(TrackerConstants.Section.FIND_MATCHES.value,
+                TrackerConstants.Section.FindMatches.MATCHES.value)
     }
 }

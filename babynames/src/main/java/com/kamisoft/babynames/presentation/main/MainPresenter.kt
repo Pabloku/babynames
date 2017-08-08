@@ -4,10 +4,15 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.kamisoft.babyname.BuildConfig
 import com.kamisoft.babynames.commons.shared_preferences.PreferencesManager
 import com.kamisoft.babynames.domain.model.Gender
+import com.kamisoft.babynames.tracking.TrackerConstants
+import com.kamisoft.babynames.tracking.TrackerManager
 
-class MainPresenter(private val preferencesManager: PreferencesManager) : MvpBasePresenter<MainView>() {
+//TODO I'd be nice to have a BaseTrackeablePresenter or something like that
+class MainPresenter(private val preferencesManager: PreferencesManager,
+                    private val trackerManager: TrackerManager) : MvpBasePresenter<MainView>() {
 
     fun start() {
+        trackPage()
         val currentAppVersion = BuildConfig.VERSION_CODE
         view?.initViews()
         if (newAppVersionRequiredAvailable(currentAppVersion)) {
@@ -25,15 +30,30 @@ class MainPresenter(private val preferencesManager: PreferencesManager) : MvpBas
         }
     }
 
-    fun onGoClicked() = view?.openFinMatchesActivity()
+    fun onGoClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.GO)
+        view?.openFinMatchesActivity()
+    }
 
-    fun onDrawerItemDadManClicked() = view?.openParentNamesActivity()
+    fun onDrawerItemDadMomClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.DRAWER_PARENTS_SCREEN)
+        view?.openParentNamesActivity()
+    }
 
-    fun onDrawerItemBoyNamesListClicked() = view?.openNamesListActivity(Gender.MALE)
+    fun onDrawerItemBoyNamesListClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.DRAWER_BOY_NAMES_SCREEN)
+        view?.openNamesListActivity(Gender.MALE)
+    }
 
-    fun onDrawerItemGirlNameListClicked() = view?.openNamesListActivity(Gender.FEMALE)
+    fun onDrawerItemGirlNameListClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.DRAWER_GIRL_NAMES_SCREEN)
+        view?.openNamesListActivity(Gender.FEMALE)
+    }
 
-    fun onDrawerItemContactClicked() = view?.openContactActivity()
+    fun onDrawerItemContactClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.DRAWER_CONTACT_SCREEN)
+        view?.openContactActivity()
+    }
 
     private fun areParentNamesSet() = preferencesManager.getParentNamesSetDatetime() != 0L
 
@@ -51,5 +71,17 @@ class MainPresenter(private val preferencesManager: PreferencesManager) : MvpBas
     private fun isOneWeekOrMoreDifference(dateTime1: Long, dateTime2: Long): Boolean {
         val oneWeekInMillis = 1000 * 60 * 60 * 24 * 7
         return dateTime2 - dateTime1 > oneWeekInMillis
+    }
+
+    private fun trackPage() {
+        trackerManager.sendScreen(TrackerConstants.Section.MAIN.value,
+                TrackerConstants.Section.Main.MAIN.value)
+    }
+
+    private fun trackEvent(label: TrackerConstants.Label.MainScreen) {
+        trackerManager.sendEvent(
+                category = TrackerConstants.Section.Main.MAIN.value,
+                action = TrackerConstants.Action.CLICK.value,
+                label = label.value)
     }
 }

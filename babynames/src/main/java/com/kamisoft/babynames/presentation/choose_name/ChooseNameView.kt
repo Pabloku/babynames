@@ -17,4 +17,6 @@ interface ChooseNameView : MvpLceView<List<BabyNameLikable>> {
 
     fun onLikedNamesChosen()
 
+    fun showSearchView()
+
 }
