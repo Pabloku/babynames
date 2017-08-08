@@ -21,7 +21,6 @@ class MainPresenter(private val preferencesManager: PreferencesManager,
         } else {
             if (!areParentNamesSet()) {
                 view?.openParentNamesActivity()
-                view?.close()
             } else {
                 if (newAppVersionAvailable(currentAppVersion)) {
                     view?.showNewVersionAvailable()
