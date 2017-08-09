@@ -5,12 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.animation.DecelerateInterpolator
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babynames.R
+import com.kamisoft.babynames.commons.Constants
 import com.kamisoft.babynames.commons.extensions.openActivity
 import com.kamisoft.babynames.commons.extensions.openActivityForResult
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
@@ -22,12 +25,16 @@ import com.kamisoft.babynames.presentation.parent_names.ParentNamesActivity
 import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
+import com.kamisoft.babynames.R.id.adView
+import com.google.android.gms.ads.AdListener
+
+
 
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     companion object Request {
-        const val PARENTS_SCREEN = 1
+        const val PARENTS_SCREEN = 1001
     }
 
     override fun createPresenter() = MainPresenter(AndroidPrefsManager(this),
@@ -37,6 +44,56 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter.start()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        if (hasFocus) {
+            animate()
+            super.onWindowFocusChanged(hasFocus)
+        }
+    }
+
+    private fun animate() {
+        animateLogo()
+        animateTitle()
+        animateSubtitle()
+        animateButtonGo()
+    }
+
+    private fun animateLogo() {
+        ViewCompat.animate(imgLogo)
+                .translationY(-250f)
+                .setStartDelay(Constants.Animations.STARTUP_DELAY)
+                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(
+                DecelerateInterpolator(1.2f)).start()
+    }
+
+    private fun animateTitle() {
+        ViewCompat.animate(txtTitle)
+                .translationY(-250f).alpha(1f)
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 500)
+                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+    }
+
+    private fun animateSubtitle() {
+        ViewCompat.animate(txtSubTitle)
+                .translationY(-250f).alpha(1f)
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 2 + 500)
+                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+    }
+
+    private fun animateButtonGo() {
+        ViewCompat.animate(btnGo)
+                .translationY(-250f)
+                .scaleY(1f).scaleX(1f)
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 3 + 500)
+                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+    }
+
+    private fun animateAdBanner() {
+        ViewCompat.animate(adView).alpha(1f)
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 500)
+                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
     }
 
     override fun initViews() {
@@ -72,9 +129,9 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     override fun openFinMatchesActivity() = openActivity(FindMatchesActivity::class.java)
 
     override fun openParentNamesActivity(requestForResult: Boolean) {
-        if (requestForResult){
+        if (requestForResult) {
             openActivityForResult(ParentNamesActivity::class.java, Request.PARENTS_SCREEN)
-        }else{
+        } else {
             openActivity(ParentNamesActivity::class.java)
         }
     }
@@ -152,6 +209,12 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     override fun loadAds() {
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
+        adView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                animateAdBanner()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
