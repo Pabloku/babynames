@@ -6,7 +6,9 @@ object Constants {
 
     object Animations {
         val STARTUP_DELAY = 200L
-        val ANIM_ITEM_DURATION = 500L
+        val DURATION_SHORT = 300L
+        val DURATION_MEDIUM = 400L
+        val DURATION_LONG = 500L
         val ITEM_DELAY = 150L
     }
 }

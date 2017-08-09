@@ -6,10 +6,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.ViewPropertyAnimator
 import android.view.animation.DecelerateInterpolator
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babynames.R
@@ -25,10 +28,6 @@ import com.kamisoft.babynames.presentation.parent_names.ParentNamesActivity
 import com.kamisoft.babynames.tracking.TrackerManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
-import com.kamisoft.babynames.R.id.adView
-import com.google.android.gms.ads.AdListener
-
-
 
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
@@ -50,50 +49,79 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         if (hasFocus) {
             animate()
             super.onWindowFocusChanged(hasFocus)
+        } else {
+            hideToolbar()
         }
     }
 
     private fun animate() {
+        animateToolbar()
         animateLogo()
         animateTitle()
         animateSubtitle()
         animateButtonGo()
     }
 
+    private fun hideToolbar() {
+        val toolbar = toolbar as Toolbar
+        toolbar.animate()
+                .translationY(-toolbar.height.toFloat())
+                .setDuration(Constants.Animations.DURATION_SHORT).start()
+    }
+
+    private fun animateToolbar(): ViewPropertyAnimator {
+        val toolbar = toolbar as Toolbar
+        toolbar.translationY = -toolbar.height.toFloat()
+        val toolbarTitle = toolbar.getChildAt(0) as AppCompatImageView
+        toolbarTitle.translationY = -toolbar.height.toFloat()
+
+        toolbar.animate()
+                .translationY(0f)
+                .setDuration(Constants.Animations.DURATION_SHORT)
+                .setStartDelay(Constants.Animations.ITEM_DELAY).start()
+
+        val animator = toolbarTitle.animate()
+                .translationY(0f)
+                .setDuration(Constants.Animations.DURATION_SHORT)
+                .setStartDelay(Constants.Animations.ITEM_DELAY)
+        animator.start()
+        return animator
+    }
+
     private fun animateLogo() {
         ViewCompat.animate(imgLogo)
                 .translationY(-250f)
                 .setStartDelay(Constants.Animations.STARTUP_DELAY)
-                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(
+                .setDuration(Constants.Animations.DURATION_SHORT).setInterpolator(
                 DecelerateInterpolator(1.2f)).start()
     }
 
     private fun animateTitle() {
         ViewCompat.animate(txtTitle)
                 .translationY(-250f).alpha(1f)
-                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 500)
-                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 200)
+                .setDuration(Constants.Animations.DURATION_SHORT).setInterpolator(DecelerateInterpolator()).start()
     }
 
     private fun animateSubtitle() {
         ViewCompat.animate(txtSubTitle)
                 .translationY(-250f).alpha(1f)
-                .setStartDelay(Constants.Animations.ITEM_DELAY * 2 + 500)
-                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 2 + 200)
+                .setDuration(Constants.Animations.DURATION_SHORT).setInterpolator(DecelerateInterpolator()).start()
     }
 
     private fun animateButtonGo() {
         ViewCompat.animate(btnGo)
                 .translationY(-250f)
                 .scaleY(1f).scaleX(1f)
-                .setStartDelay(Constants.Animations.ITEM_DELAY * 3 + 500)
-                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 3 + 200)
+                .setDuration(Constants.Animations.DURATION_MEDIUM).setInterpolator(DecelerateInterpolator()).start()
     }
 
     private fun animateAdBanner() {
         ViewCompat.animate(adView).alpha(1f)
-                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 500)
-                .setDuration(Constants.Animations.ANIM_ITEM_DURATION).setInterpolator(DecelerateInterpolator()).start()
+                .setStartDelay(Constants.Animations.ITEM_DELAY * 1 + 200)
+                .setDuration(Constants.Animations.DURATION_LONG).setInterpolator(DecelerateInterpolator()).start()
     }
 
     override fun initViews() {
