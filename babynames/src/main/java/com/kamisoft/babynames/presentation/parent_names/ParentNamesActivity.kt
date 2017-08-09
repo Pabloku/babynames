@@ -1,5 +1,6 @@
 package com.kamisoft.babynames.presentation.parent_names
 
+import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -94,14 +95,15 @@ class ParentNamesActivity : AppCompatActivity() {
             preferencesManager.setParent1Name(edtParent1Name.text.toString())
             preferencesManager.setParent2(getParent2())
             preferencesManager.setParent2Name(edtParent2Name.text.toString())
-            openMainActivity()
+            openFindMatchesActivity()
         } else {
             trackEvent(TrackerConstants.Label.ParentsScreen.GO_KO)
         }
     }
 
-    private fun openMainActivity() {
+    private fun openFindMatchesActivity() {
         openActivity(FindMatchesActivity::class.java)
+        setResult(Activity.RESULT_OK)
         finish()
     }
 
@@ -163,4 +165,5 @@ class ParentNamesActivity : AppCompatActivity() {
                 action = TrackerConstants.Action.CLICK.value,
                 label = label.value)
     }
+
 }

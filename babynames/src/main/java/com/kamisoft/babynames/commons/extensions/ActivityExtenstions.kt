@@ -17,6 +17,9 @@ fun Activity.openActivity(javaClass: Class<*>, params: Bundle) =
 fun Activity.openActivityForResult(javaClass: Class<*>, params: Bundle, requestCode: Int) =
         startActivityForResult(Intent(this, javaClass).putExtras(params), requestCode)
 
+fun Activity.openActivityForResult(javaClass: Class<*>, requestCode: Int) =
+        startActivityForResult(Intent(this, javaClass), requestCode)
+
 fun Activity.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }

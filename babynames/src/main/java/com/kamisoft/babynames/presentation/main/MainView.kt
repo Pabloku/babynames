@@ -9,7 +9,7 @@ interface MainView : MvpView {
 
     fun openFinMatchesActivity()
 
-    fun openParentNamesActivity()
+    fun openParentNamesActivity(requestForResult: Boolean = false)
 
     fun openNamesListActivity(gender: Gender)
 

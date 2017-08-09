@@ -20,7 +20,7 @@ class MainPresenter(private val preferencesManager: PreferencesManager,
             view?.showNewRequiredVersionAvailable()
         } else {
             if (!areParentNamesSet()) {
-                view?.openParentNamesActivity()
+                view?.openParentNamesActivity(requestForResult = true)
             } else {
                 if (newAppVersionAvailable(currentAppVersion)) {
                     view?.showNewVersionAvailable()

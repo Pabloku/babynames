@@ -1,5 +1,6 @@
 ﻿package com.kamisoft.babynames.presentation.main
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import com.google.android.gms.ads.AdRequest
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.kamisoft.babynames.R
 import com.kamisoft.babynames.commons.extensions.openActivity
+import com.kamisoft.babynames.commons.extensions.openActivityForResult
 import com.kamisoft.babynames.commons.shared_preferences.AndroidPrefsManager
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.presentation.contact.ContactActivity
@@ -23,6 +25,10 @@ import kotlinx.android.synthetic.main.activity_main_content.*
 
 
 class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
+
+    companion object Request {
+        const val PARENTS_SCREEN = 1
+    }
 
     override fun createPresenter() = MainPresenter(AndroidPrefsManager(this),
             TrackerManager(this))
@@ -65,7 +71,13 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
 
     override fun openFinMatchesActivity() = openActivity(FindMatchesActivity::class.java)
 
-    override fun openParentNamesActivity() = openActivity(ParentNamesActivity::class.java)
+    override fun openParentNamesActivity(requestForResult: Boolean) {
+        if (requestForResult){
+            openActivityForResult(ParentNamesActivity::class.java, Request.PARENTS_SCREEN)
+        }else{
+            openActivity(ParentNamesActivity::class.java)
+        }
+    }
 
     override fun openNamesListActivity(gender: Gender) {
         val params = Bundle()
@@ -140,5 +152,12 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     override fun loadAds() {
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Request.PARENTS_SCREEN && resultCode == Activity.RESULT_CANCELED) {
+            close()
+        }
     }
 }
