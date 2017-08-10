@@ -16,5 +16,5 @@
   <string name="go">OK, let\'s start!</string>
   <string name="origin">Origin: %1$s</string>
   <string name="empty_default">List is empty ¯\\_(ツ)_/¯</string>
-  <string name="app_url_play_store">https://goo.gl/2b2HhB</string>
+  <string translatable="false" name="app_url_play_store">https://goo.gl/2b2HhB</string>
 </resources>

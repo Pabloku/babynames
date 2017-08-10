@@ -1,6 +1,9 @@
 <resources>
-  <!--PROD  <string name="banner_main">ca-app-pub-9682684081624763/5888422361</string> -->
-  <!-- TEST AD-->
-  <string name="banner_main">ca-app-pub-3940256099942544/6300978111</string>
+  <!-- TEST AD
+  <string translatable="false" name="banner_main">ca-app-pub-3940256099942544/6300978111</string>-->
+  <!--PROD  -->
+  <string translatable="false" name="banner_main">ca-app-pub-9682684081624763/5888422361</string>
+  <string translatable="false" name="banner_name_list"> ca-app-pub-9682684081624763/8313267540</string>
+  <string translatable="false" name="banner_find_matches">ca-app-pub-9682684081624763/2342577956</string>
 
 </resources>

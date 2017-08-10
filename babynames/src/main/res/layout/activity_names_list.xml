@@ -52,6 +52,6 @@
       android:layout_centerHorizontal="true"
       android:layout_alignParentBottom="true"
       app:adSize="BANNER"
-      app:adUnitId="@string/banner_main"/>
+      app:adUnitId="@string/banner_name_list"/>
 
 </RelativeLayout>

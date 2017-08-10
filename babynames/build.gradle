@@ -80,7 +80,7 @@ dependencies {
   compile appDependencies.recyclerViewFS
   compile appDependencies.kotlinCoroutines
   compile appDependencies.futures
-  debugCompile appDependencies.stetho
+  compile appDependencies.stetho
   compile appDependencies.materialDialogs
 }
 
