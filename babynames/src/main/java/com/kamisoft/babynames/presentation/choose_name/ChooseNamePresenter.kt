@@ -77,9 +77,11 @@ class ChooseNamePresenter(
         if (babyName.liked) {
             trackFavoriteEvent()
             favoriteCounter++
+            saveFavoriteUseCase.increaseNameLikedCounter(gender, babyName.name)
         } else {
             trackUnFavoriteEvent()
             favoriteCounter--
+            saveFavoriteUseCase.decreaseNameLikedCounter(gender, babyName.name)
         }
         view?.updateFavoriteCounter(favoriteCounter)
     }

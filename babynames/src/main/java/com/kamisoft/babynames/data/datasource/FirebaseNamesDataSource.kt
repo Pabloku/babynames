@@ -4,11 +4,9 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.crash.FirebaseCrash
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.kamisoft.babynames.data.entity.FireBaseBabyName
+import com.kamisoft.babynames.data.entity.FireBaseBabyNameWithFavoriteCounter
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.logger.Logger
 import java.text.Collator
@@ -17,6 +15,7 @@ import java.util.*
 
 //Proguard config for firebase real time database https://firebase.google.com/docs/database/android/start/
 class FirebaseNamesDataSource : NamesDataSource {
+
     override fun getNamesList(gender: Gender): List<FireBaseBabyName> {
         return Tasks.await(getNameListTask(gender))
     }
@@ -55,5 +54,38 @@ class FirebaseNamesDataSource : NamesDataSource {
 
         })
         return taskCompletionSource.task
+    }
+
+    override fun increaseNameLikedCounter(gender: Gender, name: String) {
+        updateNameLikedCounter(gender, name, liked = true)
+    }
+
+    override fun decreaseNameLikedCounter(gender: Gender, name: String) {
+        updateNameLikedCounter(gender, name, liked = false)
+    }
+
+    private fun updateNameLikedCounter(gender: Gender, name: String, liked: Boolean) {
+        val firebaseBabyNamesDBReference = FirebaseDatabase.getInstance().reference.child(FirebaseDBCommons.Node.BABY_NAMES.toString())
+        val firebaseQuery = firebaseBabyNamesDBReference.child(FirebaseDBCommons.Node.valueOf(gender.toString().toUpperCase()).toString())
+        val firebaseNameNode = firebaseQuery.child(name)
+        firebaseNameNode.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(mutableData: MutableData): Transaction.Result {
+                val babyName = mutableData.getValue(FireBaseBabyNameWithFavoriteCounter::class.java)
+                if (babyName != null) {
+                    if (liked) babyName.favoriteCount++ else babyName.favoriteCount--
+                    mutableData.value = babyName
+                }
+                return Transaction.success(mutableData)
+            }
+
+            override fun onComplete(databaseError: DatabaseError?, committed: Boolean,
+                                    dataSnapshot: DataSnapshot?) {
+                if (databaseError != null) {
+                    Logger.error(databaseError.toException(), "Error in onComplete")
+                } else {
+                    Logger.debug("onComplete success")
+                }
+            }
+        })
     }
 }

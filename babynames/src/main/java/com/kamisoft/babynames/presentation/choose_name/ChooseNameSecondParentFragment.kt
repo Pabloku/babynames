@@ -7,7 +7,9 @@ import android.widget.FrameLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.kamisoft.babynames.R
 import com.kamisoft.babynames.data.datasource.FavoritesDataFactory
+import com.kamisoft.babynames.data.datasource.NamesDataFactory
 import com.kamisoft.babynames.data.repository.FavoritesDataRepository
+import com.kamisoft.babynames.data.repository.NamesDataRepository
 import com.kamisoft.babynames.domain.model.BabyName
 import com.kamisoft.babynames.domain.model.Gender
 import com.kamisoft.babynames.domain.model.Parent
@@ -110,7 +112,7 @@ class ChooseNameSecondParentFragment : MvpLceFragment<FrameLayout, List<BabyName
 
     override fun createPresenter() = ChooseNamePresenter(
             GetFavoriteList(FavoritesDataRepository(FavoritesDataFactory())),
-            SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory())),
+            SaveFavoriteName(FavoritesDataRepository(FavoritesDataFactory()), NamesDataRepository(NamesDataFactory())),
             TrackerManager(activity))
 
     override fun setData(nameList: List<BabyNameLikable>) {

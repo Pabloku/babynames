@@ -11,4 +11,14 @@ class NamesDataRepository(val namesDataFactory: NamesDataFactory) : NamesReposit
         val namesDataSource = namesDataFactory.create()
         return namesDataSource.getNamesList(gender)
     }
+
+    override fun increaseNameLikedCounter(gender: Gender, name: String) {
+        val namesDataSource = namesDataFactory.create()
+        return namesDataSource.increaseNameLikedCounter(gender, name)
+    }
+
+    override fun decreaseNameLikedCounter(gender: Gender, name: String) {
+        val namesDataSource = namesDataFactory.create()
+        return namesDataSource.decreaseNameLikedCounter(gender, name)
+    }
 }
