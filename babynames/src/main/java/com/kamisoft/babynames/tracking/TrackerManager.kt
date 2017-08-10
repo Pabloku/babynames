@@ -27,7 +27,7 @@ class TrackerManager(context: Context) {
     fun sendItemEvent(itemId: String, itemCategory: String, itemName: String) {
         if (!TextUtils.isEmpty(itemId) && !TextUtils.isEmpty(itemCategory) && !TextUtils.isEmpty(
                 itemName)) {
-            val item = TrackerItem(itemId, itemCategory, itemName)
+            val item = TrackerItem(itemId, itemName, itemCategory)
             firebaseAnalyticsTracker.sendItemEvent(item)
         }
     }
