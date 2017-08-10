@@ -51,6 +51,7 @@ class FindMatchesPresenter(private val getNamesUseCase: GetNameList) : MvpBasePr
         Logger.debug("Second parent chose ${babyNamesLiked.size} names")
         summaryResult = summaryResult.copy(parent2NamesChosen = babyNamesLiked)
         view?.showMatchesView()
+        view?.showAdInterstitial()
     }
 
     fun getGender() = summaryResult.gender

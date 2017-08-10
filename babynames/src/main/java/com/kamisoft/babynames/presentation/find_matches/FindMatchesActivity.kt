@@ -23,6 +23,9 @@ import com.kamisoft.babynames.presentation.find_matches.BabyNamesSearchView.Baby
 import com.kamisoft.babynames.presentation.matches.MatchesFragment
 import kotlinx.android.synthetic.main.activity_find_matches.*
 import kotlinx.android.synthetic.main.toolbar.*
+import com.google.android.gms.ads.InterstitialAd
+
+
 
 class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>(), FindMatchesView {
 
@@ -30,6 +33,8 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     private lateinit var searchItem: MenuItem
 
     private val babyNamesSearchView by lazy { createBabyNamesSearchView() }
+
+    private val interstitialAd: InterstitialAd by lazy { InterstitialAd(this) }
 
     enum class CurrentStep(val value: String) {
         CHOOSE_GENDER("ChooseGender"),
@@ -237,5 +242,14 @@ class FindMatchesActivity : MvpActivity<FindMatchesView, FindMatchesPresenter>()
     override fun loadAds() {
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
+
+        /* TODO Uncomment when added the possibility to pay for no ads version
+        interstitialAd.adUnitId = getString(R.string.banner_matches_interstitial)
+        /interstitialAd.loadAd(adRequest)*/
+    }
+
+    override fun showAdInterstitial() {
+        //TODO Uncomment when added the possibility to pay for no ads version
+        //if (interstitialAd.isLoaded) interstitialAd.show()
     }
 }
