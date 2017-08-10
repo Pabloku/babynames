@@ -17,17 +17,38 @@ class MainPresenter(private val preferencesManager: PreferencesManager,
         view?.initViews()
         view?.loadAds()
         if (newAppVersionRequiredAvailable(currentAppVersion)) {
+            trackEvent(TrackerConstants.Label.MainScreen.REQUIRED_APP_VERSION, TrackerConstants.Action.SHOW)
             view?.showNewRequiredVersionAvailable()
         } else {
             if (!areParentNamesSet()) {
                 view?.openParentNamesActivity(requestForResult = true)
             } else {
                 if (newAppVersionAvailable(currentAppVersion)) {
+                    trackEvent(TrackerConstants.Label.MainScreen.NEW_APP_VERSION, TrackerConstants.Action.SHOW)
                     view?.showNewVersionAvailable()
                     preferencesManager.setLastNewVersionCheckDate(System.currentTimeMillis())
                 }
             }
         }
+    }
+
+    fun onRequiredAppVersionDialogOkClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.REQUIRED_APP_OK)
+        view?.openPlayStoreLink()
+    }
+
+    fun onNewAppVersionAvailableDialogOkClicked() {
+        trackEvent(TrackerConstants.Label.MainScreen.NEW_APP_OK)
+        view?.openPlayStoreLink()
+    }
+
+    fun onRequiredAppVersionDialogDismissed() {
+        trackEvent(TrackerConstants.Label.MainScreen.REQUIRED_APP_DISMISSED)
+        view?.close()
+    }
+
+    fun onNewAppVersionAvailableDialogDismissed() {
+        trackEvent(TrackerConstants.Label.MainScreen.NEW_APP_DISMISSED)
     }
 
     fun onGoClicked() {
@@ -78,10 +99,11 @@ class MainPresenter(private val preferencesManager: PreferencesManager,
                 TrackerConstants.Section.Main.MAIN.value)
     }
 
-    private fun trackEvent(label: TrackerConstants.Label.MainScreen) {
+    private fun trackEvent(label: TrackerConstants.Label.MainScreen,
+                           action: TrackerConstants.Action = TrackerConstants.Action.CLICK) {
         trackerManager.sendEvent(
                 category = TrackerConstants.Section.Main.MAIN.value,
-                action = TrackerConstants.Action.CLICK.value,
+                action = action.value,
                 label = label.value)
     }
 }

@@ -92,7 +92,13 @@ class TrackerConstants {
             DRAWER_PARENTS_SCREEN("menu_parents"),
             DRAWER_BOY_NAMES_SCREEN("menu_boy_names"),
             DRAWER_GIRL_NAMES_SCREEN("menu_girl_names"),
-            DRAWER_CONTACT_SCREEN("menu_contact")
+            DRAWER_CONTACT_SCREEN("menu_contact"),
+            NEW_APP_VERSION("main_new_version_dialog"),
+            REQUIRED_APP_VERSION("main_required_version_dialog"),
+            NEW_APP_OK("main_new_version_ok"),
+            NEW_APP_DISMISSED("main_new_version_dismissed"),
+            REQUIRED_APP_OK("main_required_version_ok"),
+            REQUIRED_APP_DISMISSED("main_required_version_dismissed")
         }
 
         enum class ParentsScreen(val value: String) {

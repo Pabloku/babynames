@@ -19,6 +19,8 @@ interface MainView : MvpView {
 
     fun showNewRequiredVersionAvailable()
 
+    fun openPlayStoreLink()
+
     fun loadAds()
 
     fun close()

@@ -211,10 +211,9 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
                 .negativeText(R.string.new_app_version_cancel)
                 .autoDismiss(true)
                 .onPositive({ _, _ ->
-                    val googlePlayWeplanUrl = getString(R.string.app_url_play_store)
-                    val intentWeb = Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayWeplanUrl))
-                    startActivity(intentWeb)
+                    presenter.onNewAppVersionAvailableDialogOkClicked()
                 })
+                .dismissListener({ presenter.onNewAppVersionAvailableDialogDismissed() })
                 .show()
     }
 
@@ -226,12 +225,16 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
                 .negativeText(R.string.required_app_version_cancel)
                 .autoDismiss(true)
                 .onPositive({ _, _ ->
-                    val googlePlayWeplanUrl = getString(R.string.app_url_play_store)
-                    val intentWeb = Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayWeplanUrl))
-                    startActivity(intentWeb)
+                    presenter.onRequiredAppVersionDialogOkClicked()
                 })
-                .dismissListener({ finish() })
+                .dismissListener({ presenter.onRequiredAppVersionDialogDismissed() })
                 .show()
+    }
+
+    override fun openPlayStoreLink() {
+        val googlePlayWeplanUrl = getString(R.string.app_url_play_store)
+        val intentWeb = Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayWeplanUrl))
+        startActivity(intentWeb)
     }
 
     override fun loadAds() {
