@@ -3,6 +3,6 @@
   <string name="contact_answer_asap">¡Te contestaré lo antes posible!</string>
   <string name="contact_txt_dialog_email">Envíame un email con&#8230;</string>
   <string name="contact_email_label">Email</string>
-  <string name="contact_email">babynames@gmail.com</string> <!--TODO create gmail account!! -->
+  <string name="contact_email">babynames.application@gmail.com</string>
   <string name="contact_email_subject">Tengo esta sugerencia</string>
 </resources>
