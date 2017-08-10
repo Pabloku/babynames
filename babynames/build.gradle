@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -33,19 +34,18 @@ android {
   }
 
   productFlavors {
-    PRODUCTION {
+    production {
+      minSdkVersion globalConfiguration["androidMinSdkVersion"]
       applicationId 'com.kamisoft.babynames'
-      if (project.hasProperty("babynames.signingRelease") && new File(
-          project.property("babynames.signingRelease") + ".gradle").exists()) {
-        apply from: project.property("babynames.signingRelease") + ".gradle";
+      def signingConfig = "babynames.signing.config"
+      if (project.hasProperty(signingConfig) && new File(
+          project.property(signingConfig) + ".gradle").exists()) {
+        apply from: project.property(signingConfig) + ".gradle";
       }
     }
     develop {
+      minSdkVersion = 21
       applicationId 'com.kamisoft.babynames.develop'
-      if (project.hasProperty("babynames.signingDebug") && new File(
-          project.property("babynames.signingDebug") + ".gradle").exists()) {
-        apply from: project.property("babynames.signingDebug") + ".gradle";
-      }
     }
   }
 }

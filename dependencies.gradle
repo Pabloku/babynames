@@ -47,6 +47,7 @@ ext {
                      firebaseRemoteConfig  : "com.google.firebase:firebase-config:${playServicesAndFirebaseVersion}",
                      firebaseCrashReporting: "com.google.firebase:firebase-crash:${playServicesAndFirebaseVersion}",
                      firebaseAds           : "com.google.firebase:firebase-ads:${playServicesAndFirebaseVersion}",
+                     firebasePerformance   : "com.google.firebase:firebase-perf:${playServicesAndFirebaseVersion}",
                      constraintLayout      : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
                      anko                  : "org.jetbrains.anko:anko-sdk15:$ankoVersion",
                      ankoAppCompatV7       : "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion",
