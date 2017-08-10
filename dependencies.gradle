@@ -9,7 +9,7 @@ ext {
 
   //BabyNames App
   androidVersionCode = 1
-  androidVersionName = "0.1"
+  androidVersionName = "0.1.beta"
 
   //Android
   androidBuildToolsVersion = "25.0.2"
