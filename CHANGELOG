@@ -1,4 +1,9 @@
+v0.2 (2)
+  beta 13/08/2017
 
+  - Minsdkversion updated from 16 to 21 to avoid vector drawable problems in layouts using "drawableleft" key
+
+  - 1st version!
 v0.1 (1)
   beta 10/08/2017
 

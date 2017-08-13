@@ -8,12 +8,12 @@ allprojects {
 ext {
 
   //BabyNames App
-  androidVersionCode = 1
-  androidVersionName = "0.1.beta"
+  androidVersionCode = 2
+  androidVersionName = "0.2"
 
   //Android
   androidBuildToolsVersion = "25.0.2"
-  androidMinSdkVersion = 16
+  androidMinSdkVersion = 21
   androidCompileSdkVersion = 25
   androidTargetSdkVersion = 25
 
